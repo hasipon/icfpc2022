@@ -1,6 +1,9 @@
 package ;
 import pixi.core.graphics.Graphics;
 import pixi.core.math.Point;
+import pixi.plugins.spine.core.Color;
+import tweenxcore.color.ArgbColor;
+import tweenxcore.color.RgbColor;
 
 class State 
 {
@@ -23,6 +26,7 @@ class State
 	
 	public function update(value:String, width:Int, height:Int):Void 
 	{
+		outputLayer.clear();
 		cutState.init(width, height);
 		var lines = NL.split(value);
 		var index = 0;
@@ -40,7 +44,7 @@ class State
 					{
 						cutState.cutPoint(
 							index, 
-							parsePosition(args[1]), 
+							parseId(args[1]), 
 							parsePoint   (args[2])
 						);
 					}
@@ -48,7 +52,7 @@ class State
 					{
 						cutState.cut(
 							index, 
-							parsePosition(args[1]), 
+							parseId(args[1]), 
 							args[2] == "x", 
 							Std.parseInt(args[3])
 						);
@@ -57,6 +61,31 @@ class State
 					{
 						errorOutput.add(index, "too many arguments : in " + line);
 					}
+				
+				case "color":
+					if (args.length == 3)
+					{
+						var rect = cutState.getRectangle(
+							index, 
+							parseId(args[1])
+						);
+						var color = parseRgba(args[2]);
+						outputLayer.beginFill(
+							color.toRgbInt(),
+							color.a
+						);
+						outputLayer.drawRect(
+							rect.x, 
+							cutState.height - rect.bottom, 
+							rect.width, 
+							rect.height
+						);
+					}
+					else
+					{
+						errorOutput.add(index, "too many arguments : in " + line);
+					}
+					
 					
 				case x:
 					errorOutput.add(index, "unknown move: " + x + " : in " + line);
@@ -65,10 +94,22 @@ class State
 		cutState.draw();
 	}
 	
+	
 	private function parsePoint(string:String):Point
 	{
 		var args = string.split(",");
 		return new Point(Std.parseInt(args[0]), Std.parseInt(args[1]));
+	}
+	
+	private function parseRgba(string:String):ArgbColor
+	{
+		var args = string.split(",");
+		return new ArgbColor(
+			Std.parseInt(args[3]) / 255, 
+			Std.parseInt(args[0]) / 255, 
+			Std.parseInt(args[1]) / 255,
+			Std.parseInt(args[2]) / 255
+		);
 	}
 	
 	private function parseLine(index:Int, line:String):Array<String>
@@ -113,7 +154,7 @@ class State
 		return result;
 	}
 	
-	private function parsePosition(line:String):Array<Int>
+	private function parseId(line:String):Array<Int>
 	{
 		var args = line.split(".");
 		return [for (arg in args) Std.parseInt(arg)];

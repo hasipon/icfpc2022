@@ -133,15 +133,15 @@ class CutState
 						pos.y - rect.y
 					)));
 					nodes.push(CutNode.Leaf(new Rectangle(
-						rect.x,
-						pos.y,
-						pos.x - rect.x,
-						rect.bottom - pos.y
-					)));
-					nodes.push(CutNode.Leaf(new Rectangle(
 						pos.x,
 						pos.y,
 						rect.right - pos.x,
+						rect.bottom - pos.y
+					)));
+					nodes.push(CutNode.Leaf(new Rectangle(
+						rect.x,
+						pos.y,
+						pos.x - rect.x,
 						rect.bottom - pos.y
 					)));
 				
@@ -173,6 +173,22 @@ class CutState
 		return result;
 	}
 	
+	public function getRectangle(lineNumber:Int, ids:Array<Int>):Rectangle
+	{
+		this.lineNumber = lineNumber;
+		var index = ids.pop();
+		var parent = getById(ids);
+		
+		return switch (parent[index])
+		{
+			case CutNode.Leaf(rect):
+				rect;
+				
+			case CutNode.Node(_):
+				errorOutput.add(lineNumber, "unknown id. found node:" + ids.join(".") + "." + index);
+				throw "error";
+		}
+	}
 }
 
 enum CutNode
