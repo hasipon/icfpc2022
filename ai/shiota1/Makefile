@@ -18,3 +18,5 @@ run: build
 	./a.out < ../../problems.pam/13.pam > ../../solutions/13/shiota1-v1.isl
 	./a.out < ../../problems.pam/14.pam > ../../solutions/14/shiota1-v1.isl
 	./a.out < ../../problems.pam/15.pam > ../../solutions/15/shiota1-v1.isl
+
+eval:

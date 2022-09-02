@@ -289,26 +289,62 @@ Main.main = function() {
 	Main.readHash();
 };
 Main.onKey = function(e) {
-	switch(e.keyCode) {
-	case 65:
-		Main.input.value += Main.state.getLineCut(true,Main.scouter.left,400 - Main.scouter.y);
-		break;
-	case 68:
-		Main.input.value += Main.state.getLineCut(true,Main.scouter.right,400 - Main.scouter.y);
-		break;
-	case 87:
-		Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.top);
-		break;
-	case 88:
-		Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.bottom);
-		break;
-	default:
+	if(window.document.activeElement == Main.problemInput || window.document.activeElement == Main.input) {
 		return;
 	}
-	e.preventDefault();
-	var error = window.document.getElementById("error");
-	error.innerText = Main.errorOutput.text;
-	Main.onInputChanged();
+	if(e.ctrlKey) {
+		switch(e.keyCode) {
+		case 89:
+			if(Main.history.length > 0) {
+				var result = State.NL.split(Main.input.value);
+				result.push(Main.history.pop());
+				Main.input.value = result.join("\n");
+			}
+			break;
+		case 90:
+			var result = State.NL.split(Main.input.value);
+			Main.history.push(result.pop());
+			Main.input.value = result.join("\n");
+			break;
+		}
+		Main.onInputChanged();
+		e.preventDefault();
+		var error = window.document.getElementById("error");
+		error.innerText = Main.errorOutput.text;
+	} else {
+		switch(e.keyCode) {
+		case 65:
+			Main.input.value += Main.state.getLineCut(true,Main.scouter.left,400 - Main.scouter.y);
+			break;
+		case 67:
+			Main.input.value += Main.state.getPointCut(Main.scouter.right,400 - Main.scouter.bottom);
+			break;
+		case 68:
+			Main.input.value += Main.state.getLineCut(true,Main.scouter.right,400 - Main.scouter.y);
+			break;
+		case 69:
+			Main.input.value += Main.state.getPointCut(Main.scouter.right,400 - Main.scouter.top);
+			break;
+		case 81:
+			Main.input.value += Main.state.getPointCut(Main.scouter.left,400 - Main.scouter.top);
+			break;
+		case 87:
+			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.top);
+			break;
+		case 88:
+			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.bottom);
+			break;
+		case 90:
+			Main.input.value += Main.state.getPointCut(Main.scouter.left,400 - Main.scouter.bottom);
+			break;
+		default:
+			return;
+		}
+		Main._onInputChanged();
+		e.preventDefault();
+		var error = window.document.getElementById("error");
+		error.innerText = Main.errorOutput.text;
+	}
 };
 Main.readHash = function() {
 	var hash = $global.location.hash;
@@ -334,6 +370,10 @@ Main.onProblemChanged = function() {
 	Main.problemLayer.texture = PIXI.Texture.fromImage("../problems/" + Main.problemInput.value + ".png");
 };
 Main.onImageLoad = function() {
+	Main.onInputChanged();
+};
+Main._onInputChanged = function() {
+	Main.history = [];
 	Main.onInputChanged();
 };
 Main.onInputChanged = function() {
@@ -432,7 +472,7 @@ Scouter.prototype = {
 			}
 		}
 		this.scouterLayer.clear();
-		this.scouterLayer.lineStyle(0.5,65280);
+		this.scouterLayer.lineStyle(0.5,65280,0.8);
 		this.scouterLayer.moveTo(-20,this.top);
 		this.scouterLayer.lineTo(420,this.top);
 		this.scouterLayer.moveTo(-20,this.bottom);
@@ -534,6 +574,14 @@ State.prototype = {
 			return "";
 		}
 		return "\ncut [" + id.join(".") + "] [" + (isX ? "x" : "y") + "] [" + (isX ? x : y) + "]";
+	}
+	,getPointCut: function(x,y) {
+		var id = this.cutState.getNodeAt(x,y);
+		if(id.length == 0) {
+			this.errorOutput.add(0,"not found parent rect");
+			return "";
+		}
+		return "\ncut [" + id.join(".") + "] [" + x + "," + y + "]";
 	}
 	,parsePoint: function(string) {
 		var args = string.split(",");
@@ -2087,6 +2135,7 @@ if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : 
 String.__name__ = true;
 Array.__name__ = true;
 js_Boot.__toStr = ({ }).toString;
+Main.history = [];
 State.NL = new EReg("\r\n|\r|\n","g");
 State.S = new EReg("\\s","g");
 tweenxcore_Easing.PI = 3.1415926535897932384626433832795;

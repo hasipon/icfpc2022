@@ -29,6 +29,7 @@ class Main
 	static var state       :State;
 	static var errorOutput :ErrorOutput;
 	static var scouter     :Scouter;
+	static var history:Array<String> = [];
 	
 	static function main()
 	{
@@ -82,18 +83,57 @@ class Main
 	
 	static function onKey(e:KeyboardEvent):Void 
 	{
-		switch (e.keyCode)
+		if (
+			Browser.document.activeElement == problemInput ||
+			Browser.document.activeElement == input
+		)
 		{
-			case KeyboardEvent.DOM_VK_W: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.top   );
-			case KeyboardEvent.DOM_VK_X: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.bottom);
-			case KeyboardEvent.DOM_VK_D: input.value += state.getLineCut(true , scouter.right, 400 - scouter.y);
-			case KeyboardEvent.DOM_VK_A: input.value += state.getLineCut(true , scouter.left , 400 - scouter.y);
-			case _: return;
+			return;
 		}
-		e.preventDefault();
-		var error = cast Browser.document.getElementById("error");
-		error.innerText = errorOutput.text;
-		onInputChanged();
+		if (e.ctrlKey)
+		{
+			switch (e.keyCode)
+			{
+				case KeyboardEvent.DOM_VK_Z: 
+					var result = State.NL.split(input.value);
+					history.push(result.pop());
+					input.value = result.join("\n");
+					
+				case KeyboardEvent.DOM_VK_Y:
+					if (history.length > 0)
+					{
+						var result = State.NL.split(input.value);
+						result.push(history.pop());
+						input.value = result.join("\n");
+					}
+			}
+			onInputChanged();
+			
+			e.preventDefault();
+			var error = cast Browser.document.getElementById("error");
+			error.innerText = errorOutput.text;
+		}
+		else
+		{
+			switch (e.keyCode)
+			{
+				case KeyboardEvent.DOM_VK_W: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.top   );
+				case KeyboardEvent.DOM_VK_X: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.bottom);
+				case KeyboardEvent.DOM_VK_D: input.value += state.getLineCut(true , scouter.right, 400 - scouter.y);
+				case KeyboardEvent.DOM_VK_A: input.value += state.getLineCut(true , scouter.left , 400 - scouter.y);
+				case KeyboardEvent.DOM_VK_Q: input.value += state.getPointCut(scouter.left , 400 - scouter.top   );
+				case KeyboardEvent.DOM_VK_E: input.value += state.getPointCut(scouter.right, 400 - scouter.top   );
+				case KeyboardEvent.DOM_VK_Z: input.value += state.getPointCut(scouter.left , 400 - scouter.bottom);
+				case KeyboardEvent.DOM_VK_C: input.value += state.getPointCut(scouter.right, 400 - scouter.bottom);
+				case _: return;
+			}
+			
+			_onInputChanged();
+			
+			e.preventDefault();
+			var error = cast Browser.document.getElementById("error");
+			error.innerText = errorOutput.text;
+		}
 	}
 	
 	static function readHash():Void
@@ -134,7 +174,11 @@ class Main
 	{
 		onInputChanged();
 	}
-	
+	static function _onInputChanged():Void
+	{
+		history = [];
+		onInputChanged();
+	}
 	static function onInputChanged():Void
 	{
 		try
