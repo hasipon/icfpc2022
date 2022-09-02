@@ -7,8 +7,10 @@ import js.html.InputElement;
 import js.html.TextAreaElement;
 import pixi.core.Application;
 import pixi.core.graphics.Graphics;
+import pixi.core.math.Point;
 import pixi.core.sprites.Sprite;
 import pixi.core.textures.Texture;
+import pixi.interaction.InteractionEvent;
 
 class Main 
 {
@@ -41,6 +43,7 @@ class Main
 		mainPixi.stage.addChild(borderLayer  = new Graphics());
 		mainPixi.stage.scale.x = 2.0;
 		mainPixi.stage.scale.y = 2.0;
+		mainPixi.stage.on("mousemove", onMouseMove);
 		outputLayer .x = outputLayer .y = 20;
 		problemLayer.x = problemLayer.y = 20;
 		borderLayer .x = borderLayer .y = 20;
@@ -99,5 +102,14 @@ class Main
 		
 		var error = cast Browser.document.getElementById("error");
 		error.innerText = errorOutput.text;
+	}
+	
+	
+	public static function onMouseMove(e:InteractionEvent):Void
+	{
+		var point = problemLayer.toLocal(new Point(e.data.global.x, e.data.global.y));
+		
+		var text = cast Browser.document.getElementById("point");
+		text.innerText = Math.round(point.x) + "," + Math.round(state.cutState.height - point.y);
 	}
 }
