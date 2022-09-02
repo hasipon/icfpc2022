@@ -40,6 +40,10 @@ uint32_t get(int i, int j)
 
 struct Color {
   uint8_t R, G, B, A;
+  Color(int r, int g, int b, int a) : R(r), G(b), B(b), A(a) {}
+  bool valid(void) const {
+    return (0 <= R && R < 256) && (0 <= G && G < 256) && (0 <= B && B < 256) && (0 <= A && A < 256);
+  }
 };
 ostream& operator << (ostream& os, const Color& c) {
   os << "Color{" << (int)c.R << "," << (int)c.G << "," << (int)c.B << "," << (int)c.A << "}";
@@ -67,6 +71,62 @@ Color average(int mni, int mnj, int mxi, int mxj)
     a /= cnt;
   }
   return Color{r, g, b, a};
+}
+
+double calcSimulality(int mni, int mnj, int mxi, int mxj, Color c)
+{
+  double z = 0;
+  for (int i = mni; i < mxi; ++i) {
+    for (int j = mnj; j < mxj; ++j) {
+      double r = get(i, j, 0) - c.R;
+      double g = get(i, j, 1) - c.G;
+      double b = get(i, j, 2) - c.B;
+      double a = get(i, j, 3) - c.A;
+      z += sqrt(r * r + g * g + b * b + a * a);
+    }
+  }
+  return z;
+}
+
+Color findColor(int mni, int mnj, int mxi, int mxj)
+{
+  Color z = average(mni, mnj, mxi, mxj);
+  double mn = 1e128;
+  double sim;
+  for (int _ = 0; _ < 256*2; ++_) {
+    Color c = z;
+    ++c.R;
+    if (c.valid()) {
+      sim = calcSimulality(mni, mnj, mxi, mxj, c);
+      if (mn > sim) { mn = sim; z = c; }
+    }
+    --c.R;
+    if (c.valid()) {
+      sim = calcSimulality(mni, mnj, mxi, mxj, c);
+      if (mn > sim) { mn = sim; z = c; }
+    }
+    ++c.G;
+    if (c.valid()) {
+      sim = calcSimulality(mni, mnj, mxi, mxj, c);
+      if (mn > sim) { mn = sim; z = c; }
+    }
+    --c.G;
+    if (c.valid()) {
+      sim = calcSimulality(mni, mnj, mxi, mxj, c);
+      if (mn > sim) { mn = sim; z = c; }
+    }
+    ++c.B;
+    if (c.valid()) {
+      sim = calcSimulality(mni, mnj, mxi, mxj, c);
+      if (mn > sim) { mn = sim; z = c; }
+    }
+    --c.B;
+    if (c.valid()) {
+      sim = calcSimulality(mni, mnj, mxi, mxj, c);
+      if (mn > sim) { mn = sim; z = c; }
+    }
+  }
+  return z;
 }
 
 struct Block {
@@ -190,9 +250,10 @@ void solve(void)
 {
 	if (width != 400) throw 1;
 	if (height != 400) throw 1;
-  State s = komagire(initialBlock(), 2);
+  State s = komagire(initialBlock(), 1);
   for (int k = 0; k < s.bs.size(); ++k) {
-    Color c = average(s.bs[k].mni, s.bs[k].mnj, s.bs[k].mxi, s.bs[k].mxj);
+    Color c = findColor(s.bs[k].mni, s.bs[k].mnj, s.bs[k].mxi, s.bs[k].mxj);
+    // Color c = average(s.bs[k].mni, s.bs[k].mnj, s.bs[k].mxi, s.bs[k].mxj);
     auto p = s.bs[k].color(c);
     s.bs[k] = p.second;
     s.cmd.push_back(p.first);
