@@ -1,8 +1,10 @@
 package;
 import js.Browser;
 import js.html.CanvasElement;
+import js.html.Element;
 import js.html.ImageElement;
 import js.html.InputElement;
+import js.html.TextAreaElement;
 import pixi.core.Application;
 import pixi.core.graphics.Graphics;
 import pixi.core.sprites.Sprite;
@@ -10,7 +12,7 @@ import pixi.core.textures.Texture;
 
 class Main 
 {
-	static var input       :InputElement;
+	static var input       :TextAreaElement;
 	static var problemInput:InputElement;
 	static var imageElement:ImageElement;
 	
@@ -19,7 +21,7 @@ class Main
 	static var borderLayer :Graphics;
 	static var outputLayer :Graphics;
 	static var problemLayer:Sprite;
-	static var state:State;
+	static var state       :State;
 	
 	static function main()
 	{
@@ -41,12 +43,21 @@ class Main
 		borderLayer .x = borderLayer .y = 20;
 		problemLayer.alpha = 0.3;
 		
+		state = new State(
+			outputLayer,
+			borderLayer
+		);
+		
 		problemInput = cast Browser.document.getElementById("problem");
 		problemInput.onchange = onProblemChanged;
 		problemInput.oninput = onProblemChanged;
 		
 		imageElement = cast Browser.document.getElementById("image");
 		imageElement.onload = onImageLoad;
+		
+		input = cast Browser.document.getElementById("input");
+		input.onchange = onInputChanged;
+		input.oninput = onInputChanged;
 		
 		onProblemChanged();
 	}
@@ -64,9 +75,15 @@ class Main
 	
 	static function onImageLoad():Void 
 	{
+		onInputChanged();
 	}
 	
-	static function write():Void
+	static function onInputChanged():Void
 	{
+		state.update(
+			input.value,
+			imageElement.width,
+			imageElement.height
+		);
 	}
 }
