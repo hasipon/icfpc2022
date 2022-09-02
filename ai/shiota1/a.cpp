@@ -52,7 +52,7 @@ int main() {
         for (int x = 0; x < width; x++) {
           int target = get(y, x, d);
           int di = abs(target- c);
-          cost += di * di;
+          cost += sqrt(di * di);
         }
       }
       if (ansCost > cost) {
