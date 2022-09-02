@@ -4,11 +4,15 @@
 
 node, npmとかでいい感じにする
 
+```
+nvm install node
+npm install 
+```
+
 
 ## How to run
 
-
 ````
-> cat <isl file> | ts-node index.ts
+> cat <isl file> | npx ts-node index.ts
 { score: 62350 }
 ````
