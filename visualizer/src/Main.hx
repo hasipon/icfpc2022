@@ -4,6 +4,7 @@ import js.html.CanvasElement;
 import js.html.Element;
 import js.html.ImageElement;
 import js.html.InputElement;
+import js.html.KeyboardEvent;
 import js.html.TextAreaElement;
 import pixi.core.Application;
 import pixi.core.graphics.Graphics;
@@ -11,6 +12,7 @@ import pixi.core.math.Point;
 import pixi.core.sprites.Sprite;
 import pixi.core.textures.Texture;
 import pixi.interaction.InteractionEvent;
+import tweenxcore.color.ArgbColor;
 
 class Main 
 {
@@ -18,13 +20,15 @@ class Main
 	static var problemInput:InputElement;
 	static var imageElement:ImageElement;
 	
-	static var mainCanvas:CanvasElement;
+	static var mainCanvas  :CanvasElement;
 	static var outputCanvas:CanvasElement;
-	static var mainPixi:Application;
+	static var mainPixi    :Application;
 	static var borderLayer :Graphics;
 	static var problemLayer:Sprite;
+	static var scouterLayer:Graphics;
 	static var state       :State;
 	static var errorOutput :ErrorOutput;
+	static var scouter     :Scouter;
 	
 	static function main()
 	{
@@ -39,19 +43,25 @@ class Main
 			autoResize: true,
 		});
 		mainPixi.stage.interactive = true;
-		mainPixi.stage.addChild(problemLayer = new Sprite());
-		mainPixi.stage.addChild(borderLayer  = new Graphics());
+		mainPixi.stage.addChild(problemLayer  = new Sprite());
+		mainPixi.stage.addChild(borderLayer   = new Graphics());
+		mainPixi.stage.addChild(scouterLayer  = new Graphics());
 		mainPixi.stage.scale.x = 2.0;
 		mainPixi.stage.scale.y = 2.0;
 		mainPixi.stage.on("mousemove", onMouseMove);
 		problemLayer.x = problemLayer.y = 20;
 		borderLayer .x = borderLayer .y = 20;
+		scouterLayer.x = scouterLayer.y = 20;
 		problemLayer.alpha = 0.3;
 		
 		state = new State(
 			outputCanvas.getContext2d(),
 			borderLayer,
 			errorOutput = new ErrorOutput()
+		);
+		scouter = new Scouter(
+			state,
+			scouterLayer
 		);
 		
 		problemInput = cast Browser.document.getElementById("problem");
@@ -64,8 +74,26 @@ class Main
 		input = cast Browser.document.getElementById("input");
 		input.onchange = onInputChanged;
 		input.oninput = onInputChanged;
+		
+		Browser.window.addEventListener("keydown", onKey, false);
 		Browser.window.addEventListener('hashchange', readHash, false);
 		readHash();
+	}
+	
+	static function onKey(e:KeyboardEvent):Void 
+	{
+		switch (e.keyCode)
+		{
+			case KeyboardEvent.DOM_VK_W: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.top   );
+			case KeyboardEvent.DOM_VK_X: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.bottom);
+			case KeyboardEvent.DOM_VK_D: input.value += state.getLineCut(true , scouter.right, 400 - scouter.y);
+			case KeyboardEvent.DOM_VK_A: input.value += state.getLineCut(true , scouter.left , 400 - scouter.y);
+			case _: return;
+		}
+		e.preventDefault();
+		var error = cast Browser.document.getElementById("error");
+		error.innerText = errorOutput.text;
+		onInputChanged();
 	}
 	
 	static function readHash():Void
@@ -136,7 +164,12 @@ class Main
 	{
 		var point = problemLayer.toLocal(new Point(e.data.global.x, e.data.global.y));
 		
+		scouter.update(Math.round(point.x), Math.round(point.y), imageElement);
+		
 		var text = cast Browser.document.getElementById("point");
-		text.innerText = Math.round(point.x) + "," + Math.round(state.cutState.height - point.y);
+		text.innerText = 
+			Math.round(point.x) + "," + 
+			Math.round(state.cutState.height - point.y) + "," + 
+			"#" + ArgbColor.of(scouter.pixel).toArgbHexString();
 	}
 }

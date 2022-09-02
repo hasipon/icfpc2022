@@ -174,8 +174,7 @@ class CutState
 		if (node1 == null)
 		{
 			errorOutput.add(lineNumber, "unknown id:" + id1.join(".") + "." + index1);
-		}
-		
+		}		
 		switch [node0, node1]
 		{
 			case [CutNode.Leaf(rect0), CutNode.Leaf(rect1)]:
@@ -247,6 +246,43 @@ class CutState
 				throw "error";
 				
 		}
+	}
+	
+	public function getNodeAt(x:Int, y:Int):Array<Int>
+	{
+		var ids = [];
+		_getNodeAt(x, y, ids, roots);
+		return ids;
+	}
+	
+	private function _getNodeAt(x:Int, y:Int, ids:Array<Int>, nodes:Array<CutNode>):Bool
+	{
+		for (i in 0...nodes.length)
+		{
+			ids.push(i);
+			switch (nodes[i])
+			{
+				case CutNode.Leaf(rect):
+					if (
+						rect.x < x && x < rect.right &&
+						rect.y < y && y < rect.bottom
+					)
+					{
+						return true;
+					}
+					
+				case CutNode.Node(children):
+					if (_getNodeAt(x, y, ids, children))
+					{
+						return true;
+					}
+					
+				case CutNode.Marged:
+					
+			}
+			ids.pop();
+		}
+		return false;
 	}
 }
 
