@@ -162,7 +162,7 @@ Main.main = function() {
 };
 Main.readHash = function() {
 	var hash = $global.location.hash;
-	var index = hash.indexOf("l");
+	var index = hash.indexOf(";");
 	if(index > 0) {
 		var inputText = HxOverrides.substr(hash,index + 1,null);
 		Main.input.value = decodeURIComponent(inputText.split("+").join(" "));

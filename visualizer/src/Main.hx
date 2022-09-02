@@ -72,7 +72,7 @@ class Main
 	static function readHash():Void
 	{
 		var hash = Browser.location.hash;
-		var index = hash.indexOf("l");
+		var index = hash.indexOf(";");
 		if (index > 0)
 		{
 			var inputText = hash.substr(index + 1);
