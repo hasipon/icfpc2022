@@ -1,0 +1,5 @@
+wheel
+Jinja2
+flask
+Werkzeug
+Pillow
