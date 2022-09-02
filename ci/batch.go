@@ -33,7 +33,6 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 			continue
 		}
 
-		fmt.Println("Inserting", problemID, solutionName)
 		_, err = defaultDB.RegisterSolution(solutionName, problemID, string(ans))
 		if err != nil {
 			if strings.Contains(err.Error(), "Error 1062") {
@@ -41,6 +40,8 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 			} else {
 				log.Println("Register Solution failed", err)
 			}
+		} else {
+			fmt.Println("New solution added:", problemID, solutionName)
 		}
 	}
 }
