@@ -1,7 +1,137 @@
 (function ($global) { "use strict";
-var CutState = function() {
+var $estr = function() { return js_Boot.__string_rec(this,''); },$hxEnums = $hxEnums || {},$_;
+var CutState = function(borderLayer,errorOutput) {
+	this.errorOutput = errorOutput;
+	this.borderLayer = borderLayer;
 };
 CutState.__name__ = true;
+CutState.prototype = {
+	init: function(width,height) {
+		this.width = width;
+		this.height = height;
+		this.roots = [CutNode.Leaf(new PIXI.Rectangle(0,0,width,height))];
+	}
+	,draw: function() {
+		this.borderLayer.clear();
+		this._draw([],this.roots);
+	}
+	,_draw: function(ids,nodes) {
+		var _g = 0;
+		var _g1 = nodes.length;
+		while(_g < _g1) {
+			var i = _g++;
+			ids.push(i);
+			var _g2 = nodes[i];
+			switch(_g2._hx_index) {
+			case 0:
+				var rect = _g2.rect;
+				this.borderLayer.lineStyle(0.5,16711680,0.2);
+				this.borderLayer.drawRect(rect.x,this.height - rect.bottom,rect.width,rect.height);
+				break;
+			case 1:
+				var children = _g2.children;
+				this._draw(ids,children);
+				break;
+			}
+			ids.pop();
+		}
+	}
+	,cut: function(lineNumber,ids,isX,pos) {
+		this.lineNumber = lineNumber;
+		var index = ids.pop();
+		var parent = this.getById(ids);
+		var _g = parent[index];
+		switch(_g._hx_index) {
+		case 0:
+			var rect = _g.rect;
+			var nodes = [];
+			parent[index] = CutNode.Node(nodes);
+			if(isX) {
+				nodes.push(CutNode.Leaf(new PIXI.Rectangle(rect.x,rect.y,pos - rect.x,rect.height)));
+				nodes.push(CutNode.Leaf(new PIXI.Rectangle(pos,rect.y,rect.right - pos,rect.height)));
+			} else {
+				nodes.push(CutNode.Leaf(new PIXI.Rectangle(rect.x,rect.y,rect.width,pos - rect.y)));
+				nodes.push(CutNode.Leaf(new PIXI.Rectangle(rect.x,pos,rect.width,rect.bottom - pos)));
+			}
+			break;
+		case 1:
+			var children = _g.children;
+			this.errorOutput.add(lineNumber,"unknown id. found node:" + ids.join(".") + "." + index);
+			break;
+		}
+	}
+	,getById: function(ids) {
+		var result = this.roots;
+		var _g = 0;
+		while(_g < ids.length) {
+			var id = ids[_g];
+			++_g;
+			var node = result[id];
+			if(node == null) {
+				this.errorOutput.add(this.lineNumber,"unknown id:" + ids.join("."));
+			}
+			switch(node._hx_index) {
+			case 0:
+				var _g1 = node.rect;
+				this.errorOutput.add(this.lineNumber,"unknown id. found leaf:" + ids.join("."));
+				break;
+			case 1:
+				var children = node.children;
+				result = children;
+				break;
+			}
+		}
+		return result;
+	}
+};
+var CutNode = $hxEnums["CutNode"] = { __ename__:true,__constructs__:null
+	,Leaf: ($_=function(rect) { return {_hx_index:0,rect:rect,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Leaf",$_.__params__ = ["rect"],$_)
+	,Node: ($_=function(children) { return {_hx_index:1,children:children,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Node",$_.__params__ = ["children"],$_)
+};
+CutNode.__constructs__ = [CutNode.Leaf,CutNode.Node];
+var EReg = function(r,opt) {
+	this.r = new RegExp(r,opt.split("u").join(""));
+};
+EReg.__name__ = true;
+EReg.prototype = {
+	split: function(s) {
+		var d = "#__delim__#";
+		return s.replace(this.r,d).split(d);
+	}
+};
+var ErrorOutput = function() {
+	this.text = "";
+};
+ErrorOutput.__name__ = true;
+ErrorOutput.prototype = {
+	add: function(lineNumber,message) {
+		this.text += lineNumber + ": " + message + "\n";
+	}
+};
+var HxOverrides = function() { };
+HxOverrides.__name__ = true;
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) {
+		return undefined;
+	}
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.now = function() {
+	return Date.now();
+};
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
@@ -11,11 +141,13 @@ Main.main = function() {
 	Main.mainPixi.stage.addChild(Main.outputLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.addChild(Main.problemLayer = new PIXI.Sprite());
 	Main.mainPixi.stage.addChild(Main.borderLayer = new PIXI.Graphics());
+	Main.mainPixi.stage.scale.x = 2.0;
+	Main.mainPixi.stage.scale.y = 2.0;
 	Main.outputLayer.x = Main.outputLayer.y = 20;
 	Main.problemLayer.x = Main.problemLayer.y = 20;
 	Main.borderLayer.x = Main.borderLayer.y = 20;
 	Main.problemLayer.alpha = 0.3;
-	Main.state = new State(Main.outputLayer,Main.borderLayer);
+	Main.state = new State(Main.outputLayer,Main.borderLayer,Main.errorOutput = new ErrorOutput());
 	Main.problemInput = window.document.getElementById("problem");
 	Main.problemInput.onchange = Main.onProblemChanged;
 	Main.problemInput.oninput = Main.onProblemChanged;
@@ -37,49 +169,159 @@ Main.onImageLoad = function() {
 	Main.onInputChanged();
 };
 Main.onInputChanged = function() {
-	Main.state.update(Main.input.value,Main.imageElement.width,Main.imageElement.height);
+	try {
+		Main.errorOutput.text = "";
+		Main.state.update(Main.input.value,Main.imageElement.width,Main.imageElement.height);
+	} catch( _g ) {
+	}
+	var error = window.document.getElementById("error");
+	error.innerText = Main.errorOutput.text;
 };
 Math.__name__ = true;
-var State = function(outputLayer,borderLayer) {
-	this.borderLayer = borderLayer;
+var State = function(outputLayer,borderLayer,errorOutput) {
+	this.errorOutput = errorOutput;
 	this.outputLayer = outputLayer;
-	this.cutState = new CutState();
+	this.cutState = new CutState(borderLayer,errorOutput);
 };
 State.__name__ = true;
 State.prototype = {
 	update: function(value,width,height) {
-		haxe_Log.trace(value,{ fileName : "src/State.hx", lineNumber : 19, className : "State", methodName : "update", customParams : [width,height]});
+		this.cutState.init(width,height);
+		var lines = State.NL.split(value);
+		var index = 0;
+		var _g = 0;
+		while(_g < lines.length) {
+			var line = lines[_g];
+			++_g;
+			++index;
+			line = StringTools.trim(line);
+			if(line == "") {
+				continue;
+			}
+			var args = this.parseLine(index,line);
+			var _g1 = args[0];
+			if(_g1 == "cut") {
+				this.cutState.cut(index,this.parsePosition(args[1]),args[2] == "x",Std.parseInt(args[3]));
+			} else {
+				var x = _g1;
+				this.errorOutput.add(index,"unknown move: " + x + " : in " + line);
+			}
+		}
+		this.cutState.draw();
+	}
+	,parseLine: function(index,line) {
+		var result = [];
+		var args = State.S.split(line);
+		result.push(args[0]);
+		var command = null;
+		var _g = 1;
+		var _g1 = args.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var token = args[i];
+			if(command == null) {
+				if(StringTools.startsWith(token,"[")) {
+					token = HxOverrides.substr(token,1,null);
+					command = "";
+				} else {
+					this.errorOutput.add(index,"unknown matched [ : in " + line);
+					continue;
+				}
+			} else {
+				command += " ";
+			}
+			if(StringTools.endsWith(token,"]")) {
+				command += HxOverrides.substr(token,0,token.length - 1);
+				result.push(command);
+				command = null;
+			} else {
+				command += token;
+			}
+		}
+		return result;
+	}
+	,parsePosition: function(line) {
+		var args = line.split(".");
+		var _g = [];
+		var _g1 = 0;
+		while(_g1 < args.length) {
+			var arg = args[_g1];
+			++_g1;
+			_g.push(Std.parseInt(arg));
+		}
+		return _g;
 	}
 };
 var Std = function() { };
 Std.__name__ = true;
-Std.string = function(s) {
-	return js_Boot.__string_rec(s,"");
-};
-var haxe_Log = function() { };
-haxe_Log.__name__ = true;
-haxe_Log.formatOutput = function(v,infos) {
-	var str = Std.string(v);
-	if(infos == null) {
-		return str;
-	}
-	var pstr = infos.fileName + ":" + infos.lineNumber;
-	if(infos.customParams != null) {
+Std.parseInt = function(x) {
+	if(x != null) {
 		var _g = 0;
-		var _g1 = infos.customParams;
-		while(_g < _g1.length) {
-			var v = _g1[_g];
-			++_g;
-			str += ", " + Std.string(v);
+		var _g1 = x.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = x.charCodeAt(i);
+			if(c <= 8 || c >= 14 && c != 32 && c != 45) {
+				var nc = x.charCodeAt(i + 1);
+				var v = parseInt(x,nc == 120 || nc == 88 ? 16 : 10);
+				if(isNaN(v)) {
+					return null;
+				} else {
+					return v;
+				}
+			}
 		}
 	}
-	return pstr + ": " + str;
+	return null;
 };
-haxe_Log.trace = function(v,infos) {
-	var str = haxe_Log.formatOutput(v,infos);
-	if(typeof(console) != "undefined" && console.log != null) {
-		console.log(str);
+var StringTools = function() { };
+StringTools.__name__ = true;
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return s.lastIndexOf(start,0) == 0;
+	} else {
+		return false;
 	}
+};
+StringTools.endsWith = function(s,end) {
+	var elen = end.length;
+	var slen = s.length;
+	if(slen >= elen) {
+		return s.indexOf(end,slen - elen) == slen - elen;
+	} else {
+		return false;
+	}
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	if(!(c > 8 && c < 14)) {
+		return c == 32;
+	} else {
+		return true;
+	}
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,r)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,r,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,0,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
 };
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
@@ -111,6 +353,34 @@ js_Boot.__string_rec = function(o,s) {
 	case "function":
 		return "<function>";
 	case "object":
+		if(o.__enum__) {
+			var e = $hxEnums[o.__enum__];
+			var con = e.__constructs__[o._hx_index];
+			var n = con._hx_name;
+			if(con.__params__) {
+				s = s + "\t";
+				return n + "(" + ((function($this) {
+					var $r;
+					var _g = [];
+					{
+						var _g1 = 0;
+						var _g2 = con.__params__;
+						while(true) {
+							if(!(_g1 < _g2.length)) {
+								break;
+							}
+							var p = _g2[_g1];
+							_g1 = _g1 + 1;
+							_g.push(js_Boot.__string_rec(o[p],s));
+						}
+					}
+					$r = _g;
+					return $r;
+				}(this))).join(",") + ")";
+			} else {
+				return n;
+			}
+		}
 		if(((o) instanceof Array)) {
 			var str = "[";
 			s += "\t";
@@ -160,8 +430,13 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
+	HxOverrides.now = performance.now.bind(performance);
+}
 String.__name__ = true;
 Array.__name__ = true;
 js_Boot.__toStr = ({ }).toString;
+State.NL = new EReg("\r\n|\r|\n","g");
+State.S = new EReg("\\s","g");
 Main.main();
 })({});
