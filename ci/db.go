@@ -14,6 +14,9 @@ type DB struct {
 }
 
 const schema = `
+DROP TABLE solution;
+DROP TABLE submission;
+
 CREATE TABLE IF NOT EXISTS solution
 (
     id           VARCHAR(255),

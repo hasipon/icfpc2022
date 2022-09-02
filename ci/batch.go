@@ -26,13 +26,14 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 
 		sp := strings.Split(entry.Name(), "-")
 		problemID, _ := strconv.Atoi(sp[0])
-		solutionName := strings.Join(sp[1:len(sp)], "-")
+		solutionName := entry.Name()
 		ans, err := ioutil.ReadFile(path.Join(solutionsDir, entry.Name()))
 		if err != nil {
 			log.Println("Read Solution failed", err)
 			continue
 		}
 
+		fmt.Println("Inserting", problemID, solutionName)
 		_, err = defaultDB.RegisterSolution(solutionName, problemID, string(ans))
 		if err != nil {
 			if strings.Contains(err.Error(), "Error 1062") {
@@ -70,9 +71,9 @@ func batchEvalDB() {
 		if result != nil {
 			solution.EvalOutput = result.Output
 			solution.EvalMessage = result.Tail
-			solution.IslCost = result.Cost
-			solution.SimCost = result.Similarity
-			solution.Cost = result.Sum
+			solution.IslCost = result.IslCost
+			solution.SimCost = result.SimCost
+			solution.Cost = result.Cost
 		}
 
 		err = defaultDB.UpdateSolution(solution)

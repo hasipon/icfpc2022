@@ -11,11 +11,11 @@ import (
 )
 
 type EvalResult struct {
-	Cost       int    `json:"cost,omitempty"`
-	Similarity int    `json:"similarity,omitempty"`
-	Sum        int    `json:"sum,omitempty"`
-	Output     string `json:"output,omitempty"`
-	Tail       string `json:"tail,omitempty"`
+	Cost    int    `json:"cost,omitempty"`
+	IslCost int    `json:"isl_cost,omitempty"`
+	SimCost int    `json:"sim_cost,omitempty"`
+	Output  string `json:"output,omitempty"`
+	Tail    string `json:"tail,omitempty"`
 }
 
 func splitLines(s string) []string {
@@ -41,7 +41,8 @@ func execEvalV2(probID int, isl string) (*EvalResult, error) {
 		return nil, err
 	}
 
-	cmd := exec.Command("npx", "ts-node", "index.ts")
+	cmd := exec.Command("node_modules/.bin/ts-node", "index.ts")
+	cmd.Env = append(cmd.Env, os.Environ()...)
 	cmd.Env = append(cmd.Env,
 		fmt.Sprintf("ISL_FILE=%s", f.Name()),
 		fmt.Sprintf("PROBLEM_ID=%d", probID))
@@ -51,10 +52,10 @@ func execEvalV2(probID int, isl string) (*EvalResult, error) {
 
 	out, err := cmd.CombinedOutput()
 	lines := splitLines(string(out))
-	if err == nil {
-		err = json.Unmarshal([]byte(lines[len(lines)-1]), result)
+	if err == nil && 0 < len(lines) {
+		result.Tail = lines[len(lines)-1]
+		err = json.Unmarshal([]byte(result.Tail), result)
 	}
-	result.Tail = lines[len(lines)-1]
 	result.Output = string(out)
 	return result, err
 }
