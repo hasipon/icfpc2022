@@ -143,6 +143,7 @@ Main.main = function() {
 	Main.mainPixi.stage.addChild(Main.borderLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.scale.x = 2.0;
 	Main.mainPixi.stage.scale.y = 2.0;
+	Main.mainPixi.stage.on("mousemove",Main.onMouseMove);
 	Main.outputLayer.x = Main.outputLayer.y = 20;
 	Main.problemLayer.x = Main.problemLayer.y = 20;
 	Main.borderLayer.x = Main.borderLayer.y = 20;
@@ -176,6 +177,11 @@ Main.onInputChanged = function() {
 	}
 	var error = window.document.getElementById("error");
 	error.innerText = Main.errorOutput.text;
+};
+Main.onMouseMove = function(e) {
+	var point = Main.problemLayer.toLocal(new PIXI.Point(e.data.global.x,e.data.global.y));
+	var text = window.document.getElementById("point");
+	text.innerText = Math.round(point.x) + "," + Math.round(Main.state.cutState.height - point.y);
 };
 Math.__name__ = true;
 var State = function(outputLayer,borderLayer,errorOutput) {

@@ -5,11 +5,11 @@ import pixi.core.math.shapes.Rectangle;
 class CutState 
 {
 	public var borderLayer:Graphics;
-	private var roots:Array<CutNode>;
-	private var errorOutput:ErrorOutput;
-	private var lineNumber:Int;
-	private var height:Int;
-	private var width:Int;
+	public var roots:Array<CutNode>;
+	public var errorOutput:ErrorOutput;
+	public var lineNumber:Int;
+	public var height:Int;
+	public var width:Int;
 	
 	public function new(
 		borderLayer:Graphics, 
