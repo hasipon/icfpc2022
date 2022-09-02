@@ -304,7 +304,7 @@ Main.onKey = function(e) {
 			Main.input.value = result.join("\n");
 			break;
 		}
-		Main._onInputChanged();
+		Main.onInputChanged();
 	} else {
 		switch(e.keyCode) {
 		case 65:
@@ -466,7 +466,7 @@ Scouter.prototype = {
 			}
 		}
 		this.scouterLayer.clear();
-		this.scouterLayer.lineStyle(0.5,65280,0.5);
+		this.scouterLayer.lineStyle(0.5,65280,0.8);
 		this.scouterLayer.moveTo(-20,this.top);
 		this.scouterLayer.lineTo(420,this.top);
 		this.scouterLayer.moveTo(-20,this.bottom);

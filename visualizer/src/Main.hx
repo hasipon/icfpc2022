@@ -100,7 +100,7 @@ class Main
 						input.value = result.join("\n");
 					}
 			}
-			_onInputChanged();
+			onInputChanged();
 		}
 		else
 		{
