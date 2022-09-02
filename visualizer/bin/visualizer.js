@@ -55,7 +55,28 @@ CutState.prototype = {
 			}
 			break;
 		case 1:
-			var children = _g.children;
+			var _g1 = _g.children;
+			this.errorOutput.add(lineNumber,"unknown id. found node:" + ids.join(".") + "." + index);
+			break;
+		}
+	}
+	,cutPoint: function(lineNumber,ids,pos) {
+		this.lineNumber = lineNumber;
+		var index = ids.pop();
+		var parent = this.getById(ids);
+		var _g = parent[index];
+		switch(_g._hx_index) {
+		case 0:
+			var rect = _g.rect;
+			var nodes = [];
+			parent[index] = CutNode.Node(nodes);
+			nodes.push(CutNode.Leaf(new PIXI.Rectangle(rect.x,rect.y,pos.x - rect.x,pos.y - rect.y)));
+			nodes.push(CutNode.Leaf(new PIXI.Rectangle(pos.x,rect.y,rect.right - pos.x,pos.y - rect.y)));
+			nodes.push(CutNode.Leaf(new PIXI.Rectangle(rect.x,pos.y,pos.x - rect.x,rect.bottom - pos.y)));
+			nodes.push(CutNode.Leaf(new PIXI.Rectangle(pos.x,pos.y,rect.right - pos.x,rect.bottom - pos.y)));
+			break;
+		case 1:
+			var _g1 = _g.children;
 			this.errorOutput.add(lineNumber,"unknown id. found node:" + ids.join(".") + "." + index);
 			break;
 		}
@@ -231,13 +252,23 @@ State.prototype = {
 			var args = this.parseLine(index,line);
 			var _g1 = args[0];
 			if(_g1 == "cut") {
-				this.cutState.cut(index,this.parsePosition(args[1]),args[2] == "x",Std.parseInt(args[3]));
+				if(args.length == 3) {
+					this.cutState.cutPoint(index,this.parsePosition(args[1]),this.parsePoint(args[2]));
+				} else if(args.length == 4) {
+					this.cutState.cut(index,this.parsePosition(args[1]),args[2] == "x",Std.parseInt(args[3]));
+				} else {
+					this.errorOutput.add(index,"too many arguments : in " + line);
+				}
 			} else {
 				var x = _g1;
 				this.errorOutput.add(index,"unknown move: " + x + " : in " + line);
 			}
 		}
 		this.cutState.draw();
+	}
+	,parsePoint: function(string) {
+		var args = string.split(",");
+		return new PIXI.Point(Std.parseInt(args[0]),Std.parseInt(args[1]));
 	}
 	,parseLine: function(index,line) {
 		var result = [];

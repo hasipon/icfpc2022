@@ -1,5 +1,6 @@
 package ;
 import pixi.core.graphics.Graphics;
+import pixi.core.math.Point;
 import pixi.core.math.shapes.Rectangle;
 
 class CutState 
@@ -102,7 +103,49 @@ class CutState
 					)));
 				}
 				
-			case CutNode.Node(children):
+			case CutNode.Node(_):
+				errorOutput.add(lineNumber, "unknown id. found node:" + ids.join(".") + "." + index);
+		}
+	}
+	
+	public function cutPoint(lineNumber:Int, ids:Array<Int>, pos:Point):Void 
+	{
+		this.lineNumber = lineNumber;
+		var index = ids.pop();
+		var parent = getById(ids);
+		
+		switch (parent[index])
+		{
+			case CutNode.Leaf(rect):
+				var nodes = [];
+				parent[index] = CutNode.Node(nodes);
+				
+					nodes.push(CutNode.Leaf(new Rectangle(
+						rect.x,
+						rect.y,
+						pos.x - rect.x,
+						pos.y - rect.y
+					)));
+					nodes.push(CutNode.Leaf(new Rectangle(
+						pos.x,
+						rect.y,
+						rect.right - pos.x,
+						pos.y - rect.y
+					)));
+					nodes.push(CutNode.Leaf(new Rectangle(
+						rect.x,
+						pos.y,
+						pos.x - rect.x,
+						rect.bottom - pos.y
+					)));
+					nodes.push(CutNode.Leaf(new Rectangle(
+						pos.x,
+						pos.y,
+						rect.right - pos.x,
+						rect.bottom - pos.y
+					)));
+				
+			case CutNode.Node(_):
 				errorOutput.add(lineNumber, "unknown id. found node:" + ids.join(".") + "." + index);
 		}
 	}
@@ -129,6 +172,7 @@ class CutState
 		}
 		return result;
 	}
+	
 }
 
 enum CutNode

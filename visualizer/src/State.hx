@@ -1,5 +1,6 @@
 package ;
 import pixi.core.graphics.Graphics;
+import pixi.core.math.Point;
 
 class State 
 {
@@ -35,18 +36,39 @@ class State
 			switch (args[0])
 			{
 				case "cut":
-					cutState.cut(
-						index, 
-						parsePosition(args[1]), 
-						args[2] == "x", 
-						Std.parseInt(args[3])
-					);
+					if (args.length == 3)
+					{
+						cutState.cutPoint(
+							index, 
+							parsePosition(args[1]), 
+							parsePoint   (args[2])
+						);
+					}
+					else if (args.length == 4)
+					{
+						cutState.cut(
+							index, 
+							parsePosition(args[1]), 
+							args[2] == "x", 
+							Std.parseInt(args[3])
+						);
+					}
+					else
+					{
+						errorOutput.add(index, "too many arguments : in " + line);
+					}
 					
 				case x:
 					errorOutput.add(index, "unknown move: " + x + " : in " + line);
 			}
 		}
 		cutState.draw();
+	}
+	
+	private function parsePoint(string:String):Point
+	{
+		var args = string.split(",");
+		return new Point(Std.parseInt(args[0]), Std.parseInt(args[1]));
 	}
 	
 	private function parseLine(index:Int, line:String):Array<String>
