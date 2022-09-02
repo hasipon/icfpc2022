@@ -1,0 +1,25 @@
+{% extends "base.jinja2" %}
+{% block content %}
+
+    <div class="container">
+        <h2>問題一覧 ({{ problems|length }} 件)</h2>
+        <a href="/">すべて</a>
+        <table class="table table-condensed table-striped">
+            <tr>
+                <th class="text-center">Name</th>
+                <th class="text-center">Thumb</th>
+            </tr>
+
+            {% for p in problems %}
+                <tr>
+                    <td class="text-center" id="{{ p.name }}">{{ p.name }}</td>
+                    <td class="text-center">
+                        <a href="/problems/{{ p.name }}.png">
+                            <img src="/thumb/{{ p.name }}.png" class="img-thumbnail"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+    </div>
+
+{% endblock %}
+
