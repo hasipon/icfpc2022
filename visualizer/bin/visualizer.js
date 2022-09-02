@@ -3,9 +3,16 @@ var Main = function() { };
 Main.main = function() {
 	Main.canvas = window.document.getElementById("main");
 	Main.problemInput = window.document.getElementById("problem");
-	Main.problemInput.addEventListener("changed",Main.onProblemChanged);
+	Main.problemInput.onchange = Main.onProblemChanged;
+	Main.problemInput.oninput = Main.onProblemChanged;
+	Main.imageElement = window.document.getElementById("image");
+	Main.imageElement.onload = Main.onImageLoad;
+	Main.onProblemChanged();
 };
 Main.onProblemChanged = function() {
+	Main.imageElement.src = "../problems/" + Main.problemInput.value + ".png";
+};
+Main.onImageLoad = function() {
 };
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
