@@ -109,6 +109,19 @@ class State
 					{
 						errorOutput.add(index, "too many arguments : in " + line);
 					}
+				case "merge":
+					if (args.length == 3)
+					{
+						cutState.merge(
+							index, 
+							parseId(args[1]),
+							parseId(args[2])
+						);
+					}
+					else
+					{
+						errorOutput.add(index, "too many arguments : in " + line);
+					}
 					
 				case x:
 					errorOutput.add(index, "unknown move: " + x + " : in " + line);

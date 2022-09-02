@@ -1,4 +1,5 @@
 package ;
+import js.html.svg.Rect;
 import pixi.core.graphics.Graphics;
 import pixi.core.math.Point;
 import pixi.core.math.shapes.Rectangle;
@@ -55,6 +56,8 @@ class CutState
 					
 				case CutNode.Node(children):
 					_draw(ids, children);
+					
+				case CutNode.Marged:
 			}
 			ids.pop();
 		}
@@ -105,6 +108,9 @@ class CutState
 				
 			case CutNode.Node(_):
 				errorOutput.add(lineNumber, "unknown id. found node:" + ids.join(".") + "." + index);
+				
+			case CutNode.Marged:
+				errorOutput.add(lineNumber, "unknown id. marged:" + ids.join(".") + "." + index);
 		}
 	}
 	
@@ -147,9 +153,54 @@ class CutState
 				
 			case CutNode.Node(_):
 				errorOutput.add(lineNumber, "unknown id. found node:" + ids.join(".") + "." + index);
+				
+			case CutNode.Marged:
+				errorOutput.add(lineNumber, "unknown id. marged:" + ids.join(".") + "." + index);
 		}
 	}
 	
+	public function merge(lineNumber:Int, id0:Array<Int>, id1:Array<Int>):Void 
+	{
+		var index0 = id0.pop();
+		var parent0 = getById(id0);
+		var index1 = id1.pop();
+		var parent1 = getById(id0);
+		var node0 = parent0[index0];
+		var node1 = parent1[index1];
+		if (node0 == null)
+		{
+			errorOutput.add(lineNumber, "unknown id:" + id0.join(".") + "." + index0);
+		}
+		if (node1 == null)
+		{
+			errorOutput.add(lineNumber, "unknown id:" + id1.join(".") + "." + index1);
+		}
+		
+		switch [node0, node1]
+		{
+			case [CutNode.Leaf(rect0), CutNode.Leaf(rect1)]:
+				parent0[index0] = CutNode.Marged;
+				parent1[index1] = CutNode.Marged;
+				var result = new Rectangle();
+				result.x = Math.min(rect0.x, rect1.x);
+				result.y = Math.min(rect0.y, rect1.y);
+				result.width  = Math.max(rect0.right , rect1.right ) - result.x;
+				result.height = Math.max(rect0.bottom, rect1.bottom) - result.y;
+				
+				if (
+					(rect0.width != rect1.width && rect0.height != rect1.height) ||
+					rect0.width * rect0.height + rect1.width * rect1.height != result.width * result.height
+				)
+				{
+					errorOutput.add(lineNumber, "cannot marge:" + id0.join(".") + "." + index0 + ", " + id1.join(".") + "." + index1);
+					throw "error";
+				}
+				roots.push(CutNode.Leaf(result));
+				
+			case _:
+				errorOutput.add(lineNumber, "unmatched node:" + id0.join(".") + "." + index0 + ", " + id1.join(".") + "." + index1);
+		}
+	}
 	public function getById(ids:Array<Int>):Array<CutNode>
 	{
 		var result = roots;
@@ -167,6 +218,9 @@ class CutState
 					
 				case CutNode.Node(children):
 					result = children;
+					
+				case CutNode.Marged:
+					errorOutput.add(lineNumber, "unknown id. marged:" + ids.join("."));
 			}
 			
 		}
@@ -187,6 +241,11 @@ class CutState
 			case CutNode.Node(_):
 				errorOutput.add(lineNumber, "unknown id. found node:" + ids.join(".") + "." + index);
 				throw "error";
+				
+			case CutNode.Marged:
+				errorOutput.add(lineNumber, "unknown id. marged:" + ids.join(".") + "." + index);
+				throw "error";
+				
 		}
 	}
 }
@@ -195,4 +254,5 @@ enum CutNode
 {
 	Leaf(rect:Rectangle);
 	Node(children:Array<CutNode>);
+	Marged;
 }

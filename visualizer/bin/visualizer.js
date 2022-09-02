@@ -38,6 +38,8 @@ CutState.prototype = {
 				var children = _g2.children;
 				this._draw(ids,children);
 				break;
+			case 2:
+				break;
 			}
 			ids.pop();
 		}
@@ -64,6 +66,9 @@ CutState.prototype = {
 			var _g1 = _g.children;
 			this.errorOutput.add(lineNumber,"unknown id. found node:" + ids.join(".") + "." + index);
 			break;
+		case 2:
+			this.errorOutput.add(lineNumber,"unknown id. marged:" + ids.join(".") + "." + index);
+			break;
 		}
 	}
 	,cutPoint: function(lineNumber,ids,pos) {
@@ -85,6 +90,45 @@ CutState.prototype = {
 			var _g1 = _g.children;
 			this.errorOutput.add(lineNumber,"unknown id. found node:" + ids.join(".") + "." + index);
 			break;
+		case 2:
+			this.errorOutput.add(lineNumber,"unknown id. marged:" + ids.join(".") + "." + index);
+			break;
+		}
+	}
+	,merge: function(lineNumber,id0,id1) {
+		var index0 = id0.pop();
+		var parent0 = this.getById(id0);
+		var index1 = id1.pop();
+		var parent1 = this.getById(id0);
+		var node0 = parent0[index0];
+		var node1 = parent1[index1];
+		if(node0 == null) {
+			this.errorOutput.add(lineNumber,"unknown id:" + id0.join(".") + "." + index0);
+		}
+		if(node1 == null) {
+			this.errorOutput.add(lineNumber,"unknown id:" + id1.join(".") + "." + index1);
+		}
+		if(node0._hx_index == 0) {
+			if(node1._hx_index == 0) {
+				var rect1 = node1.rect;
+				var rect0 = node0.rect;
+				parent0[index0] = CutNode.Marged;
+				parent1[index1] = CutNode.Marged;
+				var result = new PIXI.Rectangle();
+				result.x = Math.min(rect0.x,rect1.x);
+				result.y = Math.min(rect0.y,rect1.y);
+				result.width = Math.max(rect0.right,rect1.right) - result.x;
+				result.height = Math.max(rect0.bottom,rect1.bottom) - result.y;
+				if(rect0.width != rect1.width && rect0.height != rect1.height || rect0.width * rect0.height + rect1.width * rect1.height != result.width * result.height) {
+					this.errorOutput.add(lineNumber,"cannot marge:" + id0.join(".") + "." + index0 + ", " + id1.join(".") + "." + index1);
+					throw haxe_Exception.thrown("error");
+				}
+				this.roots.push(CutNode.Leaf(result));
+			} else {
+				this.errorOutput.add(lineNumber,"unmatched node:" + id0.join(".") + "." + index0 + ", " + id1.join(".") + "." + index1);
+			}
+		} else {
+			this.errorOutput.add(lineNumber,"unmatched node:" + id0.join(".") + "." + index0 + ", " + id1.join(".") + "." + index1);
 		}
 	}
 	,getById: function(ids) {
@@ -106,6 +150,9 @@ CutState.prototype = {
 				var children = node.children;
 				result = children;
 				break;
+			case 2:
+				this.errorOutput.add(this.lineNumber,"unknown id. marged:" + ids.join("."));
+				break;
 			}
 		}
 		return result;
@@ -123,14 +170,18 @@ CutState.prototype = {
 			var _g1 = _g.children;
 			this.errorOutput.add(lineNumber,"unknown id. found node:" + ids.join(".") + "." + index);
 			throw haxe_Exception.thrown("error");
+		case 2:
+			this.errorOutput.add(lineNumber,"unknown id. marged:" + ids.join(".") + "." + index);
+			throw haxe_Exception.thrown("error");
 		}
 	}
 };
 var CutNode = $hxEnums["CutNode"] = { __ename__:true,__constructs__:null
 	,Leaf: ($_=function(rect) { return {_hx_index:0,rect:rect,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Leaf",$_.__params__ = ["rect"],$_)
 	,Node: ($_=function(children) { return {_hx_index:1,children:children,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Node",$_.__params__ = ["children"],$_)
+	,Marged: {_hx_name:"Marged",_hx_index:2,__enum__:"CutNode",toString:$estr}
 };
-CutNode.__constructs__ = [CutNode.Leaf,CutNode.Node];
+CutNode.__constructs__ = [CutNode.Leaf,CutNode.Node,CutNode.Marged];
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
 };
@@ -295,6 +346,13 @@ State.prototype = {
 					this.cutState.cutPoint(index,this.parseId(args[1]),this.parsePoint(args[2]));
 				} else if(args.length == 4) {
 					this.cutState.cut(index,this.parseId(args[1]),args[2] == "x",Std.parseInt(args[3]));
+				} else {
+					this.errorOutput.add(index,"too many arguments : in " + line);
+				}
+				break;
+			case "merge":
+				if(args.length == 3) {
+					this.cutState.merge(index,this.parseId(args[1]),this.parseId(args[2]));
 				} else {
 					this.errorOutput.add(index,"too many arguments : in " + line);
 				}
