@@ -83,6 +83,13 @@ class Main
 	
 	static function onKey(e:KeyboardEvent):Void 
 	{
+		if (
+			Browser.document.activeElement == problemInput ||
+			Browser.document.activeElement == input
+		)
+		{
+			return;
+		}
 		if (e.ctrlKey)
 		{
 			switch (e.keyCode)
@@ -101,6 +108,10 @@ class Main
 					}
 			}
 			onInputChanged();
+			
+			e.preventDefault();
+			var error = cast Browser.document.getElementById("error");
+			error.innerText = errorOutput.text;
 		}
 		else
 		{
@@ -118,10 +129,11 @@ class Main
 			}
 			
 			_onInputChanged();
+			
+			e.preventDefault();
+			var error = cast Browser.document.getElementById("error");
+			error.innerText = errorOutput.text;
 		}
-		e.preventDefault();
-		var error = cast Browser.document.getElementById("error");
-		error.innerText = errorOutput.text;
 	}
 	
 	static function readHash():Void

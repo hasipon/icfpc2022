@@ -289,6 +289,9 @@ Main.main = function() {
 	Main.readHash();
 };
 Main.onKey = function(e) {
+	if(window.document.activeElement == Main.problemInput || window.document.activeElement == Main.input) {
+		return;
+	}
 	if(e.ctrlKey) {
 		switch(e.keyCode) {
 		case 89:
@@ -305,6 +308,9 @@ Main.onKey = function(e) {
 			break;
 		}
 		Main.onInputChanged();
+		e.preventDefault();
+		var error = window.document.getElementById("error");
+		error.innerText = Main.errorOutput.text;
 	} else {
 		switch(e.keyCode) {
 		case 65:
@@ -335,10 +341,10 @@ Main.onKey = function(e) {
 			return;
 		}
 		Main._onInputChanged();
+		e.preventDefault();
+		var error = window.document.getElementById("error");
+		error.innerText = Main.errorOutput.text;
 	}
-	e.preventDefault();
-	var error = window.document.getElementById("error");
-	error.innerText = Main.errorOutput.text;
 };
 Main.readHash = function() {
 	var hash = $global.location.hash;
