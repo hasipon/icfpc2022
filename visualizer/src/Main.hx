@@ -22,6 +22,7 @@ class Main
 	static var outputLayer :Graphics;
 	static var problemLayer:Sprite;
 	static var state       :State;
+	static var errorOutput :ErrorOutput;
 	
 	static function main()
 	{
@@ -38,6 +39,8 @@ class Main
 		mainPixi.stage.addChild(outputLayer  = new Graphics());
 		mainPixi.stage.addChild(problemLayer = new Sprite());
 		mainPixi.stage.addChild(borderLayer  = new Graphics());
+		mainPixi.stage.scale.x = 2.0;
+		mainPixi.stage.scale.y = 2.0;
 		outputLayer .x = outputLayer .y = 20;
 		problemLayer.x = problemLayer.y = 20;
 		borderLayer .x = borderLayer .y = 20;
@@ -45,7 +48,8 @@ class Main
 		
 		state = new State(
 			outputLayer,
-			borderLayer
+			borderLayer,
+			errorOutput = new ErrorOutput()
 		);
 		
 		problemInput = cast Browser.document.getElementById("problem");
@@ -80,10 +84,20 @@ class Main
 	
 	static function onInputChanged():Void
 	{
-		state.update(
-			input.value,
-			imageElement.width,
-			imageElement.height
-		);
+		try
+		{
+			errorOutput.text = "";
+			state.update(
+				input.value,
+				imageElement.width,
+				imageElement.height
+			);
+		}
+		catch (d:Dynamic)
+		{
+		}
+		
+		var error = cast Browser.document.getElementById("error");
+		error.innerText = errorOutput.text;
 	}
 }
