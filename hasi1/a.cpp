@@ -30,8 +30,15 @@ int main() {
 	}
 	Image = new uint8_t[width*height*4];
 	if ((int)fread(Image, 1, width*height*4, stdin) != width*height*4) throw 1;
+
+	vector<int> cut_i;
 	for (int i = 1; i < height; ++ i) {
 		for (int j = 0; j < width; ++ j) {
+			if (get(i-1, j) != get(i, j)) {
+				cut_i.push_back(i);
+				break;
+			}
 		}
+		next:;
 	}
 }
