@@ -157,7 +157,24 @@ Main.main = function() {
 	Main.input = window.document.getElementById("input");
 	Main.input.onchange = Main.onInputChanged;
 	Main.input.oninput = Main.onInputChanged;
+	window.addEventListener("hashchange",Main.readHash,false);
+	Main.readHash();
+};
+Main.readHash = function() {
+	var hash = $global.location.hash;
+	var index = hash.indexOf("l");
+	if(index > 0) {
+		var inputText = HxOverrides.substr(hash,index + 1,null);
+		Main.input.value = decodeURIComponent(inputText.split("+").join(" "));
+	} else {
+		index = hash.length;
+	}
+	var problem = Std.parseInt(hash.substring(1,index));
+	if(problem != null && problem > 0) {
+		Main.problemInput.value = "" + problem;
+	}
 	Main.onProblemChanged();
+	Main.setHash();
 };
 Main.onProblemChanged = function() {
 	Main.imageElement.src = "../problems/" + Main.problemInput.value + ".png";
@@ -177,6 +194,13 @@ Main.onInputChanged = function() {
 	}
 	var error = window.document.getElementById("error");
 	error.innerText = Main.errorOutput.text;
+	Main.setHash();
+};
+Main.setHash = function() {
+	var tmp = "#" + Std.parseInt(Main.problemInput.value) + ";";
+	var s = Main.input.value;
+	var tmp1 = encodeURIComponent(s);
+	$global.location.hash = tmp + tmp1;
 };
 Main.onMouseMove = function(e) {
 	var point = Main.problemLayer.toLocal(new PIXI.Point(e.data.global.x,e.data.global.y));
@@ -445,4 +469,4 @@ js_Boot.__toStr = ({ }).toString;
 State.NL = new EReg("\r\n|\r|\n","g");
 State.S = new EReg("\\s","g");
 Main.main();
-})({});
+})(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

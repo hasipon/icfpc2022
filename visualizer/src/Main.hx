@@ -65,8 +65,31 @@ class Main
 		input = cast Browser.document.getElementById("input");
 		input.onchange = onInputChanged;
 		input.oninput = onInputChanged;
+		Browser.window.addEventListener('hashchange', readHash, false);
+		readHash();
+	}
+	
+	static function readHash():Void
+	{
+		var hash = Browser.location.hash;
+		var index = hash.indexOf("l");
+		if (index > 0)
+		{
+			var inputText = hash.substr(index + 1);
+			input.value = StringTools.urlDecode(inputText);
+		}
+		else
+		{
+			index = hash.length;
+		}
+		var problem = Std.parseInt(hash.substring(1, index));
+		if (problem != null && problem > 0)
+		{
+			problemInput.value = "" + problem;
+		}
 		
 		onProblemChanged();
+		setHash();
 	}
 	
 	static function onProblemChanged():Void
@@ -102,8 +125,13 @@ class Main
 		
 		var error = cast Browser.document.getElementById("error");
 		error.innerText = errorOutput.text;
+		setHash();
 	}
 	
+	private static function setHash():Void 
+	{
+		Browser.location.hash = "#" + Std.parseInt(problemInput.value) + ";" + StringTools.urlEncode(input.value);
+	}
 	
 	public static function onMouseMove(e:InteractionEvent):Void
 	{
