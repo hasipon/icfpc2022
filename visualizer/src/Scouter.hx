@@ -77,7 +77,7 @@ class Scouter
 		}
 		
 		scouterLayer.clear();
-		scouterLayer.lineStyle(0.5, 0x00FF00);
+		scouterLayer.lineStyle(0.5, 0x00FF00, 0.8);
 		scouterLayer.moveTo(-20, top);
 		scouterLayer.lineTo(420, top);
 		scouterLayer.moveTo(-20, bottom);
