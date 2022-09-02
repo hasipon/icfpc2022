@@ -30,6 +30,7 @@ class Main
 	static var errorOutput :ErrorOutput;
 	static var scouter     :Scouter;
 	static var history:Array<String> = [];
+	static var textLayer:Sprite;
 	
 	static function main()
 	{
@@ -46,6 +47,7 @@ class Main
 		mainPixi.stage.interactive = true;
 		mainPixi.stage.addChild(problemLayer  = new Sprite());
 		mainPixi.stage.addChild(borderLayer   = new Graphics());
+		mainPixi.stage.addChild(textLayer     = new Sprite());
 		mainPixi.stage.addChild(scouterLayer  = new Graphics());
 		mainPixi.stage.scale.x = 2.0;
 		mainPixi.stage.scale.y = 2.0;
@@ -53,11 +55,13 @@ class Main
 		problemLayer.x = problemLayer.y = 20;
 		borderLayer .x = borderLayer .y = 20;
 		scouterLayer.x = scouterLayer.y = 20;
+		textLayer   .x = textLayer   .y = 20;
 		problemLayer.alpha = 0.3;
 		
 		state = new State(
 			outputCanvas.getContext2d(),
 			borderLayer,
+			textLayer,
 			errorOutput = new ErrorOutput()
 		);
 		scouter = new Scouter(

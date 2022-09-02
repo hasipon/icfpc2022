@@ -6,9 +6,12 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var CutState = function(borderLayer,errorOutput) {
+var CutState = function(borderLayer,textLayer,errorOutput) {
+	this.textLayer = textLayer;
 	this.errorOutput = errorOutput;
 	this.borderLayer = borderLayer;
+	this.textFields = [];
+	this.textPool = [];
 };
 CutState.__name__ = true;
 CutState.prototype = {
@@ -19,6 +22,8 @@ CutState.prototype = {
 	}
 	,draw: function() {
 		this.borderLayer.clear();
+		this.textLayer.removeChildren();
+		while(this.textFields.length > 0) this.textPool.push(this.textFields.pop());
 		this._draw([],this.roots);
 	}
 	,_draw: function(ids,nodes) {
@@ -33,6 +38,15 @@ CutState.prototype = {
 				var rect = _g2.rect;
 				this.borderLayer.lineStyle(0.5,16711680,0.2);
 				this.borderLayer.drawRect(rect.x,this.height - rect.bottom,rect.width,rect.height);
+				var text = this.textPool.length > 0 ? this.textPool.pop() : new PIXI.Text("",{ fill : 16711680});
+				text.text = ids.join(".");
+				text.x = rect.x + 2;
+				text.y = this.height - rect.bottom;
+				text.alpha = 0.4;
+				text.scale.x = 0.25;
+				text.scale.y = 0.25;
+				this.textLayer.addChild(text);
+				this.textFields.push(text);
 				break;
 			case 1:
 				var children = _g2.children;
@@ -266,6 +280,7 @@ Main.main = function() {
 	Main.mainPixi.stage.interactive = true;
 	Main.mainPixi.stage.addChild(Main.problemLayer = new PIXI.Sprite());
 	Main.mainPixi.stage.addChild(Main.borderLayer = new PIXI.Graphics());
+	Main.mainPixi.stage.addChild(Main.textLayer = new PIXI.Sprite());
 	Main.mainPixi.stage.addChild(Main.scouterLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.scale.x = 2.0;
 	Main.mainPixi.stage.scale.y = 2.0;
@@ -273,8 +288,9 @@ Main.main = function() {
 	Main.problemLayer.x = Main.problemLayer.y = 20;
 	Main.borderLayer.x = Main.borderLayer.y = 20;
 	Main.scouterLayer.x = Main.scouterLayer.y = 20;
+	Main.textLayer.x = Main.textLayer.y = 20;
 	Main.problemLayer.alpha = 0.3;
-	Main.state = new State(Main.outputCanvas.getContext("2d",null),Main.borderLayer,Main.errorOutput = new ErrorOutput());
+	Main.state = new State(Main.outputCanvas.getContext("2d",null),Main.borderLayer,Main.textLayer,Main.errorOutput = new ErrorOutput());
 	Main.scouter = new Scouter(Main.state,Main.scouterLayer);
 	Main.problemInput = window.document.getElementById("problem");
 	Main.problemInput.onchange = Main.onProblemChanged;
@@ -472,10 +488,10 @@ Scouter.prototype = {
 		return data[3] << 24 | data[0] << 16 | data[1] << 8 | data[2];
 	}
 };
-var State = function(outputLayer,borderLayer,errorOutput) {
+var State = function(outputLayer,borderLayer,textLayer,errorOutput) {
 	this.errorOutput = errorOutput;
 	this.outputLayer = outputLayer;
-	this.cutState = new CutState(borderLayer,errorOutput);
+	this.cutState = new CutState(borderLayer,textLayer,errorOutput);
 };
 State.__name__ = true;
 State.prototype = {
