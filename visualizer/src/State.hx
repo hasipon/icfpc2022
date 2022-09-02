@@ -130,6 +130,16 @@ class State
 		cutState.draw();
 	}
 	
+	public function getLineCut(isX:Bool, x:Int, y:Int):String
+	{
+		var id = cutState.getNodeAt(x, y);
+		if (id.length == 0) {
+			errorOutput.add(0, "not found parent rect");
+			return ""; 
+		}
+		return "\ncut [" + id.join(".") + "] [" + (if (isX) "x" else "y") + "] [" + (if (isX) x else y) + "]";
+	}
+	
 	
 	private function parsePoint(string:String):Point
 	{

@@ -175,6 +175,38 @@ CutState.prototype = {
 			throw haxe_Exception.thrown("error");
 		}
 	}
+	,getNodeAt: function(x,y) {
+		var ids = [];
+		this._getNodeAt(x,y,ids,this.roots);
+		return ids;
+	}
+	,_getNodeAt: function(x,y,ids,nodes) {
+		var _g = 0;
+		var _g1 = nodes.length;
+		while(_g < _g1) {
+			var i = _g++;
+			ids.push(i);
+			var _g2 = nodes[i];
+			switch(_g2._hx_index) {
+			case 0:
+				var rect = _g2.rect;
+				if(rect.x < x && x < rect.right && rect.y < y && y < rect.bottom) {
+					return true;
+				}
+				break;
+			case 1:
+				var children = _g2.children;
+				if(this._getNodeAt(x,y,ids,children)) {
+					return true;
+				}
+				break;
+			case 2:
+				break;
+			}
+			ids.pop();
+		}
+		return false;
+	}
 };
 var CutNode = $hxEnums["CutNode"] = { __ename__:true,__constructs__:null
 	,Leaf: ($_=function(rect) { return {_hx_index:0,rect:rect,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Leaf",$_.__params__ = ["rect"],$_)
@@ -234,13 +266,16 @@ Main.main = function() {
 	Main.mainPixi.stage.interactive = true;
 	Main.mainPixi.stage.addChild(Main.problemLayer = new PIXI.Sprite());
 	Main.mainPixi.stage.addChild(Main.borderLayer = new PIXI.Graphics());
+	Main.mainPixi.stage.addChild(Main.scouterLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.scale.x = 2.0;
 	Main.mainPixi.stage.scale.y = 2.0;
 	Main.mainPixi.stage.on("mousemove",Main.onMouseMove);
 	Main.problemLayer.x = Main.problemLayer.y = 20;
 	Main.borderLayer.x = Main.borderLayer.y = 20;
+	Main.scouterLayer.x = Main.scouterLayer.y = 20;
 	Main.problemLayer.alpha = 0.3;
 	Main.state = new State(Main.outputCanvas.getContext("2d",null),Main.borderLayer,Main.errorOutput = new ErrorOutput());
+	Main.scouter = new Scouter(Main.state,Main.scouterLayer);
 	Main.problemInput = window.document.getElementById("problem");
 	Main.problemInput.onchange = Main.onProblemChanged;
 	Main.problemInput.oninput = Main.onProblemChanged;
@@ -249,8 +284,31 @@ Main.main = function() {
 	Main.input = window.document.getElementById("input");
 	Main.input.onchange = Main.onInputChanged;
 	Main.input.oninput = Main.onInputChanged;
+	window.addEventListener("keydown",Main.onKey,false);
 	window.addEventListener("hashchange",Main.readHash,false);
 	Main.readHash();
+};
+Main.onKey = function(e) {
+	switch(e.keyCode) {
+	case 65:
+		Main.input.value += Main.state.getLineCut(true,Main.scouter.left,400 - Main.scouter.y);
+		break;
+	case 68:
+		Main.input.value += Main.state.getLineCut(true,Main.scouter.right,400 - Main.scouter.y);
+		break;
+	case 87:
+		Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.top);
+		break;
+	case 88:
+		Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.bottom);
+		break;
+	default:
+		return;
+	}
+	e.preventDefault();
+	var error = window.document.getElementById("error");
+	error.innerText = Main.errorOutput.text;
+	Main.onInputChanged();
 };
 Main.readHash = function() {
 	var hash = $global.location.hash;
@@ -296,10 +354,99 @@ Main.setHash = function() {
 };
 Main.onMouseMove = function(e) {
 	var point = Main.problemLayer.toLocal(new PIXI.Point(e.data.global.x,e.data.global.y));
+	Main.scouter.update(Math.round(point.x),Math.round(point.y),Main.imageElement);
 	var text = window.document.getElementById("point");
-	text.innerText = Math.round(point.x) + "," + Math.round(Main.state.cutState.height - point.y);
+	var tmp = Math.round(point.x) + "," + Math.round(Main.state.cutState.height - point.y) + "," + "#";
+	var color = Main.scouter.pixel;
+	var _this = new tweenxcore_color_ArgbColor((color >>> 24 & 255) / 255,(color >> 16 & 255) / 255,(color >> 8 & 255) / 255,(color & 255) / 255);
+	var a = _this.a;
+	var r = _this.r;
+	var g = _this.g;
+	var b = _this.b;
+	if(r <= 0.0) {
+		r = 0.0;
+	} else if(1.0 <= r) {
+		r = 1.0;
+	}
+	if(g <= 0.0) {
+		g = 0.0;
+	} else if(1.0 <= g) {
+		g = 1.0;
+	}
+	if(b <= 0.0) {
+		b = 0.0;
+	} else if(1.0 <= b) {
+		b = 1.0;
+	}
+	text.innerText = tmp + StringTools.hex(((a <= 0.0 ? 0.0 : 1.0 <= a ? 1.0 : a) * 255 | 0) << 24 | ((r * 255 | 0) << 16 | (g * 255 | 0) << 8 | (b * 255 | 0)),8);
 };
 Math.__name__ = true;
+var Scouter = function(state,scouterLayer) {
+	this.canvas = window.document.createElement("canvas");
+	window.document.body.appendChild(this.canvas);
+	this.canvas.width = 400;
+	this.canvas.height = 400;
+	this.canvas.style.display = "none";
+	this.context = this.canvas.getContext("2d");
+	this.state = state;
+	this.scouterLayer = scouterLayer;
+};
+Scouter.__name__ = true;
+Scouter.prototype = {
+	update: function(x,y,image) {
+		this.x = x;
+		this.y = y;
+		this.context.fillStyle = "white";
+		this.context.drawImage(image,0,0,400,400);
+		this.pixel = this.getPixel(x,y);
+		this.left = x;
+		this.right = x;
+		this.top = y;
+		this.bottom = y;
+		while(0 < this.left) {
+			this.left -= 1;
+			var pixel2 = this.getPixel(this.left,y);
+			if(pixel2 != this.pixel) {
+				break;
+			}
+		}
+		while(0 < this.top) {
+			this.top -= 1;
+			var pixel2 = this.getPixel(x,this.top);
+			if(pixel2 != this.pixel) {
+				break;
+			}
+		}
+		while(400 > this.right) {
+			this.right += 1;
+			var pixel2 = this.getPixel(this.right,y);
+			if(pixel2 != this.pixel) {
+				break;
+			}
+		}
+		while(400 > this.bottom) {
+			this.bottom += 1;
+			var pixel2 = this.getPixel(x,this.bottom);
+			if(pixel2 != this.pixel) {
+				break;
+			}
+		}
+		this.scouterLayer.clear();
+		this.scouterLayer.lineStyle(0.5,65280);
+		this.scouterLayer.moveTo(-20,this.top);
+		this.scouterLayer.lineTo(420,this.top);
+		this.scouterLayer.moveTo(-20,this.bottom);
+		this.scouterLayer.lineTo(420,this.bottom);
+		this.scouterLayer.moveTo(this.left,-20);
+		this.scouterLayer.lineTo(this.left,420);
+		this.scouterLayer.moveTo(this.right,-20);
+		this.scouterLayer.lineTo(this.right,420);
+	}
+	,getPixel: function(x,y) {
+		var data = this.context.getImageData(x,y,1,1).data;
+		return data[3] << 24 | data[0] << 16 | data[1] << 8 | data[2];
+	}
+};
 var State = function(outputLayer,borderLayer,errorOutput) {
 	this.errorOutput = errorOutput;
 	this.outputLayer = outputLayer;
@@ -379,6 +526,14 @@ State.prototype = {
 			}
 		}
 		this.cutState.draw();
+	}
+	,getLineCut: function(isX,x,y) {
+		var id = this.cutState.getNodeAt(x,y);
+		if(id.length == 0) {
+			this.errorOutput.add(0,"not found parent rect");
+			return "";
+		}
+		return "\ncut [" + id.join(".") + "] [" + (isX ? "x" : "y") + "] [" + (isX ? x : y) + "]";
 	}
 	,parsePoint: function(string) {
 		var args = string.split(",");
