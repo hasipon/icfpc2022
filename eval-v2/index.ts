@@ -13,4 +13,4 @@ const code= "cut [0] [x] [204]\n" +
 const interpreter = new Interpreter();
 const input = fs.readFileSync("/dev/stdin", "utf8");
 const result = interpreter.run(input);
-console.log({"score": result.cost});
+console.log({"cost": result.cost});
