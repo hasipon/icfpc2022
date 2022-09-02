@@ -19,16 +19,17 @@ class Main
 	static var imageElement:ImageElement;
 	
 	static var mainCanvas:CanvasElement;
+	static var outputCanvas:CanvasElement;
 	static var mainPixi:Application;
 	static var borderLayer :Graphics;
-	static var outputLayer :Graphics;
 	static var problemLayer:Sprite;
 	static var state       :State;
 	static var errorOutput :ErrorOutput;
 	
 	static function main()
 	{
-		mainCanvas = cast Browser.document.getElementById("output");
+		outputCanvas = cast Browser.document.getElementById("output");
+		mainCanvas = cast Browser.document.getElementById("pixi");
 	
 		mainPixi = new Application({
 			view  :mainCanvas,
@@ -38,19 +39,17 @@ class Main
 			autoResize: true,
 		});
 		mainPixi.stage.interactive = true;
-		mainPixi.stage.addChild(outputLayer  = new Graphics());
 		mainPixi.stage.addChild(problemLayer = new Sprite());
 		mainPixi.stage.addChild(borderLayer  = new Graphics());
 		mainPixi.stage.scale.x = 2.0;
 		mainPixi.stage.scale.y = 2.0;
 		mainPixi.stage.on("mousemove", onMouseMove);
-		outputLayer .x = outputLayer .y = 20;
 		problemLayer.x = problemLayer.y = 20;
 		borderLayer .x = borderLayer .y = 20;
 		problemLayer.alpha = 0.3;
 		
 		state = new State(
-			outputLayer,
+			outputCanvas.getContext2d(),
 			borderLayer,
 			errorOutput = new ErrorOutput()
 		);

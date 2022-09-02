@@ -1,20 +1,22 @@
 package ;
+import js.html.CanvasRenderingContext2D;
 import pixi.core.graphics.Graphics;
 import pixi.core.math.Point;
 import pixi.plugins.spine.core.Color;
 import tweenxcore.color.ArgbColor;
 import tweenxcore.color.RgbColor;
+using tweenxcore.Tools.FloatTools;
 
 class State 
 {
 	public var errorOutput:ErrorOutput;
 	public var cutState:CutState;
-	public var outputLayer:Graphics;
+	public var outputLayer:CanvasRenderingContext2D;
 	public static var NL:EReg = new EReg("\r\n|\r|\n", "g");
 	public static var S:EReg = new EReg("\\s", "g");
 	
 	public function new(
-		outputLayer:Graphics, 
+		outputLayer:CanvasRenderingContext2D, 
 		borderLayer:Graphics, 
 		errorOutput:ErrorOutput
 	) 
@@ -26,7 +28,8 @@ class State
 	
 	public function update(value:String, width:Int, height:Int):Void 
 	{
-		outputLayer.clear();
+		outputLayer.fillStyle = "white";
+		outputLayer.fillRect(0, 0, width, height);
 		cutState.init(width, height);
 		var lines = NL.split(value);
 		var index = 0;
@@ -70,22 +73,42 @@ class State
 							parseId(args[1])
 						);
 						var color = parseRgba(args[2]);
-						outputLayer.beginFill(
-							color.toRgbInt(),
-							color.a
-						);
-						outputLayer.drawRect(
-							rect.x, 
-							cutState.height - rect.bottom, 
-							rect.width, 
-							rect.height
-						);
+						color.r = color.a.lerp(1.0, color.r);
+						color.g = color.a.lerp(1.0, color.g);
+						color.b = color.a.lerp(1.0, color.b);
+						outputLayer.fillStyle = color.toRgbCssString();
+						outputLayer.fillRect(rect.x, cutState.height - rect.bottom, rect.width, rect.height);
 					}
 					else
 					{
 						errorOutput.add(index, "too many arguments : in " + line);
 					}
-					
+				case "swap":
+					if (args.length == 3)
+					{
+						var rect0 = cutState.getRectangle(
+							index, 
+							parseId(args[1])
+						);
+						var rect1 = cutState.getRectangle(
+							index, 
+							parseId(args[2])
+						);
+						if (rect0.width != rect1.width || rect0.height != rect1.height)
+						{
+							errorOutput.add(index, "unmatched size : in " + line);
+							return;
+						}
+						
+						var image0 = outputLayer.getImageData(rect0.x, cutState.height - rect0.bottom, rect0.width, rect0.height);
+						var image1 = outputLayer.getImageData(rect1.x, cutState.height - rect1.bottom, rect1.width, rect1.height);
+						outputLayer.putImageData(image1, rect0.x, cutState.height - rect0.bottom);
+						outputLayer.putImageData(image0, rect1.x, cutState.height - rect1.bottom);
+					}
+					else
+					{
+						errorOutput.add(index, "too many arguments : in " + line);
+					}
 					
 				case x:
 					errorOutput.add(index, "unknown move: " + x + " : in " + line);

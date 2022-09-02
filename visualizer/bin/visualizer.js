@@ -177,20 +177,19 @@ HxOverrides.now = function() {
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
-	Main.mainCanvas = window.document.getElementById("output");
+	Main.outputCanvas = window.document.getElementById("output");
+	Main.mainCanvas = window.document.getElementById("pixi");
 	Main.mainPixi = new PIXI.Application({ view : Main.mainCanvas, transparent : true, width : Main.mainCanvas.width, height : Main.mainCanvas.height, autoResize : true});
 	Main.mainPixi.stage.interactive = true;
-	Main.mainPixi.stage.addChild(Main.outputLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.addChild(Main.problemLayer = new PIXI.Sprite());
 	Main.mainPixi.stage.addChild(Main.borderLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.scale.x = 2.0;
 	Main.mainPixi.stage.scale.y = 2.0;
 	Main.mainPixi.stage.on("mousemove",Main.onMouseMove);
-	Main.outputLayer.x = Main.outputLayer.y = 20;
 	Main.problemLayer.x = Main.problemLayer.y = 20;
 	Main.borderLayer.x = Main.borderLayer.y = 20;
 	Main.problemLayer.alpha = 0.3;
-	Main.state = new State(Main.outputLayer,Main.borderLayer,Main.errorOutput = new ErrorOutput());
+	Main.state = new State(Main.outputCanvas.getContext("2d",null),Main.borderLayer,Main.errorOutput = new ErrorOutput());
 	Main.problemInput = window.document.getElementById("problem");
 	Main.problemInput.onchange = Main.onProblemChanged;
 	Main.problemInput.oninput = Main.onProblemChanged;
@@ -258,7 +257,8 @@ var State = function(outputLayer,borderLayer,errorOutput) {
 State.__name__ = true;
 State.prototype = {
 	update: function(value,width,height) {
-		this.outputLayer.clear();
+		this.outputLayer.fillStyle = "white";
+		this.outputLayer.fillRect(0,0,width,height);
 		this.cutState.init(width,height);
 		var lines = State.NL.split(value);
 		var index = 0;
@@ -278,26 +278,14 @@ State.prototype = {
 				if(args.length == 3) {
 					var rect = this.cutState.getRectangle(index,this.parseId(args[1]));
 					var color = this.parseRgba(args[2]);
-					var r = color.r;
-					var g = color.g;
-					var b = color.b;
-					if(r <= 0.0) {
-						r = 0.0;
-					} else if(1.0 <= r) {
-						r = 1.0;
-					}
-					if(g <= 0.0) {
-						g = 0.0;
-					} else if(1.0 <= g) {
-						g = 1.0;
-					}
-					if(b <= 0.0) {
-						b = 0.0;
-					} else if(1.0 <= b) {
-						b = 1.0;
-					}
-					this.outputLayer.beginFill((r * 255 | 0) << 16 | (g * 255 | 0) << 8 | (b * 255 | 0),color.a);
-					this.outputLayer.drawRect(rect.x,this.cutState.height - rect.bottom,rect.width,rect.height);
+					var rate = color.a;
+					color.r = 1 - rate + color.r * rate;
+					var rate1 = color.a;
+					color.g = 1 - rate1 + color.g * rate1;
+					var rate2 = color.a;
+					color.b = 1 - rate2 + color.b * rate2;
+					this.outputLayer.fillStyle = "rgb(" + (color.r * 255 | 0) + "," + (color.g * 255 | 0) + "," + (color.b * 255 | 0) + ")";
+					this.outputLayer.fillRect(rect.x,this.cutState.height - rect.bottom,rect.width,rect.height);
 				} else {
 					this.errorOutput.add(index,"too many arguments : in " + line);
 				}
@@ -307,6 +295,22 @@ State.prototype = {
 					this.cutState.cutPoint(index,this.parseId(args[1]),this.parsePoint(args[2]));
 				} else if(args.length == 4) {
 					this.cutState.cut(index,this.parseId(args[1]),args[2] == "x",Std.parseInt(args[3]));
+				} else {
+					this.errorOutput.add(index,"too many arguments : in " + line);
+				}
+				break;
+			case "swap":
+				if(args.length == 3) {
+					var rect0 = this.cutState.getRectangle(index,this.parseId(args[1]));
+					var rect1 = this.cutState.getRectangle(index,this.parseId(args[2]));
+					if(rect0.width != rect1.width || rect0.height != rect1.height) {
+						this.errorOutput.add(index,"unmatched size : in " + line);
+						return;
+					}
+					var image0 = this.outputLayer.getImageData(rect0.x,this.cutState.height - rect0.bottom,rect0.width,rect0.height);
+					var image1 = this.outputLayer.getImageData(rect1.x,this.cutState.height - rect1.bottom,rect1.width,rect1.height);
+					this.outputLayer.putImageData(image1,rect0.x,this.cutState.height - rect0.bottom);
+					this.outputLayer.putImageData(image0,rect1.x,this.cutState.height - rect1.bottom);
 				} else {
 					this.errorOutput.add(index,"too many arguments : in " + line);
 				}
