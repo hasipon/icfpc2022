@@ -49,7 +49,7 @@ class Main
 		mainPixi.stage.addChild(scouterLayer  = new Graphics());
 		mainPixi.stage.scale.x = 2.0;
 		mainPixi.stage.scale.y = 2.0;
-		mainPixi.stage.on("mousemove", onMouseMove);
+		mainPixi.stage.on("mousedown", onMouseDown);
 		problemLayer.x = problemLayer.y = 20;
 		borderLayer .x = borderLayer .y = 20;
 		scouterLayer.x = scouterLayer.y = 20;
@@ -106,6 +106,7 @@ class Main
 						result.push(history.pop());
 						input.value = result.join("\n");
 					}
+				case _: return;
 			}
 			onInputChanged();
 			
@@ -125,6 +126,7 @@ class Main
 				case KeyboardEvent.DOM_VK_E: input.value += state.getPointCut(scouter.right, 400 - scouter.top   );
 				case KeyboardEvent.DOM_VK_Z: input.value += state.getPointCut(scouter.left , 400 - scouter.bottom);
 				case KeyboardEvent.DOM_VK_C: input.value += state.getPointCut(scouter.right, 400 - scouter.bottom);
+				case KeyboardEvent.DOM_VK_S: input.value += state.getPointCut(scouter.x, 400 - scouter.y);
 				case _: return;
 			}
 			
@@ -204,16 +206,21 @@ class Main
 		Browser.location.hash = "#" + Std.parseInt(problemInput.value) + ";" + StringTools.urlEncode(input.value);
 	}
 	
-	public static function onMouseMove(e:InteractionEvent):Void
+	public static function onMouseDown(e:InteractionEvent):Void
 	{
 		var point = problemLayer.toLocal(new Point(e.data.global.x, e.data.global.y));
 		
 		scouter.update(Math.round(point.x), Math.round(point.y), imageElement);
 		
+		var color = ArgbColor.of(scouter.pixel);
 		var text = cast Browser.document.getElementById("point");
 		text.innerText = 
 			Math.round(point.x) + "," + 
 			Math.round(state.cutState.height - point.y) + "," + 
-			"#" + ArgbColor.of(scouter.pixel).toArgbHexString();
+			"[" + color.r * 255 +
+			"," + color.g * 255 +
+			"," + color.b * 255 +
+			"," + color.a * 255 +
+			"]";
 	}
 }

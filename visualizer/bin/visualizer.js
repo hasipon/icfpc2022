@@ -269,7 +269,7 @@ Main.main = function() {
 	Main.mainPixi.stage.addChild(Main.scouterLayer = new PIXI.Graphics());
 	Main.mainPixi.stage.scale.x = 2.0;
 	Main.mainPixi.stage.scale.y = 2.0;
-	Main.mainPixi.stage.on("mousemove",Main.onMouseMove);
+	Main.mainPixi.stage.on("mousedown",Main.onMouseDown);
 	Main.problemLayer.x = Main.problemLayer.y = 20;
 	Main.borderLayer.x = Main.borderLayer.y = 20;
 	Main.scouterLayer.x = Main.scouterLayer.y = 20;
@@ -306,6 +306,8 @@ Main.onKey = function(e) {
 			Main.history.push(result.pop());
 			Main.input.value = result.join("\n");
 			break;
+		default:
+			return;
 		}
 		Main.onInputChanged();
 		e.preventDefault();
@@ -327,6 +329,9 @@ Main.onKey = function(e) {
 			break;
 		case 81:
 			Main.input.value += Main.state.getPointCut(Main.scouter.left,400 - Main.scouter.top);
+			break;
+		case 83:
+			Main.input.value += Main.state.getPointCut(Main.scouter.x,400 - Main.scouter.y);
 			break;
 		case 87:
 			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.top);
@@ -392,33 +397,13 @@ Main.setHash = function() {
 	var tmp1 = encodeURIComponent(s);
 	$global.location.hash = tmp + tmp1;
 };
-Main.onMouseMove = function(e) {
+Main.onMouseDown = function(e) {
 	var point = Main.problemLayer.toLocal(new PIXI.Point(e.data.global.x,e.data.global.y));
 	Main.scouter.update(Math.round(point.x),Math.round(point.y),Main.imageElement);
-	var text = window.document.getElementById("point");
-	var tmp = Math.round(point.x) + "," + Math.round(Main.state.cutState.height - point.y) + "," + "#";
 	var color = Main.scouter.pixel;
-	var _this = new tweenxcore_color_ArgbColor((color >>> 24 & 255) / 255,(color >> 16 & 255) / 255,(color >> 8 & 255) / 255,(color & 255) / 255);
-	var a = _this.a;
-	var r = _this.r;
-	var g = _this.g;
-	var b = _this.b;
-	if(r <= 0.0) {
-		r = 0.0;
-	} else if(1.0 <= r) {
-		r = 1.0;
-	}
-	if(g <= 0.0) {
-		g = 0.0;
-	} else if(1.0 <= g) {
-		g = 1.0;
-	}
-	if(b <= 0.0) {
-		b = 0.0;
-	} else if(1.0 <= b) {
-		b = 1.0;
-	}
-	text.innerText = tmp + StringTools.hex(((a <= 0.0 ? 0.0 : 1.0 <= a ? 1.0 : a) * 255 | 0) << 24 | ((r * 255 | 0) << 16 | (g * 255 | 0) << 8 | (b * 255 | 0)),8);
+	var color1 = new tweenxcore_color_ArgbColor((color >>> 24 & 255) / 255,(color >> 16 & 255) / 255,(color >> 8 & 255) / 255,(color & 255) / 255);
+	var text = window.document.getElementById("point");
+	text.innerText = Math.round(point.x) + "," + Math.round(Main.state.cutState.height - point.y) + "," + "[" + color1.r * 255 + "," + color1.g * 255 + "," + color1.b * 255 + "," + color1.a * 255 + "]";
 };
 Math.__name__ = true;
 var Scouter = function(state,scouterLayer) {
