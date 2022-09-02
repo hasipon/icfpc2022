@@ -5,6 +5,9 @@ uint8_t* Image;
 uint8_t get(int i, int j, int k) {
 	return Image[((height - 1 - i) * width + j) * 4 + k];
 }
+uint32_t get(int i, int j) {
+	return *(uint32_t*)&Image[((height - 1 - i) * width + j) * 4];
+}
 int main() {
 	char buf[1000], name[1000];
 	if (!fgets(buf, sizeof(buf), stdin)) throw 1;
@@ -27,8 +30,8 @@ int main() {
 	}
 	Image = new uint8_t[width*height*4];
 	if ((int)fread(Image, 1, width*height*4, stdin) != width*height*4) throw 1;
-	int i = 395;
-	for (int j = 0; j < 400; ++ j) {
-		cout << (int)get(i, j, 0) << " " << (int)get(i, j, 1) << " " << (int)get(i, j, 2) << " " << (int)get(i, j, 3) << endl;
+	for (int i = 1; i < height; ++ i) {
+		for (int j = 0; j < width; ++ j) {
+		}
 	}
 }
