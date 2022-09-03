@@ -28,6 +28,7 @@ func CallSubmitApi(problemID int, name string, isl string) error {
 	}
 
 	req.Header.Set("Authorization", "Bearer "+os.Getenv("API_TOKEN"))
+	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	resp, err := client.Do(req)
 	if err != nil {
