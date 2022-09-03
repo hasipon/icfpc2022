@@ -1,9 +1,11 @@
 
 use std::env::args;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::BufWriter;
 use image::io::Reader as ImageReader;
 use std::io::prelude::*;
+use serde::{Serialize, Deserialize};
+use chrono::Utc;
 
 mod data;
 mod draw;
@@ -15,10 +17,11 @@ fn main() -> std::io::Result<()>  {
     let arg:Vec<String> = args().collect();
 
     let mut problem = 18;
-    let mut initial_file_path = format!("initial/{}.isl", problem).to_owned();
     if arg.len() >= 2 {
         problem = arg[1].parse().unwrap();
     }
+    
+    let mut initial_file_path = format!("initial/{}.isl", problem).to_owned();
     if arg.len() >= 3 {
         initial_file_path = arg[2].to_owned();
     }
@@ -35,8 +38,24 @@ fn main() -> std::io::Result<()>  {
     draw::fill_color(&mut commands, &image);
     let mut string = String::new();
     writer::write(&mut string, &commands);
-    
-    println!("{}", string);
+
+    let mut result = Result {
+        moves: string,
+        id: problem.to_string(),
+    };
+
+    let serialized = serde_json::to_string(&result).unwrap();
+    let text = Utc::now().format("%Y%m%d%H%M%S%f3").to_string();
+    let mut file = File::create(format!("../../solutions/{}-shohei1-{}.json", problem, text))?;
+    let mut writer = BufWriter::new(file);
+    writer.write_all(serialized.as_bytes())?;
+    writer.flush()?;
 
     Ok(())
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Result {
+    moves: String,
+    id: String,
 }
