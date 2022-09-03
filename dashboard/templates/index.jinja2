@@ -18,6 +18,10 @@
                 <th class="text-center">SubmittedCount</th>
                 <th class="text-center">LastSubmittedAt</th>
                 <th class="text-center">Thumb</th>
+                <th class="text-center">Solutions 1st score</th>
+                <th class="text-center">Solutions 1st img</th>
+                <th class="text-center">Solutions 2nd score</th>
+                <th class="text-center">Solutions 2nd img</th>
             </tr>
 
             {% for p in problems %}
@@ -30,6 +34,19 @@
                     <td class="text-center">
                         <a href="/problems/{{ p.name }}.png">
                             <img src="/thumb/{{ p.name }}.png" class="img-thumbnail"></a>
+                    </td>
+                    <td class="text-center">
+                        {{ solutions[p.name|int][0].cost }}
+                    </td>
+                    <td class="text-center">
+                        {{ solutions[p.name|int][0].id }}
+                        img
+                    </td>
+                    <td class="text-center">
+                        {{ solutions[p.name|int][1].cost }}
+                    </td>
+                    <td class="text-center">
+                        {{ solutions[p.name|int][1].id }}
                     </td>
                 </tr>
             {% endfor %}
