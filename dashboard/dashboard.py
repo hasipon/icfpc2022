@@ -77,9 +77,9 @@ def index():
 
     result_by_api = json.load(open('../result_by_api.json', 'r'))
 
-    solutionsRows = engine.execute("select * from solution").all()
+    solutions_rows = engine.execute("select * from solution").all()
     solutions = defaultdict(lambda: [])
-    for row in solutionsRows:
+    for row in solutions_rows:
         solutions[row.problem_id].append(row)
 
     for k in solutions.keys():
