@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 )
 
 //go:embed list.json
@@ -47,6 +49,7 @@ func getSubmitJson(id int) *Solution {
 	sub := Submission{}
 	err = json.Unmarshal(body, &sub)
 	if err != nil {
+		log.Println(string(body))
 		log.Fatalln(err)
 	}
 	resp, err = client.Get(sub.FileUrl)
@@ -67,14 +70,21 @@ func getSubmitJson(id int) *Solution {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Llongfile)
+
 	submissions := &Submissions{}
 	err := json.Unmarshal(listJson, submissions)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	for _, submit := range submissions.Submissions {
+	for i, submit := range submissions.Submissions {
 		id := submit.Id
+		log.Printf("%d/%d", i+1, len(submissions.Submissions))
 		path := fmt.Sprintf("./%d.json", id)
+		now := time.Now().Unix()
+		nowString := strconv.FormatInt(now, 10)
+		solutionPath := fmt.Sprintf("../solutions/%d-submitted-%s.json", id, nowString)
+
 		if _, err := os.Stat(path); err == nil {
 			continue
 		}
@@ -87,5 +97,10 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
+		err = os.WriteFile(solutionPath, j, os.ModePerm)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		time.Sleep(time.Millisecond * 100)
 	}
 }
