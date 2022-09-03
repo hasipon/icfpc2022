@@ -533,7 +533,7 @@ State.prototype = {
 				if(args.length == 3) {
 					this.cutState.cutPoint(index,this.parseId(args[1]),this.parsePoint(args[2]));
 				} else if(args.length == 4) {
-					this.cutState.cut(index,this.parseId(args[1]),args[2] == "x",Std.parseInt(args[3]));
+					this.cutState.cut(index,this.parseId(args[1]),args[2] == "x" || args[2] == "X",Std.parseInt(args[3]));
 				} else {
 					this.errorOutput.add(index,"too many arguments : in " + line);
 				}

@@ -58,7 +58,7 @@ class State
 						cutState.cut(
 							index, 
 							parseId(args[1]), 
-							args[2] == "x", 
+							args[2] == "x" || args[2] == "X", 
 							Std.parseInt(args[3])
 						);
 					}
