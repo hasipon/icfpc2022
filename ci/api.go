@@ -17,7 +17,7 @@ func CallSubmitApi(problemID int, name string, isl string) error {
 	writer := multipart.NewWriter(requestBody)
 	part, err := writer.CreateFormFile("file", name)
 	part.Write([]byte(isl))
-	part.Write([]byte{0})
+	writer.Close()
 
 	url := fmt.Sprintf("https://robovinci.xyz/api/submissions/%d/create", problemID)
 	req, err := http.NewRequest("POST", url, requestBody)
