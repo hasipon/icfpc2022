@@ -30,7 +30,9 @@
                             <img src="http://34.85.55.117/repo/problems/{{ p.name }}.png">
                         </a>
                     </td>
+
                     <td class="text-center">
+                        {% if 0 < solutions[p.name|int] | length %}
                         <a href="/vis/{{ solutions[p.name|int][0].id }}">
                             <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
                         </a>
@@ -41,8 +43,12 @@
                             <dt> {{ solutions[p.name|int][0].cost }} </dt>
                             <dd> {{ solutions[p.name|int][0].isl_cost }}(move) + {{ solutions[p.name|int][0].sim_cost }}(sim)</dd>
                         </dl>
+                        {% else %}
+                            <p>No submission</p>
+                        {% endif %}
                     </td>
                     <td class="text-center">
+                        {% if 1 < solutions[p.name|int] | length %}
                         <a href="/vis/{{ solutions[p.name|int][1].id }}">
                             <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
                         </a>
@@ -53,6 +59,9 @@
                             <dt> {{ solutions[p.name|int][1].cost }} </dt>
                             <dd> {{ solutions[p.name|int][1].isl_cost }}(move) + {{ solutions[p.name|int][1].sim_cost }}(sim)</dd>
                         </dl>
+                        {% else %}
+                            <p>No submission</p>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
