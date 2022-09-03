@@ -279,7 +279,11 @@ Hoge walk(int i0, int i1, int j0, int j1) {
 	}
 	vector<pair<int,int>> cuts2(cuts.begin(), cuts.end());
 	random_shuffle(cuts2.begin(), cuts2.end());
-	for (int i = 0; i < 2 && i < (int)cuts2.size(); ++ i) {
+	int walkArea = (i1-i0)*(j1-j0);
+	int n = 2;
+	if (walkArea <= 50*50) n = 5;
+	else if (walkArea <= 80*80) n = 3;
+	for (int i = 0; i < n && i < (int)cuts2.size(); ++ i) {
 		auto p = cuts2[i];
 		if (p.first == 0) {
 			int i = p.second;
