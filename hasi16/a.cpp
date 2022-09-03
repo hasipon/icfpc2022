@@ -187,22 +187,25 @@ struct Hoge {
 		a.push_back(y);
 	}
 	double calcScore() {
+		double r = 0;
+		if ((i1-i0)*(j1-j0) == 400*400) {
+			r += 5;
+		}
 		if (t == -1) {
-			return calcSim() + round(5.0*400*400/((i1-i0)*(j1-j0)));
+			return r + calcSim();
 		} else {
-			double r = round(7.0*400*400/((i1-i0)*(j1-j0)));
-			if (a[0].t == -1) {
-				r += round(5.0*400*400/((i1-i0)*(j1-j0)));
-				r += a[0].calcSim();
-				r += a[1].calcScore();
-			} else if (a[1].t == -1) {
-				r += round(5.0*400*400/((i1-i0)*(j1-j0)));
-				r += a[1].calcSim();
-				r += a[0].calcScore();
+			r += round(7.0*400*400/((i1-i0)*(j1-j0)));
+			if (t == 0) {
+				int area0 = (v-i0)*(j1-j0);
+				int area1 = (i1-v)*(j1-j0);
+				r += round(5.0*400*400/max(area0,area1));
 			} else {
-				r += a[0].calcScore();
-				r += a[1].calcScore();
+				int area0 = (i1-i0)*(v-j0);
+				int area1 = (i1-i0)*(j1-v);
+				r += round(5.0*400*400/max(area0,area1));
 			}
+			r += a[0].calcScore();
+			r += a[1].calcScore();
 			return r;
 		}
 	}
@@ -214,35 +217,55 @@ struct Hoge {
 		if (fval.second < 0) fval = f(i0,i1,j0,j1);
 		return fval.second * 0.005;
 	}
-	void output(string blockId) {
+	uint32_t getRootColor() {
 		if (t == -1) {
-			col(blockId, getColor());
-		} else {
-			if (a[0].t == -1) {
-				col(blockId, a[0].getColor());
-				if (t == 0) {
-					cout << "cut ["<<blockId<<"] [Y] ["<<v<<"]"<<endl;
-				} else {
-					cout << "cut ["<<blockId<<"] [X] ["<<v<<"]"<<endl;
-				}
-				a[1].output(blockId+".1");
-			} else if (a[1].t == -1) {
-				col(blockId, a[1].getColor());
-				if (t == 0) {
-					cout << "cut ["<<blockId<<"] [Y] ["<<v<<"]"<<endl;
-				} else {
-					cout << "cut ["<<blockId<<"] [X] ["<<v<<"]"<<endl;
-				}
-				a[0].output(blockId+".0");
+			return getColor();
+		} else if (t == 0) {
+			int area0 = (v-i0)*(j1-j0);
+			int area1 = (i1-v)*(j1-j0);
+			if (area0 <= area1) {
+				return a[0].getRootColor();
 			} else {
-				if (t == 0) {
-					cout << "cut ["<<blockId<<"] [Y] ["<<v<<"]"<<endl;
-				} else {
-					cout << "cut ["<<blockId<<"] [X] ["<<v<<"]"<<endl;
-				}
-				a[0].output(blockId+".0");
-				a[1].output(blockId+".1");
+				return a[1].getRootColor();
 			}
+		} else {
+			int area0 = (i1-i0)*(v-j0);
+			int area1 = (i1-i0)*(j1-v);
+			if (area0 <= area1) {
+				return a[0].getRootColor();
+			} else {
+				return a[1].getRootColor();
+			}
+		}
+	}
+	void output(string blockId, bool isRoot=false) {
+		if (isRoot) {
+			col(blockId, getRootColor());
+		}
+		if (t == -1) {
+			// do nothing
+		} else if (t == 0) {
+			int area0 = (v-i0)*(j1-j0);
+			int area1 = (i1-v)*(j1-j0);
+			cout << "cut ["<<blockId<<"] [Y] ["<<v<<"]"<<endl;
+			if (area0 <= area1) {
+				col(blockId+".1", a[1].getRootColor());
+			} else {
+				col(blockId+".0", a[0].getRootColor());
+			}
+			a[0].output(blockId+".0");
+			a[1].output(blockId+".1");
+		} else {
+			int area0 = (i1-i0)*(v-j0);
+			int area1 = (i1-i0)*(j1-v);
+			cout << "cut ["<<blockId<<"] [X] ["<<v<<"]"<<endl;
+			if (area0 <= area1) {
+				col(blockId+".1", a[1].getRootColor());
+			} else {
+				col(blockId+".0", a[0].getRootColor());
+			}
+			a[0].output(blockId+".0");
+			a[1].output(blockId+".1");
 		}
 	}
 };
@@ -294,7 +317,7 @@ void solve() {
 	}
 	Hoge hoge = walk(0, 400, 0, 400);
 	cerr << hoge.calcScore() << endl;
-	hoge.output("0");
+	hoge.output("0", true);
 }
 int main() {
 	char buf[1000], name[1000];
