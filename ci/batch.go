@@ -39,11 +39,13 @@ func RemoveDuplicatedSolutions(solutionsDir string) {
 		hash := solutionHash(problemID, string(ans))
 		if prev, ok := m[hash]; ok {
 			if strings.Contains(prev.Name(), "submitted") {
+				log.Println("Removing", prev.Name())
 				os.Remove(path.Join(solutionsDir, prev.Name()))
 				os.Remove(path.Join(solutionsDir, prev.Name()+".png"))
 				m[hash] = entry
 				continue
 			} else if strings.Contains(entry.Name(), "submitted") {
+				log.Println("Removing", entry.Name())
 				os.Remove(path.Join(solutionsDir, entry.Name()))
 				os.Remove(path.Join(solutionsDir, entry.Name()+".png"))
 				continue
