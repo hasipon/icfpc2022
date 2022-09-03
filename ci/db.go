@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
+	"fmt"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -19,6 +22,7 @@ CREATE TABLE IF NOT EXISTS solution
     id           VARCHAR(255),
     problem_id   INT NOT NULL,
     isl          MEDIUMTEXT NOT NULL,
+    hash         VARCHAR(255),
     valid        INT DEFAULT 0,
     cost         INT DEFAULT 0,
     isl_cost     INT DEFAULT 0,
@@ -36,6 +40,7 @@ CREATE TABLE IF NOT EXISTS submission
     id           int,
     problem_id   INT NOT NULL,
     isl          MEDIUMTEXT,
+    hash         VARCHAR(255),
     score        INT DEFAULT 0,
     status       VARCHAR(255),
     submitted_at DATETIME
@@ -50,6 +55,7 @@ type Solution struct {
 	ID          string    `json:"id,omitempty" db:"id"`
 	ProblemID   int       `json:"problem_id,omitempty" db:"problem_id"`
 	Isl         string    `json:"isl,omitempty" db:"isl"`
+	Hash        string    `json:"hash,omitempty" db:"hash"`
 	Valid       int       `json:"valid,omitempty" db:"valid"`
 	Cost        int       `json:"cost,omitempty" db:"cost"`
 	IslCost     int       `json:"isl_cost,omitempty" db:"isl_cost"`
@@ -65,6 +71,7 @@ type Submission struct {
 	ID          int       `json:"id,omitempty" db:"id"`
 	ProblemID   int       `json:"problem_id,omitempty" db:"problem_id"`
 	Isl         string    `json:"isl,omitempty" db:"isl"`
+	Hash        string    `json:"hash,omitempty" db:"hash"`
 	Score       int       `json:"score,omitempty" db:"score"`
 	Status      string    `json:"status,omitempty" db:"status"`
 	SubmittedAt time.Time `json:"submitted_at" db:"submitted_at"`
@@ -79,12 +86,20 @@ func (db DB) Init() error {
 	return err
 }
 
+func solutionHash(problemID int, isl string) string {
+	h := sha1.New()
+	h.Write([]byte(isl))
+	return fmt.Sprintf("%d-%s", problemID, hex.EncodeToString(h.Sum(nil)))
+}
+
 func (db DB) RegisterSolution(name string, problemID int, isl string) (*Solution, error) {
 	now := time.Now()
+
 	solution := &Solution{
 		ID:        name,
 		ProblemID: problemID,
 		Isl:       isl,
+		Hash:      solutionHash(problemID, isl),
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -148,10 +163,12 @@ ORDER BY cost LIMIT 1`,
 }
 
 func (db DB) ReplaceSubmission(submission *Submission) error {
+	submission.Hash = solutionHash(submission.ProblemID, submission.Isl)
 	_, err := db.NamedExec(`REPLACE INTO submission (
     id,
     problem_id,
     isl,
+    hash,
     score,
     status,
     submitted_at
@@ -159,6 +176,7 @@ func (db DB) ReplaceSubmission(submission *Submission) error {
     :id,
     :problem_id,
     :isl,
+    :hash,
     :score,
     :status,
     :submitted_at
