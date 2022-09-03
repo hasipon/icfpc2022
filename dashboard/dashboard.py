@@ -3,6 +3,8 @@ import os
 import subprocess
 import pathlib
 import shutil
+import json
+
 from PIL import Image
 from typing import *
 from flask import Flask, request, render_template
@@ -64,10 +66,13 @@ def index():
 
     problems_dict = {x["name"]: x for x in problems}
 
+    result_by_api = json.load(open('../result_by_api.json', 'r'))
+
     return render_template(
         'index.jinja2',
         is_search=request.args.get("search"),
         problems=problems,
+        result_by_api=result_by_api,
         problems_dict=problems_dict
     )
 

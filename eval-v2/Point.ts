@@ -2,17 +2,17 @@
 
 export class Point {
     px: number;
-  
+
     py: number;
-  
+
     constructor(point: [number, number] = [0, 0]) {
       [this.px, this.py] = point;
     }
-  
+
     getPoints(): [number, number] {
       return [this.px, this.py];
     }
-  
+
     clone() {
       return new Point(this.getPoints());
     }
@@ -45,7 +45,7 @@ export class Point {
             || (bottomLeft.py === this.py  && bottomLeft.px <= this.px && this.px <= topRight.px)
             || (topRight.py === this.py  && bottomLeft.px <= this.px && this.px <= topRight.px);
     }
-    
+
     isInside(bottomLeft: Point, topRight: Point) {
       return this.isStrictlyInside(bottomLeft, topRight) || this.isOnBoundary(bottomLeft, topRight);
     }
@@ -54,5 +54,12 @@ export class Point {
       return this.px * this.py;
     }
 
+    add(otherPoint: Point) {
+      return new Point([this.px + otherPoint.px, this.py + otherPoint.py]);
+    }
+
+    subtract(otherPoint: Point) {
+      return new Point([this.px - otherPoint.px, this.py - otherPoint.py]);
+    }
+
   }
-  

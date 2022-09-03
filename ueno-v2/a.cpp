@@ -1,13 +1,29 @@
 #include <iostream>
 #include <sstream>
 
+#include <cstdio>
 #include <vector>
 #include <string>
 #include <array>
 #include <unordered_map>
 #include <memory>
+#include <cmath>
 
-using Color = std::array<uint32_t, 4>;
+constexpr int ColorCost = 5;
+constexpr int VerticalCutCost = 7;
+constexpr int HorizontalCutCost = 7;
+constexpr int PointCutCost = 10;
+constexpr int SwapCost = 3;
+constexpr int MergeCost = 1;
+
+using Color = std::array<uint8_t, 4>;
+inline double pixeDiff(Color lhs, Color rhs) {
+    int sum = 0;
+    for (size_t i = 0; i < std::tuple_size<Color>::value; ++i) {
+        sum += (int(lhs[i]) - int(rhs[i])) * (int(lhs[i]) - int(rhs[i]));
+    }
+    return std::sqrt(sum);
+}
 
 class Point {
 public:
@@ -16,18 +32,20 @@ public:
 
     std::array<uint16_t, 2> p;
 
-    Point getDiff(Point);
-    bool isStrictlyInside(Point, Point);
-    bool isOnBoundary(Point, Point);
-    bool isInside(Point, Point);
-    int getScalarSize();
+    Point getDiff(Point) const;
+    bool isStrictlyInside(Point, Point) const;
+    bool isOnBoundary(Point, Point) const;
+    bool isInside(Point, Point) const;
+    int getScalarSize() const;
+    Point add(Point otherPoint) const;
+    Point subtract(Point otherPoint) const;
 };
 
 Point::Point() : p({0, 0}) {}
 
 Point::Point(uint16_t x, uint16_t y) : p({x, y}) {}
 
-Point Point::getDiff(Point other) {
+Point Point::getDiff(Point other) const {
     uint16_t newX = this->p[0] - other.p[0];
     uint16_t newY = this->p[1] - other.p[1];
 
@@ -41,26 +59,34 @@ Point Point::getDiff(Point other) {
     return Point{newX, newY};
 }
 
-bool Point::isStrictlyInside(Point bottomLeft, Point topRight) {
+bool Point::isStrictlyInside(Point bottomLeft, Point topRight) const {
     return bottomLeft.p[0] < this->p[0] &&
            this->p[0] < topRight.p[0] &&
            bottomLeft.p[1] < this->p[1] &&
            this->p[1] < topRight.p[1];
 }
 
-bool Point::isOnBoundary(Point bottomLeft, Point topRight) {
+bool Point::isOnBoundary(Point bottomLeft, Point topRight) const {
     return (bottomLeft.p[0] == this->p[0] && bottomLeft.p[1] <= this->p[1] && this->p[1] <= topRight.p[1])
            || (topRight.p[0] == this->p[0] && bottomLeft.p[1] <= this->p[1] && this->p[1] <= topRight.p[1])
            || (bottomLeft.p[1] == this->p[1] && bottomLeft.p[0] <= this->p[0] && this->p[0] <= topRight.p[0])
            || (topRight.p[1] == this->p[1] && bottomLeft.p[0] <= this->p[0] && this->p[0] <= topRight.p[0]);
 }
 
-bool Point::isInside(Point bottomLeft, Point topRight) {
+bool Point::isInside(Point bottomLeft, Point topRight) const {
     return this->isStrictlyInside(bottomLeft, topRight) || this->isOnBoundary(bottomLeft, topRight);
 }
 
-int Point::getScalarSize() {
+int Point::getScalarSize() const {
     return this->p[0] * this->p[1];
+}
+
+Point Point::add(Point otherPoint) const {
+    return Point(this->p[0] + otherPoint.p[0], this->p[1] + otherPoint.p[1]);
+}
+
+Point Point::subtract(Point otherPoint) const {
+    return Point(this->p[0] - otherPoint.p[0], this->p[1] - otherPoint.p[1]);
 }
 
 enum BlockType {
@@ -96,6 +122,11 @@ SimpleBlock::SimpleBlock(std::string id, Point bottomLeft, Point topRight, Color
     this->size = topRight.getDiff(bottomLeft);
     this->color = color;
 
+    /*
+    std::cout << id << "(" << bottomLeft.p[0] << "," <<bottomLeft.p[1] <<")("<< topRight.p[0] << "," <<  topRight.p[1] << ")" << std::endl;
+    std::cout << "    " << int(color[0]) << "\t" << int(color[1]) << "\t" << int(color[2]) << "\t" << int(color[3]) << "\t" << std::endl;
+    */
+
     if(this->bottomLeft.p[0] > this->topRight.p[0] || this->bottomLeft.p[1] > this->topRight.p[1]) {
         printf("Invalid Block");
         exit(EXIT_FAILURE);
@@ -117,6 +148,7 @@ public:
 
     ComplexBlock(std::string id, Point bottomLeft, Point topRight, std::vector<SimpleBlock> subBlocks);
     virtual std::vector<Block*> getChildren();
+    std::vector<SimpleBlock> offsetChildren(Point) const;
 };
 
 ComplexBlock::ComplexBlock(std::string id, Point bottomLeft, Point topRight, std::vector<SimpleBlock> subBlocks) {
@@ -141,12 +173,26 @@ std::vector<Block *> ComplexBlock::getChildren() {
 
     return res;
 }
+std::vector<SimpleBlock> ComplexBlock::offsetChildren(Point newBottomLeft) const {
+    std::vector<SimpleBlock> newChildren;
+
+    for (const auto &block: subBlocks) {
+        newChildren.emplace_back(
+                "child",
+                block.bottomLeft.add(newBottomLeft).subtract(bottomLeft),
+                block.topRight.add(newBottomLeft).subtract(bottomLeft),
+                block.color
+        );
+    }
+
+    return newChildren;
+}
 
 class Canvas {
 public:
     Canvas(int x, int y) : width(x), height(y) {
         blocks["0"] = std::unique_ptr<Block>(
-                new SimpleBlock("0", Point(0, 0), Point(width, height), Color({0, 0, 0, 0}))
+                new SimpleBlock("0", Point(0, 0), Point(width, height), Color({255, 255, 255, 255}))
         );
     }
 
@@ -157,15 +203,70 @@ public:
     void SwapCanvas(std::string blockId1, std::string blockId2);
     void MergeCanvas(std::string blockId1, std::string blockId2);
 
+    Color C(Point at) const;
+
     std::unordered_map<std::string, std::unique_ptr<Block>> blocks;
 
     int topLevelIdCounter = 0;
+    int moveCost = 0;
     int width;
     int height;
 };
 
+Color Canvas::C(Point at) const {
+    if (width < at.p[0] || height < at.p[1]) {
+        printf("at (%d, %d) is out-of-bound (width: %d, height: %d)\n", at.p[0], at.p[1], width, height);
+        exit(EXIT_FAILURE);
+    }
+
+    for (const auto &block: blocks) {
+        if (block.second->typ == SimpleBlockType) {
+            const auto &simpleBlockRef = *dynamic_cast<SimpleBlock *>(block.second.get());
+            if (simpleBlockRef.bottomLeft.p[0] <= at.p[0] && at.p[0] < simpleBlockRef.topRight.p[0] &&
+                simpleBlockRef.bottomLeft.p[1] <= at.p[1] && at.p[1] < simpleBlockRef.topRight.p[1]) {
+                return simpleBlockRef.color;
+            }
+        } else {
+            const auto &complexBlockRef = *dynamic_cast<ComplexBlock *>(block.second.get());
+            for (const auto &simpleBlockRef: complexBlockRef.subBlocks) {
+                if (simpleBlockRef.bottomLeft.p[0] <= at.p[0] && at.p[0] < simpleBlockRef.topRight.p[0] &&
+                    simpleBlockRef.bottomLeft.p[1] <= at.p[1] && at.p[1] < simpleBlockRef.topRight.p[1]) {
+                    return simpleBlockRef.color;
+                }
+            }
+        }
+
+        /*
+        if (at.isInside(block.second->bottomLeft, block.second->topRight)) {
+            if (block.second->typ == SimpleBlockType) {
+                const auto &simpleBlockRef = *dynamic_cast<SimpleBlock *>(block.second.get());
+                std::cout << simpleBlockRef.id << " ";
+                return simpleBlockRef.color;
+            } else {
+                const auto &complexBlockRef = *dynamic_cast<ComplexBlock *>(block.second.get());
+                for (const auto &c: complexBlockRef.subBlocks) {
+                    if (at.isInside(c.bottomLeft, c.topRight)) {
+                        return c.color;
+                    }
+                }
+                printf("at (%d, %d) is out-of-bound block %s (bottomLeft: (%d,%d), topRight: (%d,%d))\n", at.p[0], at.p[1],
+                       block.second->id.c_str(),
+                       block.second->bottomLeft.p[0], block.second->bottomLeft.p[1],
+                       block.second->topRight.p[0], block.second->topRight.p[1]
+                );
+                exit(EXIT_FAILURE);
+            }
+        }
+        */
+    }
+
+    printf("at (%d, %d) is out-of-bound (strict) (width: %d, height: %d)\n", at.p[0], at.p[1], width, height);
+    exit(EXIT_FAILURE);
+}
+
 void Canvas::ColorMove(std::string blockId, Color color) {
     auto &block = blocks[blockId];
+    moveCost += std::lround(ColorCost * height * width / double(block->size.getScalarSize()));
 
     if (block->typ == SimpleBlockType) {
         SimpleBlock &actualBlock = *dynamic_cast<SimpleBlock *>(block.get());
@@ -183,6 +284,7 @@ void Canvas::ColorMove(std::string blockId, Color color) {
 
 void Canvas::PointCut(std::string blockId, Point point) {
     auto &block = blocks[blockId];
+    moveCost += std::lround(PointCutCost * height * width / double(block->size.getScalarSize()));
 
     if (!point.isStrictlyInside(block->bottomLeft, block->topRight)) {
         printf("Point (%d, %d) is out of the block %s (%d, %d) to (%d, %d)\n", point.p[0], point.p[1], blockId.c_str(),
@@ -402,6 +504,7 @@ void Canvas::PointCut(std::string blockId, Point point) {
 
 void Canvas::VerticalCutCanvas(std::string blockId, int lineNumber) {
     auto &block = blocks[blockId];
+    moveCost += std::lround(VerticalCutCost * height * width / double(block->size.getScalarSize()));
 
     if (!(block->bottomLeft.p[0] <= lineNumber && lineNumber <= block->topRight.p[0])) {
         printf("Line number is out of the [%s]! Block is from (%d, %d) to (%d, %d), point is at %d!", blockId.c_str(),
@@ -477,6 +580,7 @@ void Canvas::VerticalCutCanvas(std::string blockId, int lineNumber) {
 
 void Canvas::HorizontalCutCanvas(std::string blockId, int lineNumber) {
     auto &block = blocks[blockId];
+    moveCost += std::lround(HorizontalCutCost * height * width / double(block->size.getScalarSize()));
 
     if (!(block->bottomLeft.p[1] <= lineNumber && lineNumber <= block->topRight.p[1])) {
         printf("Line number is out of the [%s]! Block is from (%d, %d) to (%d, %d), point is at %d!", blockId.c_str(),
@@ -551,27 +655,62 @@ void Canvas::HorizontalCutCanvas(std::string blockId, int lineNumber) {
 }
 
 void Canvas::SwapCanvas(std::string blockId1, std::string blockId2) {
-    auto block1 = *blocks[blockId1].get();
-    auto block2 = *blocks[blockId2].get();
+    auto &block1 = blocks[blockId1];
+    auto &block2 = blocks[blockId2];
+    moveCost += std::lround(SwapCost * height * width / double(block1->size.getScalarSize()));
 
-    blocks.erase(blockId1);
-    blocks.erase(blockId2);
+    if (block1->size.p[0] == block2->size.p[0] && block1->size.p[1] == block2->size.p[1]) {
+        Block *newBlock1 = nullptr, *newBlock2 = nullptr;
 
-    if (block1.size.p[0] == block2.size.p[0] && block1.size.p[1] == block2.size.p[1]) {
-        block1.id = blockId2;
-        block2.id = blockId1;
-        blocks[blockId1] = std::make_unique<Block>(block1);
-        blocks[blockId2] = std::make_unique<Block>(block2);
+        if (block1->typ == SimpleBlockType) {
+            newBlock2 = new SimpleBlock(
+                    blockId1,
+                    block2->bottomLeft,
+                    block2->topRight,
+                    dynamic_cast<SimpleBlock *>(block1.get())->color
+            );
+        } else {
+            newBlock2 = new ComplexBlock(
+                    blockId1,
+                    block2->bottomLeft,
+                    block2->topRight,
+                    dynamic_cast<ComplexBlock *>(block1.get())->offsetChildren(block2->bottomLeft)
+            );
+        }
+
+        if (block2->typ == SimpleBlockType) {
+            newBlock1 = new SimpleBlock(
+                    blockId2,
+                    block1->bottomLeft,
+                    block1->topRight,
+                    dynamic_cast<SimpleBlock *>(block2.get())->color
+            );
+        } else {
+            newBlock1 = new ComplexBlock(
+                    blockId2,
+                    block1->bottomLeft,
+                    block1->topRight,
+                    dynamic_cast<ComplexBlock *>(block2.get())->offsetChildren(block1->bottomLeft)
+            );
+        }
+
+        blocks.erase(blockId1);
+        blocks.erase(blockId2);
+
+        blocks[newBlock1->id] = std::unique_ptr<Block>(newBlock1);
+        blocks[newBlock2->id] = std::unique_ptr<Block>(newBlock2);
     } else {
-        printf("Blocks are not the same size, %s has size (%d, %d) while %s has size (%d, %d).", block1.id.c_str(),
-               block1.size.p[0], block1.size.p[1], block2.id.c_str(), block2.size.p[0], block2.size.p[1]);
+        printf("Blocks are not the same size, %s has size (%d, %d) while %s has size (%d, %d).", block1->id.c_str(),
+               block1->size.p[0], block1->size.p[1], block2->id.c_str(), block2->size.p[0], block2->size.p[1]);
         exit(EXIT_FAILURE);
     }
 }
 
 void Canvas::MergeCanvas(std::string blockId1, std::string blockId2) {
+    moveCost += MergeCost;
     auto &block1 = blocks[blockId1];
     auto &block2 = blocks[blockId2];
+    moveCost += std::lround(SwapCost * height * width / std::max(double(block1->size.getScalarSize()), double(block2->size.getScalarSize())));
 
     const bool bottomToTop = (block1->bottomLeft.p[1] == block2->topRight.p[1] ||
                               block1->topRight.p[1] == block2->bottomLeft.p[1]) &&
@@ -659,12 +798,10 @@ std::string read_block(std::stringstream &ss) {
 }
 
 Point read_point(std::string p) {
-    auto split = p.find(',');
+    int x, y;
+    std::sscanf(p.c_str(), "[%d, %d]", &x, &y);
 
-    std::string left = p.substr(1, split - 1);
-    std::string right = p.substr(split + 1, p.size() - split - 2);
-
-    return Point(std::stoi(left), std::stoi(right));
+    return Point(x, y);
 }
 
 int read_line_number(std::stringstream &ss) {
@@ -678,43 +815,36 @@ Color read_color(std::stringstream &ss) {
     std::string all;
     ss >> all;
 
-    all = all.substr(1, all.size() - 2);
-    std::cout << all << std::endl;
+    while( all.back() != ']' ) {
+        std::string next;
+        ss >> next;
+        all += next;
+    }
 
-    auto r = all.find(',');
-    int R = std::stoi(all.substr(0, r));
-    all = all.substr(r + 1, all.size() - 1 - r);
-
-    auto g = all.find(',');
-    int G = std::stoi(all.substr(0, g));
-    all = all.substr(g + 1, all.size() - 1 - g);
-
-    auto b = all.find(',');
-    int B = std::stoi(all.substr(0, r - 1));
-    all = all.substr(b + 1, all.size() - 1 - b);
-
-    int A = std::stoi(all);
+    int R, G, B, A;
+    std::sscanf(all.c_str(), "[%d, %d, %d, %d]", &R, &G, &B, &A);
 
     return Color ({Color::value_type(R),Color::value_type(G),Color::value_type(B),Color::value_type(A)});
 }
 
-int main() {
+void interpretIsl(std::istream &in, Canvas &c) {
     std::string line;
-    Canvas c = Canvas(400, 400);
 
-    while(std::getline(std::cin, line) ) {
+    while(std::getline(in, line) ) {
         std::stringstream ss;
         ss << line;
-
-        std::cout << line << std::endl;
 
         std::string move;
         ss >> move;
         if (move == "cut") {
             auto block = read_block(ss);
-
             std::string orient_or_point;
             ss >> orient_or_point;
+            if (orient_or_point.back() != ']') {
+                std::string next;
+                ss >> next;
+                orient_or_point += next;
+            }
 
             if (orient_or_point == "[X]" || orient_or_point == "[x]") {
                 int line_number = read_line_number(ss);
@@ -746,6 +876,82 @@ int main() {
             c.MergeCanvas(block1, block2);
         }
     }
+}
+
+uint8_t* hasiImageRead(FILE *fp, int &width, int &height) {
+    char buf[1000];
+    char name[1000];
+
+    if (!fgets(buf, sizeof(buf), fp)) throw 1;
+    for (;;) {
+        if (!fgets(buf, sizeof(buf), fp)) throw 1;
+        if (std::string(buf) == "ENDHDR\n") break;
+        if (std::string(buf) == "TUPLTYPE RGB_ALPHA\n") continue;
+        int val;
+        sscanf(buf, "%s %d", name, &val);
+        auto n = std::string(name);
+        if (n == "WIDTH") {
+            width = val;
+        } else if (n == "HEIGHT") {
+            height = val;
+        } else if (n == "DEPTH") {
+            if (val != 4) throw 1;
+        } else if (n == "MAXVAL") {
+            if (val != 255) throw 1;
+        }
+    }
+
+    auto image = new uint8_t[width*height*4];
+    if ((int)fread(image, 1, width*height*4, fp) != width*height*4) throw 1;
+
+    return image;
+}
+
+Color hasiImageAt(const uint8_t *image, int width, int height, Point at) {
+    auto R = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 0];
+    auto G = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 1];
+    auto B = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 2];
+    auto A = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 3];
+
+    return Color({R, G, B, A});
+}
+
+int main() {
+    std::string line;
+
+    FILE* fp = fopen("image.pam", "r");
+    if (fp == NULL) {
+        printf("failed to open image.pam");
+        exit(EXIT_FAILURE);
+    }
+
+    int width, height;
+    auto image = hasiImageRead(fp, width, height);
+
+    Canvas c = Canvas(width, height);
+    interpretIsl(std::cin, c);
+
+    double similarity = 0;
+    for (int x = 0; x < 400; ++x) {
+        for (int y = 0; y < 400; ++y) {
+            auto canvasColor = c.C(Point(x, y));
+            auto imageColor = hasiImageAt(image, width, height, Point(x, y));
+            similarity += pixeDiff(canvasColor, imageColor);
+
+            /*
+            std::cout << x << "," << y << " R:" << int(canvasColor[0]) << " G:" << int(canvasColor[1]) << " B:" << int(canvasColor[2]) << " A:" << int(canvasColor[3]) << std::endl;
+            */
+            //std::cout << "image R:" << int(imageColor[0]) << " G:" << int(imageColor[1]) << " B:" << int(imageColor[2]) << " A:" << int(imageColor[3]) << " " << pixeDiff(canvasColor, imageColor) << std::endl;
+            //std::cout << pixeDiff(canvasColor, imageColor) << std::endl;
+
+            //std::cout << int(imageColor[0]) << "\t" << int(imageColor[1]) << "\t" << int(imageColor[2]) << "\t" << int(imageColor[3]) << "\t" << pixeDiff(canvasColor, imageColor) << std::endl;
+        }
+    }
+    similarity *= 0.005;
+    auto similarityInt = std::lround(similarity);
+
+    //std::cout << "SimCost: " << simularity /400 /400<< std::endl;
+    std::cout << "MoveCost: " << c.moveCost << "\nSimCost: " << similarityInt << "\nTotalCost: " << c.moveCost + similarityInt <<std::endl;
 
     return 0;
 }
