@@ -89,6 +89,6 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
-		time.Sleep(time.Millisecond * 100)
+		time.Sleep(time.Millisecond * 300)
 	}
 }
