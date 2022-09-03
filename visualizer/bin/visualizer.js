@@ -6,6 +6,12 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var CutNode = $hxEnums["CutNode"] = { __ename__:true,__constructs__:null
+	,Leaf: ($_=function(rect) { return {_hx_index:0,rect:rect,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Leaf",$_.__params__ = ["rect"],$_)
+	,Node: ($_=function(children) { return {_hx_index:1,children:children,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Node",$_.__params__ = ["children"],$_)
+	,Marged: {_hx_name:"Marged",_hx_index:2,__enum__:"CutNode",toString:$estr}
+};
+CutNode.__constructs__ = [CutNode.Leaf,CutNode.Node,CutNode.Marged];
 var CutState = function(borderLayer,textLayer,errorOutput) {
 	this.textLayer = textLayer;
 	this.errorOutput = errorOutput;
@@ -15,10 +21,18 @@ var CutState = function(borderLayer,textLayer,errorOutput) {
 };
 CutState.__name__ = true;
 CutState.prototype = {
-	init: function(width,height) {
-		this.width = width;
-		this.height = height;
-		this.roots = [CutNode.Leaf(new PIXI.Rectangle(0,0,width,height))];
+	init: function(initialState) {
+		this.width = initialState.width;
+		this.height = initialState.height;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = initialState.nodes;
+		while(_g1 < _g2.length) {
+			var node = _g2[_g1];
+			++_g1;
+			_g.push(CutNode.Leaf(node.rect));
+		}
+		this.roots = _g;
 	}
 	,draw: function() {
 		this.borderLayer.clear();
@@ -222,18 +236,20 @@ CutState.prototype = {
 		return false;
 	}
 };
-var CutNode = $hxEnums["CutNode"] = { __ename__:true,__constructs__:null
-	,Leaf: ($_=function(rect) { return {_hx_index:0,rect:rect,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Leaf",$_.__params__ = ["rect"],$_)
-	,Node: ($_=function(children) { return {_hx_index:1,children:children,__enum__:"CutNode",toString:$estr}; },$_._hx_name="Node",$_.__params__ = ["children"],$_)
-	,Marged: {_hx_name:"Marged",_hx_index:2,__enum__:"CutNode",toString:$estr}
-};
-CutNode.__constructs__ = [CutNode.Leaf,CutNode.Node,CutNode.Marged];
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
 };
 EReg.__name__ = true;
 EReg.prototype = {
-	split: function(s) {
+	match: function(s) {
+		if(this.r.global) {
+			this.r.lastIndex = 0;
+		}
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+	,split: function(s) {
 		var d = "#__delim__#";
 		return s.replace(this.r,d).split(d);
 	}
@@ -271,6 +287,29 @@ HxOverrides.substr = function(s,pos,len) {
 HxOverrides.now = function() {
 	return Date.now();
 };
+var InitialNode = function(rect,color) {
+	this.rect = rect;
+	this.color = color;
+};
+InitialNode.__name__ = true;
+var InitialState = function(width,height,nodes) {
+	this.width = width;
+	this.height = height;
+	this.nodes = nodes;
+};
+InitialState.__name__ = true;
+var Lambda = function() { };
+Lambda.__name__ = true;
+Lambda.exists = function(it,f) {
+	var x = $getIterator(it);
+	while(x.hasNext()) {
+		var x1 = x.next();
+		if(f(x1)) {
+			return true;
+		}
+	}
+	return false;
+};
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
@@ -305,6 +344,9 @@ Main.main = function() {
 	Main.readHash();
 };
 Main.onKey = function(e) {
+	if(Main.initialState == null) {
+		return;
+	}
 	if(window.document.activeElement == Main.problemInput || window.document.activeElement == Main.input) {
 		return;
 	}
@@ -332,31 +374,31 @@ Main.onKey = function(e) {
 	} else {
 		switch(e.keyCode) {
 		case 65:
-			Main.input.value += Main.state.getLineCut(true,Main.scouter.left,400 - Main.scouter.y);
+			Main.input.value += Main.state.getLineCut(true,Main.scouter.left,Main.initialState.height - Main.scouter.y);
 			break;
 		case 67:
-			Main.input.value += Main.state.getPointCut(Main.scouter.right,400 - Main.scouter.bottom);
+			Main.input.value += Main.state.getPointCut(Main.scouter.right,Main.initialState.height - Main.scouter.bottom);
 			break;
 		case 68:
-			Main.input.value += Main.state.getLineCut(true,Main.scouter.right,400 - Main.scouter.y);
+			Main.input.value += Main.state.getLineCut(true,Main.scouter.right,Main.initialState.height - Main.scouter.y);
 			break;
 		case 69:
-			Main.input.value += Main.state.getPointCut(Main.scouter.right,400 - Main.scouter.top);
+			Main.input.value += Main.state.getPointCut(Main.scouter.right,Main.initialState.height - Main.scouter.top);
 			break;
 		case 81:
-			Main.input.value += Main.state.getPointCut(Main.scouter.left,400 - Main.scouter.top);
+			Main.input.value += Main.state.getPointCut(Main.scouter.left,Main.initialState.height - Main.scouter.top);
 			break;
 		case 83:
-			Main.input.value += Main.state.getPointCut(Main.scouter.x,400 - Main.scouter.y);
+			Main.input.value += Main.state.getPointCut(Main.scouter.x,Main.initialState.height - Main.scouter.y);
 			break;
 		case 87:
-			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.top);
+			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,Main.initialState.height - Main.scouter.top);
 			break;
 		case 88:
-			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,400 - Main.scouter.bottom);
+			Main.input.value += Main.state.getLineCut(false,Main.scouter.x,Main.initialState.height - Main.scouter.bottom);
 			break;
 		case 90:
-			Main.input.value += Main.state.getPointCut(Main.scouter.left,400 - Main.scouter.bottom);
+			Main.input.value += Main.state.getPointCut(Main.scouter.left,Main.initialState.height - Main.scouter.bottom);
 			break;
 		default:
 			return;
@@ -391,6 +433,28 @@ Main.onProblemChanged = function() {
 	Main.problemLayer.texture = PIXI.Texture.fromImage("../problems/" + Main.problemInput.value + ".png");
 };
 Main.onImageLoad = function() {
+	var num = Std.parseInt(Main.problemInput.value);
+	if(num > 25) {
+		var url = "../problems/" + num + ".initial.json";
+		var http = new haxe_http_HttpJs(url);
+		http.onData = Main.onJsonLoaded;
+		http.request();
+	} else {
+		Main.initialState = new InitialState(400,400,[new InitialNode(new PIXI.Rectangle(0,0,400,400),new tweenxcore_color_ArgbColor(0.,0.,0.,0.))]);
+		Main.onInputChanged();
+	}
+};
+Main.onJsonLoaded = function(data) {
+	var data1 = JSON.parse(data);
+	var nodes = [];
+	var _g = 0;
+	var _g1 = data1.blocks;
+	while(_g < _g1.length) {
+		var block = _g1[_g];
+		++_g;
+		nodes[Std.parseInt(block.blockId)] = new InitialNode(new PIXI.Rectangle(block.bottomLeft[1],block.bottomLeft[0],block.topRight[1] - block.bottomLeft[1],block.topRight[0] - block.bottomLeft[0]),new tweenxcore_color_ArgbColor(block.color[3],block.color[0],block.color[1],block.color[2]));
+	}
+	Main.initialState = new InitialState(data1.width,data1.height,nodes);
 	Main.onInputChanged();
 };
 Main._onInputChanged = function() {
@@ -398,9 +462,12 @@ Main._onInputChanged = function() {
 	Main.onInputChanged();
 };
 Main.onInputChanged = function() {
+	if(Main.initialState == null) {
+		return;
+	}
 	try {
 		Main.errorOutput.text = "";
-		Main.state.update(Main.input.value,Main.imageElement.width,Main.imageElement.height);
+		Main.state.update(Main.input.value,Main.initialState);
 	} catch( _g ) {
 	}
 	var error = window.document.getElementById("error");
@@ -422,6 +489,28 @@ Main.onMouseDown = function(e) {
 	text.innerText = Math.round(point.x) + "," + Math.round(Main.state.cutState.height - point.y) + "," + "[" + color1.r * 255 + "," + color1.g * 255 + "," + color1.b * 255 + "," + color1.a * 255 + "]";
 };
 Math.__name__ = true;
+var Reflect = function() { };
+Reflect.__name__ = true;
+Reflect.isFunction = function(f) {
+	if(typeof(f) == "function") {
+		return !(f.__name__ || f.__ename__);
+	} else {
+		return false;
+	}
+};
+Reflect.compareMethods = function(f1,f2) {
+	if(f1 == f2) {
+		return true;
+	}
+	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
+		return false;
+	}
+	if(f1.scope == f2.scope && f1.method == f2.method) {
+		return f1.method != null;
+	} else {
+		return false;
+	}
+};
 var Scouter = function(state,scouterLayer) {
 	this.canvas = window.document.createElement("canvas");
 	window.document.body.appendChild(this.canvas);
@@ -495,10 +584,19 @@ var State = function(outputLayer,borderLayer,textLayer,errorOutput) {
 };
 State.__name__ = true;
 State.prototype = {
-	update: function(value,width,height) {
+	update: function(value,initialState) {
 		this.outputLayer.fillStyle = "white";
-		this.outputLayer.fillRect(0,0,width,height);
-		this.cutState.init(width,height);
+		this.outputLayer.fillRect(0,0,initialState.width,initialState.height);
+		var _g = 0;
+		var _g1 = initialState.nodes;
+		while(_g < _g1.length) {
+			var node = _g1[_g];
+			++_g;
+			var _this = node.color;
+			this.outputLayer.fillStyle = "rgba(" + (_this.r * 255 | 0) + "," + (_this.g * 255 | 0) + "," + (_this.b * 255 | 0) + "," + _this.a + ")";
+			this.outputLayer.fillRect(node.rect.x,node.rect.y,node.rect.width,node.rect.height);
+		}
+		this.cutState.init(initialState);
 		var lines = State.NL.split(value);
 		var index = 0;
 		var _g = 0;
@@ -533,7 +631,7 @@ State.prototype = {
 				if(args.length == 3) {
 					this.cutState.cutPoint(index,this.parseId(args[1]),this.parsePoint(args[2]));
 				} else if(args.length == 4) {
-					this.cutState.cut(index,this.parseId(args[1]),args[2] == "x",Std.parseInt(args[3]));
+					this.cutState.cut(index,this.parseId(args[1]),args[2] == "x" || args[2] == "X",Std.parseInt(args[3]));
 				} else {
 					this.errorOutput.add(index,"too many arguments : in " + line);
 				}
@@ -637,6 +735,9 @@ State.prototype = {
 };
 var Std = function() { };
 Std.__name__ = true;
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
 Std.parseInt = function(x) {
 	if(x != null) {
 		var _g = 0;
@@ -728,6 +829,15 @@ var haxe_Exception = function(message,previous,native) {
 	this.__nativeException = native != null ? native : this;
 };
 haxe_Exception.__name__ = true;
+haxe_Exception.caught = function(value) {
+	if(((value) instanceof haxe_Exception)) {
+		return value;
+	} else if(((value) instanceof Error)) {
+		return new haxe_Exception(value.message,null,value);
+	} else {
+		return new haxe_ValueException(value,null,value);
+	}
+};
 haxe_Exception.thrown = function(value) {
 	if(((value) instanceof haxe_Exception)) {
 		return value.get_native();
@@ -740,7 +850,10 @@ haxe_Exception.thrown = function(value) {
 };
 haxe_Exception.__super__ = Error;
 haxe_Exception.prototype = $extend(Error.prototype,{
-	get_native: function() {
+	unwrap: function() {
+		return this.__nativeException;
+	}
+	,get_native: function() {
 		return this.__nativeException;
 	}
 });
@@ -751,7 +864,258 @@ var haxe_ValueException = function(value,previous,native) {
 haxe_ValueException.__name__ = true;
 haxe_ValueException.__super__ = haxe_Exception;
 haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
+	unwrap: function() {
+		return this.value;
+	}
 });
+var haxe_http_HttpBase = function(url) {
+	this.url = url;
+	this.headers = [];
+	this.params = [];
+	this.emptyOnData = $bind(this,this.onData);
+};
+haxe_http_HttpBase.__name__ = true;
+haxe_http_HttpBase.prototype = {
+	onData: function(data) {
+	}
+	,onBytes: function(data) {
+	}
+	,onError: function(msg) {
+	}
+	,onStatus: function(status) {
+	}
+	,hasOnData: function() {
+		return !Reflect.compareMethods($bind(this,this.onData),this.emptyOnData);
+	}
+	,success: function(data) {
+		this.responseBytes = data;
+		this.responseAsString = null;
+		if(this.hasOnData()) {
+			this.onData(this.get_responseData());
+		}
+		this.onBytes(this.responseBytes);
+	}
+	,get_responseData: function() {
+		if(this.responseAsString == null && this.responseBytes != null) {
+			this.responseAsString = this.responseBytes.getString(0,this.responseBytes.length,haxe_io_Encoding.UTF8);
+		}
+		return this.responseAsString;
+	}
+};
+var haxe_http_HttpJs = function(url) {
+	this.async = true;
+	this.withCredentials = false;
+	haxe_http_HttpBase.call(this,url);
+};
+haxe_http_HttpJs.__name__ = true;
+haxe_http_HttpJs.__super__ = haxe_http_HttpBase;
+haxe_http_HttpJs.prototype = $extend(haxe_http_HttpBase.prototype,{
+	request: function(post) {
+		var _gthis = this;
+		this.responseAsString = null;
+		this.responseBytes = null;
+		var r = this.req = js_Browser.createXMLHttpRequest();
+		var onreadystatechange = function(_) {
+			if(r.readyState != 4) {
+				return;
+			}
+			var s;
+			try {
+				s = r.status;
+			} catch( _g ) {
+				s = null;
+			}
+			if(s == 0 && js_Browser.get_supported() && $global.location != null) {
+				var protocol = $global.location.protocol.toLowerCase();
+				var rlocalProtocol = new EReg("^(?:about|app|app-storage|.+-extension|file|res|widget):$","");
+				var isLocal = rlocalProtocol.match(protocol);
+				if(isLocal) {
+					s = r.response != null ? 200 : 404;
+				}
+			}
+			if(s == undefined) {
+				s = null;
+			}
+			if(s != null) {
+				_gthis.onStatus(s);
+			}
+			if(s != null && s >= 200 && s < 400) {
+				_gthis.req = null;
+				_gthis.success(haxe_io_Bytes.ofData(r.response));
+			} else if(s == null || s == 0 && r.response == null) {
+				_gthis.req = null;
+				_gthis.onError("Failed to connect or resolve host");
+			} else if(s == null) {
+				_gthis.req = null;
+				var onreadystatechange = r.response != null ? haxe_io_Bytes.ofData(r.response) : null;
+				_gthis.responseBytes = onreadystatechange;
+				_gthis.onError("Http Error #" + r.status);
+			} else {
+				switch(s) {
+				case 12007:
+					_gthis.req = null;
+					_gthis.onError("Unknown host");
+					break;
+				case 12029:
+					_gthis.req = null;
+					_gthis.onError("Failed to connect to host");
+					break;
+				default:
+					_gthis.req = null;
+					var onreadystatechange = r.response != null ? haxe_io_Bytes.ofData(r.response) : null;
+					_gthis.responseBytes = onreadystatechange;
+					_gthis.onError("Http Error #" + r.status);
+				}
+			}
+		};
+		if(this.async) {
+			r.onreadystatechange = onreadystatechange;
+		}
+		var uri;
+		var _g = this.postData;
+		var _g1 = this.postBytes;
+		if(_g == null) {
+			if(_g1 == null) {
+				uri = null;
+			} else {
+				var bytes = _g1;
+				uri = new Blob([bytes.b.bufferValue]);
+			}
+		} else if(_g1 == null) {
+			var str = _g;
+			uri = str;
+		} else {
+			uri = null;
+		}
+		if(uri != null) {
+			post = true;
+		} else {
+			var _g = 0;
+			var _g1 = this.params;
+			while(_g < _g1.length) {
+				var p = _g1[_g];
+				++_g;
+				if(uri == null) {
+					uri = "";
+				} else {
+					uri = (uri == null ? "null" : Std.string(uri)) + "&";
+				}
+				var s = p.name;
+				var value = (uri == null ? "null" : Std.string(uri)) + encodeURIComponent(s) + "=";
+				var s1 = p.value;
+				uri = value + encodeURIComponent(s1);
+			}
+		}
+		try {
+			if(post) {
+				r.open("POST",this.url,this.async);
+			} else if(uri != null) {
+				var question = this.url.split("?").length <= 1;
+				r.open("GET",this.url + (question ? "?" : "&") + (uri == null ? "null" : Std.string(uri)),this.async);
+				uri = null;
+			} else {
+				r.open("GET",this.url,this.async);
+			}
+			r.responseType = "arraybuffer";
+		} catch( _g ) {
+			var e = haxe_Exception.caught(_g).unwrap();
+			this.req = null;
+			this.onError(e.toString());
+			return;
+		}
+		r.withCredentials = this.withCredentials;
+		if(!Lambda.exists(this.headers,function(h) {
+			return h.name == "Content-Type";
+		}) && post && this.postData == null) {
+			r.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		}
+		var _g = 0;
+		var _g1 = this.headers;
+		while(_g < _g1.length) {
+			var h = _g1[_g];
+			++_g;
+			r.setRequestHeader(h.name,h.value);
+		}
+		r.send(uri);
+		if(!this.async) {
+			onreadystatechange(null);
+		}
+	}
+});
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
+};
+haxe_io_Bytes.__name__ = true;
+haxe_io_Bytes.ofData = function(b) {
+	var hb = b.hxBytes;
+	if(hb != null) {
+		return hb;
+	}
+	return new haxe_io_Bytes(b);
+};
+haxe_io_Bytes.prototype = {
+	getString: function(pos,len,encoding) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		if(encoding == null) {
+			encoding = haxe_io_Encoding.UTF8;
+		}
+		var s = "";
+		var b = this.b;
+		var i = pos;
+		var max = pos + len;
+		switch(encoding._hx_index) {
+		case 0:
+			var debug = pos > 0;
+			while(i < max) {
+				var c = b[i++];
+				if(c < 128) {
+					if(c == 0) {
+						break;
+					}
+					s += String.fromCodePoint(c);
+				} else if(c < 224) {
+					var code = (c & 63) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code);
+				} else if(c < 240) {
+					var c2 = b[i++];
+					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code1);
+				} else {
+					var c21 = b[i++];
+					var c3 = b[i++];
+					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(u);
+				}
+			}
+			break;
+		case 1:
+			while(i < max) {
+				var c = b[i++] | b[i++] << 8;
+				s += String.fromCodePoint(c);
+			}
+			break;
+		}
+		return s;
+	}
+};
+var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:true,__constructs__:null
+	,UTF8: {_hx_name:"UTF8",_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
+	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
+};
+haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
+var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__:true,__constructs__:null
+	,Blocked: {_hx_name:"Blocked",_hx_index:0,__enum__:"haxe.io.Error",toString:$estr}
+	,Overflow: {_hx_name:"Overflow",_hx_index:1,__enum__:"haxe.io.Error",toString:$estr}
+	,OutsideBounds: {_hx_name:"OutsideBounds",_hx_index:2,__enum__:"haxe.io.Error",toString:$estr}
+	,Custom: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"haxe.io.Error",toString:$estr}; },$_._hx_name="Custom",$_.__params__ = ["e"],$_)
+};
+haxe_io_Error.__constructs__ = [haxe_io_Error.Blocked,haxe_io_Error.Overflow,haxe_io_Error.OutsideBounds,haxe_io_Error.Custom];
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
 	this.array = array;
@@ -858,6 +1222,24 @@ js_Boot.__string_rec = function(o,s) {
 	default:
 		return String(o);
 	}
+};
+var js_Browser = function() { };
+js_Browser.__name__ = true;
+js_Browser.get_supported = function() {
+	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
+		return typeof(window.location.protocol) == "string";
+	} else {
+		return false;
+	}
+};
+js_Browser.createXMLHttpRequest = function() {
+	if(typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	if(typeof ActiveXObject != "undefined") {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
 };
 var tweenxcore_Easing = function() { };
 tweenxcore_Easing.__name__ = true;
@@ -2130,9 +2512,12 @@ tweenxcore_color_ArgbColor.prototype = $extend(tweenxcore_color_RgbColor.prototy
 	}
 });
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
+function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
+$global.$haxeUID |= 0;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }
+if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.__name__ = true;
 Array.__name__ = true;
 js_Boot.__toStr = ({ }).toString;

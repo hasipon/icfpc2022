@@ -28,11 +28,21 @@ class State
 		this.cutState = new CutState(borderLayer, textLayer, errorOutput);
 	}
 	
-	public function update(value:String, width:Int, height:Int):Void 
+	public function update(value:String, initialState:InitialState):Void 
 	{
 		outputLayer.fillStyle = "white";
-		outputLayer.fillRect(0, 0, width, height);
-		cutState.init(width, height);
+		outputLayer.fillRect(0, 0, initialState.width, initialState.height);
+		for (node in initialState.nodes)
+		{
+			outputLayer.fillStyle = node.color.toRgbaCssString();
+			outputLayer.fillRect(
+				node.rect.x, 
+				node.rect.y, 
+				node.rect.width, 
+				node.rect.height
+			);
+		}
+		cutState.init(initialState);
 		var lines = NL.split(value);
 		var index = 0;
 		for (line in lines)
@@ -58,7 +68,7 @@ class State
 						cutState.cut(
 							index, 
 							parseId(args[1]), 
-							args[2] == "x", 
+							args[2] == "x" || args[2] == "X", 
 							Std.parseInt(args[3])
 						);
 					}

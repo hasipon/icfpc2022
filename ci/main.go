@@ -55,6 +55,7 @@ func main() {
 	}
 
 	InsertSubmissionInDirectory(filepath.Join(RepoRoot, "submissions"))
+	RemoveDuplicatedSolutions(filepath.Join(RepoRoot, "solutions"))
 	InsertSolutionsInDirectory(filepath.Join(RepoRoot, "solutions"))
 
 	var wg sync.WaitGroup

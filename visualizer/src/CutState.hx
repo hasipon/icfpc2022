@@ -17,6 +17,7 @@ class CutState
 	public var width:Int;
 	public var textFields:Array<Text>;
 	public var textPool:Array<Text>;
+	
 	public function new(
 		borderLayer:Graphics, 
 		textLayer:Sprite, 
@@ -30,11 +31,11 @@ class CutState
 		textPool = [];
 	}
 	
-	public function init(width:Int, height:Int):Void
+	public function init(initialState:InitialState):Void
 	{
-		this.width = width;
-		this.height = height;
-		this.roots = [CutNode.Leaf(new Rectangle(0, 0, width, height))];
+		this.width  = initialState.width;
+		this.height = initialState.height;
+		this.roots = [for (node in initialState.nodes) CutNode.Leaf(node.rect)];
 	}
 	
 	public function draw():Void 
@@ -314,11 +315,4 @@ class CutState
 		}
 		return false;
 	}
-}
-
-enum CutNode
-{
-	Leaf(rect:Rectangle);
-	Node(children:Array<CutNode>);
-	Marged;
 }

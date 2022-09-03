@@ -4,5 +4,6 @@ for i in $(seq 26 30); do \
     curl https://cdn.robovinci.xyz/imageframes/${i}.png > problems/${i}.png; \
     convert problems/${i}.png problems.pam/${i}.pam; \
 
+    curl https://cdn.robovinci.xyz/imageframes/${i}.initial.png > problems/${i}.initial.png; \
     curl https://cdn.robovinci.xyz/imageframes/${i}.initial.json > problems/${i}.initial.json; \
 done

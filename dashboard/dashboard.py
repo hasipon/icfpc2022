@@ -71,26 +71,24 @@ def eval_solution():
 
 @app.route('/')
 def index():
-    problem_files = [os.path.relpath(x, problems_path) for x in glob.glob(str(problems_path / "*.png"))]
+    problem_files = [os.path.relpath(x, problems_path)
+                     for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png")]
     problem_files.sort(key=lambda x: int(x[:-4]))
-
-    for png_file in problem_files:
-        png_path = problems_path / png_file
-        thumb_path = static_path / "thumb" / png_file
-        if not thumb_path.exists():
-            gen_thumbnail(png_path, thumb_path)
-
     problems = [
         {
             "name": x[:-4],
         } for x in problem_files
     ]
-
     problems_dict = {x["name"]: x for x in problems}
 
-    result_by_api = json.load(open('../result_by_api.json', 'r'))
+    for p in problems:
+        initial = problems_path / (p["name"] + ".initial.png")
+        if os.path.exists(initial):
+            p["initial"] = True
 
-    solutions_rows = engine.execute("select * from solution").all()
+    result_by_api = json.load(open('../result_by_api.json', 'r'))
+    solutions_rows = engine.execute(
+        "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
     solutions = defaultdict(lambda: [])
     for row in solutions_rows:
         solutions[row.problem_id].append(row)
@@ -113,6 +111,14 @@ def index():
 def get_vis(solution: str):
     problem_id, isl = engine.execute("SELECT problem_id, isl FROM solution WHERE id=%s", (solution,)).fetchone()
     return flask.redirect(visualizer_url + f"/#{problem_id};{isl}")
+
+
+@app.route('/eval_output/<solution>')
+def eval_output(solution: str):
+    (output,) = engine.execute("SELECT eval_output FROM solution WHERE id=%s", (solution,)).fetchone()
+    response = flask.make_response(output, 200)
+    response.mimetype = "text/plain"
+    return response
 
 
 @app.route('/filter')
