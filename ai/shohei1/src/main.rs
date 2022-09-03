@@ -39,16 +39,10 @@ fn main() -> std::io::Result<()>  {
     let mut string = String::new();
     writer::write(&mut string, &commands);
 
-    let mut result = Result {
-        moves: string,
-        id: problem.to_string(),
-    };
-
-    let serialized = serde_json::to_string(&result).unwrap();
     let text = Utc::now().format("%Y%m%d%H%M%S%f3").to_string();
-    let mut file = File::create(format!("../../solutions/{}-shohei1-{}.json", problem, text))?;
+    let mut file = File::create(format!("../../solutions/{}-shohei1-{}.isl", problem, text))?;
     let mut writer = BufWriter::new(file);
-    writer.write_all(serialized.as_bytes())?;
+    writer.write_all(string.as_bytes())?;
     writer.flush()?;
 
     Ok(())
