@@ -49,34 +49,77 @@ pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
         }
     }
 
-    // Gradient Descent
+    // Gradient Descent で　だいたい 収束させる
     for (;;) {
         vector<double> grad(4, 0);
         for (int i = i0; i < i1; ++i) {
             for (int j = j0; j < j1; ++j) {
                 auto denominator = sqrt(d(get(i, j), *(uint32_t *) res));
                 for (int k = 0; k < 4; ++k) {
-                    grad[k] += (res[k] - get(i, j, k)) / denominator;
+                    //std::cout << "res " << int(res[k]) << " pix " << int(get(i, j, k)) << " dis " << denominator << " grd " << (double(res[k]) - double(get(i, j, k))) / denominator << std::endl;
+                    if (denominator != 0) {
+                        grad[k] += (double(res[k]) - double(get(i, j, k))) / denominator;
+                    }
                 }
             }
         }
 
-        double lr = 0.005;
+        // O(k) だけ 山登りより早い
         for (int k = 0; k < 4; ++k) {
-            res[k] -= lr * grad[k];
+            //std::cout << "grad[" << k << "]:" << grad[k] << std::endl;
+            if (0 < grad[k] && 0 < res[k]) {
+                res[k]--;
+            } else if (grad[k] < 0 && res[k] < 255) {
+                res[k]++;
+            }
+            //std::cout << "res[" << k << "]:" << int(res[k]) << std::endl;
+
+            //std::cout << -lr * grad[k] << std::endl;
+            //res[k] -= lr * grad[k];
         }
 
         double score2 = 0;
         for (int i = i0; i < i1; ++ i) for (int j = j0; j < j1; ++ j) score2 += sqrt(d(get(i,j), *(uint32_t*)res));
         if (score2 < score) {
+            //std::cout << "score updated from " << score << "to " << score2 << std::endl;
             score = score2;
         } else {
-            for (int k = 0; k < 4; ++k) {
-                res[k] += lr * grad[k];
-            }
+            //std::cout << "score is same " << score << "to " << score2 << std::endl;
+            score = score2;
             break;
         }
     }
+
+    // 山登りで最後まで収束させる
+    for (;;) {
+        for (int k = 0; k < 4; ++ k) {
+            if (res[k] > 0) {
+                -- res[k];
+                double score2 = 0;
+                for (int i = i0; i < i1; ++ i) for (int j = j0; j < j1; ++ j) score2 += sqrt(d(get(i,j), *(uint32_t*)res));
+                if (score2 < score) {
+                    score = score2;
+                    goto next;
+                }
+                ++ res[k];
+            }
+            if (res[k] < 255) {
+                ++ res[k];
+                double score2 = 0;
+                for (int i = i0; i < i1; ++ i) for (int j = j0; j < j1; ++ j) score2 += sqrt(d(get(i,j), *(uint32_t*)res));
+                if (score2 < score) {
+                    score = score2;
+                    goto next;
+                }
+                -- res[k];
+            }
+        }
+        break;
+        next:;
+    }
+
+    //std::cout << "next" << std::endl;
+    //exit(EXIT_FAILURE);
 
     return {*(uint32_t*)res, score};
 }
@@ -206,7 +249,7 @@ Hoge walk(int i0, int i1, int j0, int j1) {
 	}
 	vector<pair<int,int>> cuts2(cuts.begin(), cuts.end());
 	random_shuffle(cuts2.begin(), cuts2.end());
-	for (int i = 0; i < 2 && i < (int)cuts2.size(); ++ i) {
+	for (int i = 0; i < 4 && i < (int)cuts2.size(); ++ i) {
 		auto p = cuts2[i];
 		if (p.first == 0) {
 			int i = p.second;

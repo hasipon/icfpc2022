@@ -4,28 +4,35 @@ import subprocess
 import pathlib
 import shutil
 import json
+import sys
+import tempfile
 from collections import defaultdict
+from flask_cors import CORS
 
+import flask
 from PIL import Image
 from typing import *
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from sqlalchemy import create_engine, VARCHAR, select
 from sqlalchemy import Column, Integer, String, Float, DateTime
 
 from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 
+visualizer_url = "http://34.85.55.117/repo/visualizer"
 static_path = pathlib.Path(__file__).resolve().parent / 'static'
 repo_path = pathlib.Path(__file__).resolve().parent.parent
 problems_path = repo_path / "problems"
 app = Flask(__name__, static_folder=str(static_path), static_url_path='')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-# global cache
-problem_details = {}
-
 engine = create_engine('mysql+pymysql://icfpc2022:icfpc2022@{host}/icfpc2022?charset=utf8'.format(**{
     'host': os.environ.get('DB_HOST', 'localhost'),
 }))
+
+CORS(
+    app,
+    supports_credentials=True
+)
 
 
 @app.after_request
@@ -41,43 +48,47 @@ def gen_thumbnail(src_path: pathlib.Path, dst_path: pathlib.Path):
     img.resize((100, 100)).save(dst_path)
 
 
-def load_problem_details(problem_files: List[str]):
-    details = {}
-
-    for prob in problem_files:
-        details[prob] = {
-            "name": prob
-        }
-
-    return details
+@app.route('/eval_solution', methods=["GET", "POST"])
+def eval_solution():
+    solution = request.args["solution"]
+    fd, tmpfile = tempfile.mkstemp()
+    print(tmpfile)
+    with open(tmpfile, 'w+b') as fp:
+        fp.write(solution.encode())
+        fp.close()
+    env = os.environ.copy()
+    env["ISL_FILE"] = tmpfile
+    env["PROBLEM_ID"] = request.args["problem_id"]
+    cp = subprocess.run(["node_modules/.bin/ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
+    print(cp.stdout.decode(), file=sys.stderr)
+    print(cp.stderr.decode(), file=sys.stderr)
+    lines = cp.stdout.decode().splitlines()
+    if len(lines) == 0:
+        return "failed"
+    line = lines[-1]
+    return line
 
 
 @app.route('/')
 def index():
-    problem_files = [os.path.relpath(x, problems_path) for x in glob.glob(str(problems_path / "*"))]
+    problem_files = [os.path.relpath(x, problems_path)
+                     for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png")]
     problem_files.sort(key=lambda x: int(x[:-4]))
-
-    global problem_details
-    if len(problem_details) != len(problem_files):
-        problem_details = load_problem_details(problem_files)
-
-    for png_file in problem_files:
-        png_path = problems_path / png_file
-        thumb_path = static_path / "thumb" / png_file
-        if not thumb_path.exists():
-            gen_thumbnail(png_path, thumb_path)
-
     problems = [
         {
             "name": x[:-4],
         } for x in problem_files
     ]
-
     problems_dict = {x["name"]: x for x in problems}
 
-    result_by_api = json.load(open('../result_by_api.json', 'r'))
+    for p in problems:
+        initial = problems_path / (p["name"] + ".initial.png")
+        if os.path.exists(initial):
+            p["initial"] = True
 
-    solutions_rows = engine.execute("select * from solution").all()
+    result_by_api = json.load(open('../result_by_api.json', 'r'))
+    solutions_rows = engine.execute(
+        "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
     solutions = defaultdict(lambda: [])
     for row in solutions_rows:
         solutions[row.problem_id].append(row)
@@ -94,6 +105,20 @@ def index():
         result_by_api=result_by_api,
         problems_dict=problems_dict
     )
+
+
+@app.route('/vis/<solution>')
+def get_vis(solution: str):
+    problem_id, isl = engine.execute("SELECT problem_id, isl FROM solution WHERE id=%s", (solution,)).fetchone()
+    return flask.redirect(visualizer_url + f"/#{problem_id};{isl}")
+
+
+@app.route('/eval_output/<solution>')
+def eval_output(solution: str):
+    (output,) = engine.execute("SELECT eval_output FROM solution WHERE id=%s", (solution,)).fetchone()
+    response = flask.make_response(output, 200)
+    response.mimetype = "text/plain"
+    return response
 
 
 @app.route('/filter')

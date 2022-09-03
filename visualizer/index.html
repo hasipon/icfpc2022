@@ -35,8 +35,11 @@
 </style>
 </head>
 <body bgcolor="#EEEEEE">
+<form>
 	問:
 	<input type="text" id="problem" value="1" /></input><br/>
+	<input type="text" id="eval" size="80" value="1" /></input><br/>
+	<input type="submit"  value="Eval" id="eval-button">
 	<code id="point"></code></pre>
 	<pre><code id="error" style="color:red;"></code></pre>
 	<div style="
@@ -46,16 +49,20 @@
 	<div class="canvas-wrap"　>
 		<canvas id="output" tabindex="0" width="400" height="400" ></canvas><br/>
 		<canvas id="pixi" tabindex="0" width="820" height="820"></canvas></canvas><br/>
-	</div><textarea 
-		id="input"
-		style="
-		margin:5px; 
+	</div>
+			<textarea
+				id="input"
+				name="solution"
+				style="
+		margin:5px;
 		width:500px;
 		height:800px;
 		padding: 10px;
 		display: inline-block;
 	">
 	</textarea>
+
+		</form>
 	</div>
 <pre>
 W: 上の線でCUT
@@ -72,5 +79,19 @@ S: マウスの点でCUT
 	<img id="image" tabindex="0" width="400" height="400" style="background-color:#F2C272;border: 1px solid #DDDDDD;"></img><br/>
 	<br/>
 	<script src="./bin/visualizer.js"></script>
+	<script>
+		document.getElementById("eval-button").addEventListener("click" , function (){
+			const xhr = new XMLHttpRequest();
+			var problemId = document.getElementById("problem").value
+			xhr.open('get', 'http://34.85.55.117:5000/eval_solution?solution=' + encodeURI(document.getElementById("input").value)+'&problem_id='+problemId );
+			xhr.send();
+
+			xhr.addEventListener('readystatechange', () => {
+				console.log(xhr.response);
+				document.getElementById("eval").value = xhr.response
+			});
+		}
+		)
+	</script>
 </body>
 </html>
