@@ -9,8 +9,8 @@ problems.json:
 result-by-api: api-token
 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/results/user | jq . > result_by_api.json
 
-.PHONY: submissions
-submissions: api-token
+.PHONY: submissions-list
+submissions-list: api-token
 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/submissions > submissions/list.json
 	cd submissions && go run main.go
 
