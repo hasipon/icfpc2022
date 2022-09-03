@@ -3,7 +3,17 @@
 
 import { BlockType, ComplexBlock, SimpleBlock } from './Block';
 import { Canvas, Color } from './Canvas';
-import { ColorInstruction, HorizontalCutInstruction, Instruction, InstructionType, MergeInstruction, PointCutInstruction, SwapInstruction, VerticalCutInstruction } from './Instruction';
+import {
+    ColorInstruction,
+    HorizontalCutInstruction,
+    Instruction,
+    instructionToString,
+    InstructionType,
+    MergeInstruction,
+    PointCutInstruction,
+    SwapInstruction,
+    VerticalCutInstruction
+} from './Instruction';
 import { InstructionCostCalculator } from './InstructionCostCalculator';
 import { Parser } from './Parser';
 import { Point } from './Point';
@@ -47,6 +57,7 @@ export class Interpreter {
             const result = this.interpret(index, canvas, program.instructions[index]);
             canvas = result.canvas;
             totalCost += result.cost;
+	    console.log("cost: " + `           ${result.cost}`.slice(-5) + "\t" + instructionToString(program.instructions[index]));
         }
         return new InterpreterResult(canvas, totalCost);
     }
