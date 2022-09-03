@@ -14,22 +14,45 @@
             <tr>
                 <th class="text-center">Id</th>
                 <th class="text-center">Name</th>
-                <th class="text-center">SubmittedMinScore</th>
-                <th class="text-center">SubmittedCount</th>
-                <th class="text-center">LastSubmittedAt</th>
-                <th class="text-center">Thumb</th>
+                <th class="text-center">Score</th>
+                <th class="text-center">Target</th>
+                <th class="text-center">Solutions 1st</th>
+                <th class="text-center">Solutions 2nd</th>
             </tr>
 
             {% for p in problems %}
                 <tr>
                     <td class="text-center" id="{{ p.name }}">{{ p.name }}</td>
-                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["problem_name"]}}</td>
-                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["min_cost"]}}</td>
-                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["submission_count"]}}</td>
-                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["last_submitted_at"]}}</td>
+                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["problem_name"] }}</td>
+                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["min_cost"] }}</td>
                     <td class="text-center">
-                        <a href="/problems/{{ p.name }}.png">
-                            <img src="/thumb/{{ p.name }}.png" class="img-thumbnail"></a>
+                        <a href="http://34.85.55.117/repo/problems/{{ p.name }}.png">
+                            <img src="http://34.85.55.117/repo/problems/{{ p.name }}.png">
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
+                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
+                        </a>
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
+                            {{ solutions[p.name|int][0].id }}
+                        </a>
+                        <dl>
+                            <dt> {{ solutions[p.name|int][0].cost }} </dt>
+                            <dd> {{ solutions[p.name|int][0].isl_cost }}(move) + {{ solutions[p.name|int][0].sim_cost }}(sim)</dd>
+                        </dl>
+                    </td>
+                    <td class="text-center">
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
+                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
+                        </a>
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
+                            {{ solutions[p.name|int][1].id }}
+                        </a>
+                        <dl>
+                            <dt> {{ solutions[p.name|int][1].cost }} </dt>
+                            <dd> {{ solutions[p.name|int][1].isl_cost }}(move) + {{ solutions[p.name|int][1].sim_cost }}(sim)</dd>
+                        </dl>
                     </td>
                 </tr>
             {% endfor %}

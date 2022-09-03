@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // InsertSolutionsInDirectory solutionsディレクトリにあるファイルたちをDBに登録します
@@ -81,6 +82,24 @@ func InsertSubmissionInDirectory(submissionDir string) {
 		if err != nil {
 			log.Println("ReplaceSubmission err", err)
 		}
+	}
+}
+
+func batchSubmit() {
+	solutions, err := defaultDB.FindUnSubmittedSolutions()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, s := range solutions {
+		log.Println(s.ID, "is not submitted")
+
+		err = CallSubmitApi(s.ProblemID, s.ID, s.Isl)
+		if err != nil {
+			log.Println(err)
+		}
+
+		time.Sleep(1 * time.Second)
 	}
 }
 

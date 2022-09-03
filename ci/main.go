@@ -5,6 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 var (
@@ -55,5 +56,19 @@ func main() {
 
 	InsertSubmissionInDirectory(filepath.Join(RepoRoot, "submissions"))
 	InsertSolutionsInDirectory(filepath.Join(RepoRoot, "solutions"))
-	batchEvalDB()
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		batchEvalDB()
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		batchSubmit()
+	}()
+
+	wg.Wait()
 }
