@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -42,6 +43,42 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 			}
 		} else {
 			fmt.Println("New solution added:", problemID, solutionName)
+		}
+	}
+}
+
+func InsertSubmissionInDirectory(submissionDir string) {
+	listJson, err := ioutil.ReadFile(path.Join(submissionDir, "list.json"))
+	if err != nil {
+		panic(err)
+	}
+
+	var jsonBody struct {
+		Submissions []*Submission `json:"submissions,omitempty"`
+	}
+
+	err = json.Unmarshal(listJson, &jsonBody)
+	if err != nil {
+		panic(err)
+	}
+
+	submissions := jsonBody.Submissions
+
+	for _, s := range submissions {
+		islFilePath := path.Join(submissionDir, fmt.Sprintf("%d.isl", s.ID))
+		_, err = os.Stat(islFilePath)
+		if err == nil {
+			islByte, err := ioutil.ReadFile(islFilePath)
+			if err != nil {
+				panic(err)
+			}
+
+			s.Isl = string(islByte)
+		}
+
+		err = defaultDB.ReplaceSubmission(s)
+		if err != nil {
+			log.Println("ReplaceSubmission err", err)
 		}
 	}
 }

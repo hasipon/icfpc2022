@@ -36,11 +36,12 @@ CREATE TABLE IF NOT EXISTS solution
 
 CREATE TABLE IF NOT EXISTS submission
 (
+    id           int,
     problem_id   INT NOT NULL,
     isl          MEDIUMTEXT,
-    cost         INT DEFAULT 0,
-    updated_at   DATETIME,
-    PRIMARY KEY (problem_id)
+    score        INT DEFAULT 0,
+    status       VARCHAR(255),
+    submitted_at DATETIME,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 `
 const indexes = `
@@ -64,11 +65,12 @@ type Solution struct {
 }
 
 type Submission struct {
-	ProblemID int       `json:"problem_id,omitempty" db:"problem_id"`
-	Isl       string    `json:"isl,omitempty" db:"isl"`
-	Cost      int       `json:"cost,omitempty" db:"cost"`
-	Message   string    `json:"message,omitempty" db:"message"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID          int       `json:"id,omitempty" db:"id"`
+	ProblemID   int       `json:"problem_id,omitempty" db:"problem_id"`
+	Isl         string    `json:"isl,omitempty" db:"isl"`
+	Score       int       `json:"score,omitempty" db:"score"`
+	Status      string    `json:"status,omitempty" db:"status"`
+	SubmittedAt time.Time `json:"submitted_at" db:"submitted_at"`
 }
 
 func (db DB) Ok() bool {
@@ -148,24 +150,21 @@ ORDER BY cost LIMIT 1`,
 	return solution, err
 }
 
-func (db DB) GetSubmission(problemID int) (*Submission, error) {
-	submission := new(Submission)
-	err := db.QueryRowx("SELECT * FROM submission WHERE problem_id = ?", problemID).StructScan(submission)
-	return submission, err
-}
-
 func (db DB) ReplaceSubmission(submission *Submission) error {
-	submission.UpdatedAt = time.Now()
 	_, err := db.NamedExec(`REPLACE INTO submission (
+    id,
     problem_id,
     isl,
-    cost,
-	updated_at
+    score,
+    status,
+    submitted_at
 ) VALUES (
+    :id,
     :problem_id,
     :isl,
-    :cost,
-	:updated_at
+    :score,
+    :status,
+    :submitted_at
 )`, submission)
 	return err
 }
