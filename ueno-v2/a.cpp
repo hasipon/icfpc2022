@@ -16,18 +16,20 @@ public:
 
     std::array<uint16_t, 2> p;
 
-    Point getDiff(Point);
-    bool isStrictlyInside(Point, Point);
-    bool isOnBoundary(Point, Point);
-    bool isInside(Point, Point);
-    int getScalarSize();
+    Point getDiff(Point) const;
+    bool isStrictlyInside(Point, Point) const;
+    bool isOnBoundary(Point, Point) const;
+    bool isInside(Point, Point) const;
+    int getScalarSize() const;
+    Point add(Point otherPoint) const;
+    Point subtract(Point otherPoint) const;
 };
 
 Point::Point() : p({0, 0}) {}
 
 Point::Point(uint16_t x, uint16_t y) : p({x, y}) {}
 
-Point Point::getDiff(Point other) {
+Point Point::getDiff(Point other) const {
     uint16_t newX = this->p[0] - other.p[0];
     uint16_t newY = this->p[1] - other.p[1];
 
@@ -41,26 +43,34 @@ Point Point::getDiff(Point other) {
     return Point{newX, newY};
 }
 
-bool Point::isStrictlyInside(Point bottomLeft, Point topRight) {
+bool Point::isStrictlyInside(Point bottomLeft, Point topRight) const {
     return bottomLeft.p[0] < this->p[0] &&
            this->p[0] < topRight.p[0] &&
            bottomLeft.p[1] < this->p[1] &&
            this->p[1] < topRight.p[1];
 }
 
-bool Point::isOnBoundary(Point bottomLeft, Point topRight) {
+bool Point::isOnBoundary(Point bottomLeft, Point topRight) const {
     return (bottomLeft.p[0] == this->p[0] && bottomLeft.p[1] <= this->p[1] && this->p[1] <= topRight.p[1])
            || (topRight.p[0] == this->p[0] && bottomLeft.p[1] <= this->p[1] && this->p[1] <= topRight.p[1])
            || (bottomLeft.p[1] == this->p[1] && bottomLeft.p[0] <= this->p[0] && this->p[0] <= topRight.p[0])
            || (topRight.p[1] == this->p[1] && bottomLeft.p[0] <= this->p[0] && this->p[0] <= topRight.p[0]);
 }
 
-bool Point::isInside(Point bottomLeft, Point topRight) {
+bool Point::isInside(Point bottomLeft, Point topRight) const {
     return this->isStrictlyInside(bottomLeft, topRight) || this->isOnBoundary(bottomLeft, topRight);
 }
 
-int Point::getScalarSize() {
+int Point::getScalarSize() const {
     return this->p[0] * this->p[1];
+}
+
+Point Point::add(Point otherPoint) const {
+    return Point(this->p[0] + otherPoint.p[0], this->p[1] + otherPoint.p[1]);
+}
+
+Point Point::subtract(Point otherPoint) const {
+    return Point(this->p[0] - otherPoint.p[0], this->p[1] - otherPoint.p[1]);
 }
 
 enum BlockType {
@@ -117,6 +127,7 @@ public:
 
     ComplexBlock(std::string id, Point bottomLeft, Point topRight, std::vector<SimpleBlock> subBlocks);
     virtual std::vector<Block*> getChildren();
+    std::vector<SimpleBlock> offsetChildren(Point) const;
 };
 
 ComplexBlock::ComplexBlock(std::string id, Point bottomLeft, Point topRight, std::vector<SimpleBlock> subBlocks) {
@@ -140,6 +151,20 @@ std::vector<Block *> ComplexBlock::getChildren() {
     }
 
     return res;
+}
+std::vector<SimpleBlock> ComplexBlock::offsetChildren(Point newBottomLeft) const {
+    std::vector<SimpleBlock> newChildren;
+
+    for (const auto &block: subBlocks) {
+        newChildren.emplace_back(
+                "child",
+                block.bottomLeft.add(newBottomLeft).subtract(bottomLeft),
+                block.topRight.add(newBottomLeft).subtract(bottomLeft),
+                block.color
+        );
+    }
+
+    return newChildren;
 }
 
 class Canvas {
@@ -551,20 +576,52 @@ void Canvas::HorizontalCutCanvas(std::string blockId, int lineNumber) {
 }
 
 void Canvas::SwapCanvas(std::string blockId1, std::string blockId2) {
-    auto block1 = *blocks[blockId1].get();
-    auto block2 = *blocks[blockId2].get();
+    auto &block1 = blocks[blockId1];
+    auto &block2 = blocks[blockId2];
 
-    blocks.erase(blockId1);
-    blocks.erase(blockId2);
+    if (block1->size.p[0] == block2->size.p[0] && block1->size.p[1] == block2->size.p[1]) {
+        Block *newBlock1 = nullptr, *newBlock2 = nullptr;
 
-    if (block1.size.p[0] == block2.size.p[0] && block1.size.p[1] == block2.size.p[1]) {
-        block1.id = blockId2;
-        block2.id = blockId1;
-        blocks[blockId1] = std::make_unique<Block>(block1);
-        blocks[blockId2] = std::make_unique<Block>(block2);
+        if (block1->typ == SimpleBlockType) {
+            newBlock2 = new SimpleBlock(
+                    blockId1,
+                    block2->bottomLeft,
+                    block2->topRight,
+                    dynamic_cast<SimpleBlock *>(block1.get())->color
+            );
+        } else {
+            newBlock2 = new ComplexBlock(
+                    blockId1,
+                    block2->bottomLeft,
+                    block2->topRight,
+                    dynamic_cast<ComplexBlock *>(block1.get())->offsetChildren(block2->bottomLeft)
+            );
+        }
+
+        if (block2->typ == SimpleBlockType) {
+            newBlock1 = new SimpleBlock(
+                    blockId2,
+                    block1->bottomLeft,
+                    block1->topRight,
+                    dynamic_cast<SimpleBlock *>(block2.get())->color
+            );
+        } else {
+            newBlock1 = new ComplexBlock(
+                    blockId2,
+                    block1->bottomLeft,
+                    block1->topRight,
+                    dynamic_cast<ComplexBlock *>(block2.get())->offsetChildren(block1->bottomLeft)
+            );
+        }
+
+        blocks.erase(blockId1);
+        blocks.erase(blockId2);
+
+        blocks[newBlock1->id] = std::unique_ptr<Block>(newBlock1);
+        blocks[newBlock2->id] = std::unique_ptr<Block>(newBlock2);
     } else {
-        printf("Blocks are not the same size, %s has size (%d, %d) while %s has size (%d, %d).", block1.id.c_str(),
-               block1.size.p[0], block1.size.p[1], block2.id.c_str(), block2.size.p[0], block2.size.p[1]);
+        printf("Blocks are not the same size, %s has size (%d, %d) while %s has size (%d, %d).", block1->id.c_str(),
+               block1->size.p[0], block1->size.p[1], block2->id.c_str(), block2->size.p[0], block2->size.p[1]);
         exit(EXIT_FAILURE);
     }
 }
@@ -690,7 +747,7 @@ Color read_color(std::stringstream &ss) {
     all = all.substr(g + 1, all.size() - 1 - g);
 
     auto b = all.find(',');
-    int B = std::stoi(all.substr(0, r - 1));
+    int B = std::stoi(all.substr(0, b));
     all = all.substr(b + 1, all.size() - 1 - b);
 
     int A = std::stoi(all);
