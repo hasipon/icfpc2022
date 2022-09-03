@@ -6,10 +6,17 @@ problems.json:
 	done
 
 .PHONY: result-by-api
-result-by-api:
+result-by-api: api-token
 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/results/user > result_by_api.json
 
 .PHONY: submissions
-submissions:
+submissions: api-token
 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/submissions > submissions/list.json
-# 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/submissions/6709
+	cd submissions && go run main.go
+
+.PHONY: api-token
+api-token:
+	if [ -z "$$API_TOKEN" ]; then \
+	 echo "API_TOKEN not found"; \
+	 exit 1; \
+	fi
