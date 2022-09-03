@@ -89,11 +89,11 @@ fn _fill_color<R:Rng + Sized>(
     if rects.len() == 0 { return; }
     
     let mut color0 = Rgba::from([127.0, 127.0, 127.0, 150.0]);
-    let mut power = 130.0;
-    for _ in 0..11 {
+    let mut power = 135.0;
+    for _ in 0..18 {
         let color1 = get_rects_color(&rects, image, color0, power, rng);
         color0 = color1;
-        power *= 0.60;
+        power *= 0.65;
     }
     let result_color = to_u8_color(color0);
     tree.find_mut(id).fill_color(result_color);
