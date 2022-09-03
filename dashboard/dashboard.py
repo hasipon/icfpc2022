@@ -73,6 +73,8 @@ def eval_solution():
     print(cp.stdout.decode())
     print(cp.stderr.decode())
     lines = cp.stdout.decode().splitlines()
+    if len(lines) == 0:
+        return "failed"
     line = lines[-1]
     return line
 
