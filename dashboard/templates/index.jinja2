@@ -1,7 +1,7 @@
 {% extends "base.jinja2" %}
 {% block content %}
 
-    <div class="container">
+    <div class="container-fluid">
         <h2>問題一覧 ({{ problems|length }} 件)</h2>
         <dl>
             <dt>Solved</dt>
@@ -12,9 +12,8 @@
         <a href="/">すべて</a>
         <table class="table table-condensed table-striped">
             <tr>
-                <th class="text-center">Id</th>
-                <th class="text-center">Name</th>
-                <th class="text-center">Score</th>
+                <th class="text-center">Problem</th>
+                <th class="text-center">Source</th>
                 <th class="text-center">Target</th>
                 <th class="text-center">Solutions 1st</th>
                 <th class="text-center">Solutions 2nd</th>
@@ -22,9 +21,21 @@
 
             {% for p in problems %}
                 <tr>
-                    <td class="text-center" id="{{ p.name }}">{{ p.name }}</td>
-                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["problem_name"] }}</td>
-                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["min_cost"] }}</td>
+                    <td class="text-center" id="{{ p.name }}">
+                        {{ p.name }}.{{ result_by_api.results[p.name|int-1]["problem_name"] }}
+                        <br/>
+                        {{ result_by_api.results[p.name|int-1]["min_cost"] }}
+                    </td>
+                    <td class="text-center">
+                        {% if p.initial %}
+                            <a href="http://34.85.55.117/repo/problems/{{ p.name }}.initial.png">
+                                <img src="http://34.85.55.117/repo/problems/{{ p.name }}.initial.png">
+                            </a>
+                        {% else %}
+                            No initial.json
+                        {% endif %}
+                    </td>
+
                     <td class="text-center">
                         <a href="http://34.85.55.117/repo/problems/{{ p.name }}.png">
                             <img src="http://34.85.55.117/repo/problems/{{ p.name }}.png">
@@ -33,32 +44,38 @@
 
                     <td class="text-center">
                         {% if 0 < solutions[p.name|int] | length %}
-                        <a href="/vis/{{ solutions[p.name|int][0].id }}">
-                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
-                        </a>
-                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
-                            {{ solutions[p.name|int][0].id }}
-                        </a>
-                        <dl>
-                            <dt> {{ solutions[p.name|int][0].cost }} </dt>
-                            <dd> {{ solutions[p.name|int][0].isl_cost }}(move) + {{ solutions[p.name|int][0].sim_cost }}(sim)</dd>
-                        </dl>
+                            <a href="/vis/{{ solutions[p.name|int][0].id }}">
+                                <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
+                            </a>
+                            <br/>
+                            <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
+                                {{ solutions[p.name|int][0].id }}
+                            </a>
+                            <dl>
+                                <dt> {{ solutions[p.name|int][0].cost }} </dt>
+                                <dd> {{ solutions[p.name|int][0].isl_cost }}(move)
+                                    + {{ solutions[p.name|int][0].sim_cost }}(sim)
+                                </dd>
+                            </dl>
                         {% else %}
                             <p>No submission</p>
                         {% endif %}
                     </td>
                     <td class="text-center">
                         {% if 1 < solutions[p.name|int] | length %}
-                        <a href="/vis/{{ solutions[p.name|int][1].id }}">
-                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
-                        </a>
-                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
-                            {{ solutions[p.name|int][1].id }}
-                        </a>
-                        <dl>
-                            <dt> {{ solutions[p.name|int][1].cost }} </dt>
-                            <dd> {{ solutions[p.name|int][1].isl_cost }}(move) + {{ solutions[p.name|int][1].sim_cost }}(sim)</dd>
-                        </dl>
+                            <a href="/vis/{{ solutions[p.name|int][1].id }}">
+                                <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
+                            </a>
+                            <br/>
+                            <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
+                                {{ solutions[p.name|int][1].id }}
+                            </a>
+                            <dl>
+                                <dt> {{ solutions[p.name|int][1].cost }} </dt>
+                                <dd> {{ solutions[p.name|int][1].isl_cost }}(move)
+                                    + {{ solutions[p.name|int][1].sim_cost }}(sim)
+                                </dd>
+                            </dl>
                         {% else %}
                             <p>No submission</p>
                         {% endif %}
