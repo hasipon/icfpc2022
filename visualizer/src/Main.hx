@@ -1,4 +1,6 @@
 package;
+import haxe.Http;
+import haxe.Json;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.Element;
@@ -9,6 +11,7 @@ import js.html.TextAreaElement;
 import pixi.core.Application;
 import pixi.core.graphics.Graphics;
 import pixi.core.math.Point;
+import pixi.core.math.shapes.Rectangle;
 import pixi.core.sprites.Sprite;
 import pixi.core.textures.Texture;
 import pixi.interaction.InteractionEvent;
@@ -19,7 +22,7 @@ class Main
 	static var input       :TextAreaElement;
 	static var problemInput:InputElement;
 	static var imageElement:ImageElement;
-	
+	static var initialState:InitialState;
 	static var mainCanvas  :CanvasElement;
 	static var outputCanvas:CanvasElement;
 	static var mainPixi    :Application;
@@ -31,6 +34,7 @@ class Main
 	static var scouter     :Scouter;
 	static var history:Array<String> = [];
 	static var textLayer:Sprite;
+	
 	
 	static function main()
 	{
@@ -87,6 +91,7 @@ class Main
 	
 	static function onKey(e:KeyboardEvent):Void 
 	{
+		if (initialState == null) return;
 		if (
 			Browser.document.activeElement == problemInput ||
 			Browser.document.activeElement == input
@@ -122,15 +127,15 @@ class Main
 		{
 			switch (e.keyCode)
 			{
-				case KeyboardEvent.DOM_VK_W: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.top   );
-				case KeyboardEvent.DOM_VK_X: input.value += state.getLineCut(false, scouter.x    , 400 - scouter.bottom);
-				case KeyboardEvent.DOM_VK_D: input.value += state.getLineCut(true , scouter.right, 400 - scouter.y);
-				case KeyboardEvent.DOM_VK_A: input.value += state.getLineCut(true , scouter.left , 400 - scouter.y);
-				case KeyboardEvent.DOM_VK_Q: input.value += state.getPointCut(scouter.left , 400 - scouter.top   );
-				case KeyboardEvent.DOM_VK_E: input.value += state.getPointCut(scouter.right, 400 - scouter.top   );
-				case KeyboardEvent.DOM_VK_Z: input.value += state.getPointCut(scouter.left , 400 - scouter.bottom);
-				case KeyboardEvent.DOM_VK_C: input.value += state.getPointCut(scouter.right, 400 - scouter.bottom);
-				case KeyboardEvent.DOM_VK_S: input.value += state.getPointCut(scouter.x, 400 - scouter.y);
+				case KeyboardEvent.DOM_VK_W: input.value += state.getLineCut(false, scouter.x    , initialState.height - scouter.top   );
+				case KeyboardEvent.DOM_VK_X: input.value += state.getLineCut(false, scouter.x    , initialState.height - scouter.bottom);
+				case KeyboardEvent.DOM_VK_D: input.value += state.getLineCut(true , scouter.right, initialState.height - scouter.y);
+				case KeyboardEvent.DOM_VK_A: input.value += state.getLineCut(true , scouter.left , initialState.height - scouter.y);
+				case KeyboardEvent.DOM_VK_Q: input.value += state.getPointCut(scouter.left , initialState.height - scouter.top   );
+				case KeyboardEvent.DOM_VK_E: input.value += state.getPointCut(scouter.right, initialState.height - scouter.top   );
+				case KeyboardEvent.DOM_VK_Z: input.value += state.getPointCut(scouter.left , initialState.height - scouter.bottom);
+				case KeyboardEvent.DOM_VK_C: input.value += state.getPointCut(scouter.right, initialState.height - scouter.bottom);
+				case KeyboardEvent.DOM_VK_S: input.value += state.getPointCut(scouter.x, initialState.height - scouter.y);
 				case _: return;
 			}
 			
@@ -178,6 +183,52 @@ class Main
 	
 	static function onImageLoad():Void 
 	{
+		var num = Std.parseInt(problemInput.value);
+		if (num > 25)
+		{
+			var url = "../problems/" + num + ".initial.json";
+			var http = new Http(url);
+			http.onData = onJsonLoaded;
+			http.request();
+		}
+		else
+		{
+			initialState = new InitialState(
+				400, 
+				400,
+				[
+					new InitialNode(new Rectangle(0, 0, 400, 400), ArgbColor.of(0x000000)),
+				]
+			);
+			onInputChanged();
+		}
+	}
+	static function onJsonLoaded(data:String):Void
+	{
+		var data = Json.parse(data);
+		var nodes = [];
+		for (block in (data.blocks:Array<Dynamic>))
+		{
+			nodes[Std.parseInt(block.blockId)] = new InitialNode(
+				new Rectangle(
+					block.bottomLeft[1],
+					block.bottomLeft[0],
+					block.topRight[1] - block.bottomLeft[1],
+					block.topRight[0] - block.bottomLeft[0]
+				),
+				new ArgbColor(
+					block.color[3],
+					block.color[0],
+					block.color[1],
+					block.color[2]
+				)
+			);
+		}
+		initialState = new InitialState(
+			data.width,
+			data.height,
+			nodes
+		);
 		onInputChanged();
 	}
 	static function _onInputChanged():Void
@@ -187,13 +238,13 @@ class Main
 	}
 	static function onInputChanged():Void
 	{
+		if (initialState == null) return;
 		try
 		{
 			errorOutput.text = "";
 			state.update(
 				input.value,
-				imageElement.width,
-				imageElement.height
+				initialState
 			);
 		}
 		catch (d:Dynamic)
