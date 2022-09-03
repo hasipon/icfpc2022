@@ -400,6 +400,7 @@ struct State {
       auto p = bs[k].colorAv();
       cmd.push_back(p.first);
       bs[k] = p.second;
+      cost += calcCost(TYPE_COLOR, bs[k]);
     }
     return;
   }
@@ -486,6 +487,7 @@ void solve(void)
   if (height != 400) throw 1;
 
   State best(initialBlock());
+  best.simulality();
   priority_queue<State> q;
   q.push(best);
   const lli WIDTH = 20;
@@ -493,7 +495,11 @@ void solve(void)
     clog << _ << "th gen queue size: " << q.size() << ", " << "best sim: " << best.cost << endl;
     priority_queue<State> nq;
     while (q.size()) {
-      if (q.top() < best) best = q.top();
+      {
+        State s = q.top();
+        s.colorAv();
+        if (s < best) best = s;
+      }
       auto t = cutOneBlock(q.top());
       q.pop();
       if (t.empty()) continue;
