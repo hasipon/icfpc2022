@@ -53,6 +53,7 @@ func main() {
 		initDB()
 	}
 
+	InsertSubmissionInDirectory(filepath.Join(RepoRoot, "submissions"))
 	InsertSolutionsInDirectory(filepath.Join(RepoRoot, "solutions"))
 	batchEvalDB()
 }
