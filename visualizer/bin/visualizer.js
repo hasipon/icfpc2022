@@ -42,7 +42,7 @@ CutState.prototype = {
 				text.text = ids.join(".");
 				text.x = rect.x + 2;
 				text.y = this.height - rect.bottom;
-				text.alpha = 0.4;
+				text.alpha = 0.6;
 				text.scale.x = 0.25;
 				text.scale.y = 0.25;
 				this.textLayer.addChild(text);
@@ -285,10 +285,10 @@ Main.main = function() {
 	Main.mainPixi.stage.scale.x = 2.0;
 	Main.mainPixi.stage.scale.y = 2.0;
 	Main.mainPixi.stage.on("mousedown",Main.onMouseDown);
-	Main.problemLayer.x = Main.problemLayer.y = 20;
-	Main.borderLayer.x = Main.borderLayer.y = 20;
-	Main.scouterLayer.x = Main.scouterLayer.y = 20;
-	Main.textLayer.x = Main.textLayer.y = 20;
+	Main.problemLayer.x = Main.problemLayer.y = 5;
+	Main.borderLayer.x = Main.borderLayer.y = 5;
+	Main.scouterLayer.x = Main.scouterLayer.y = 5;
+	Main.textLayer.x = Main.textLayer.y = 5;
 	Main.problemLayer.alpha = 0.3;
 	Main.state = new State(Main.outputCanvas.getContext("2d",null),Main.borderLayer,Main.textLayer,Main.errorOutput = new ErrorOutput());
 	Main.scouter = new Scouter(Main.state,Main.scouterLayer);

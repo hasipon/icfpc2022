@@ -7,17 +7,14 @@
 	<script src="./bin/js/pixi.min.js"></script>
 	<style type="text/css">
 .canvas-wrap{
-            width: 600px;
+            width: 820px;
             max-width: 100%;
             position: relative;
             padding: 0;
             box-sizing: content-box;
-			height: 1000px;
-}
-.canvas_warp:before{
-            content:"";
-            display: block;
-            padding-top: 50%;
+			height: 820px;
+			
+            display: f;
 }
 .canvas-wrap canvas{
             position: absolute;
@@ -30,8 +27,8 @@
 }
 .canvas-wrap canvas#output{
 	background-color:white;
-	left:40px;
-	top:40px;
+	left:10px;
+	top:10px;
 	transform: scale(2, 2);
 	transform-origin: top left;
 }
@@ -40,21 +37,25 @@
 <body bgcolor="#EEEEEE">
 	問:
 	<input type="text" id="problem" value="1" /></input><br/>
-	入力:<br/>
-	<textarea 
+	<code id="point"></code></pre>
+	<pre><code id="error" style="color:red;"></code></pre>
+	<div style="
+		flex-flow:row wrap;
+		display: flex;
+	">
+	<div class="canvas-wrap"　>
+		<canvas id="output" tabindex="0" width="400" height="400" ></canvas><br/>
+		<canvas id="pixi" tabindex="0" width="900" height="900"></canvas></canvas><br/>
+	</div><textarea 
 		id="input"
 		style="
 		margin:5px; 
-		width:800px;
-		height:500px;
+		width:500px;
+		height:800px;
 		padding: 10px;
+		display: inline-block;
 	">
-	</textarea></br>
-	<code id="point"></code></pre>
-	<pre><code id="error" style="color:red;"></code></pre>
-	<div class="canvas-wrap">
-		<canvas id="output" tabindex="0" width="400" height="400" ></canvas><br/>
-		<canvas id="pixi" tabindex="0" width="900" height="900"></canvas></canvas><br/>
+	</textarea>
 	</div>
 <pre>
 W: 上の線でCUT

@@ -52,10 +52,10 @@ class Main
 		mainPixi.stage.scale.x = 2.0;
 		mainPixi.stage.scale.y = 2.0;
 		mainPixi.stage.on("mousedown", onMouseDown);
-		problemLayer.x = problemLayer.y = 20;
-		borderLayer .x = borderLayer .y = 20;
-		scouterLayer.x = scouterLayer.y = 20;
-		textLayer   .x = textLayer   .y = 20;
+		problemLayer.x = problemLayer.y = 5;
+		borderLayer .x = borderLayer .y = 5;
+		scouterLayer.x = scouterLayer.y = 5;
+		textLayer   .x = textLayer   .y = 5;
 		problemLayer.alpha = 0.3;
 		
 		state = new State(
