@@ -104,10 +104,11 @@ int main() {
                     continue ;
                 }
                 if(vb[i].canMerge(vb[j])){
-                    cout << vb[i].blockId << ' ' << vb[j].blockId <<endl;
+                    cout << "merge [" << vb[i].blockId << "] [" << vb[j].blockId<< "]" <<endl;
                     next.push_back(vb[i].merge(vb[j]));
                     merged.insert(vb[i].blockId);
                     merged.insert(vb[j].blockId);
+                    break;
                 }
             }
         }
@@ -120,5 +121,6 @@ int main() {
         }
         vb = next;
     }
+    cout << "color ["<< globalcnt <<"] [255,255,255,255]" <<endl;
     return 0;
 }
