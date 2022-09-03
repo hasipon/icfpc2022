@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -112,6 +113,13 @@ func batchEvalDB() {
 			solution.IslCost = result.IslCost
 			solution.SimCost = result.SimCost
 			solution.Cost = result.Cost
+			if result.ImagePath != "" {
+				p := filepath.Join(RepoRoot, "solutions", solution.ID+".png")
+				err = os.Rename(result.ImagePath, p)
+				if err != nil {
+					log.Println("image file rename failed: ", err)
+				}
+			}
 		}
 
 		err = defaultDB.UpdateSolution(solution)

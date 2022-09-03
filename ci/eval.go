@@ -11,11 +11,12 @@ import (
 )
 
 type EvalResult struct {
-	Cost    int    `json:"cost,omitempty"`
-	IslCost int    `json:"isl_cost,omitempty"`
-	SimCost int    `json:"sim_cost,omitempty"`
-	Output  string `json:"output,omitempty"`
-	Tail    string `json:"tail,omitempty"`
+	Cost      int    `json:"cost,omitempty"`
+	IslCost   int    `json:"isl_cost,omitempty"`
+	SimCost   int    `json:"sim_cost,omitempty"`
+	Output    string `json:"output,omitempty"`
+	Tail      string `json:"tail,omitempty"`
+	ImagePath string `json:"image_path,omitempty"`
 }
 
 func splitLines(s string) []string {
@@ -33,6 +34,7 @@ func execEvalV2(probID int, isl string) (*EvalResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	imagePath := f.Name() + ".png"
 
 	defer os.Remove(f.Name())
 
@@ -45,6 +47,7 @@ func execEvalV2(probID int, isl string) (*EvalResult, error) {
 	cmd.Env = append(cmd.Env, os.Environ()...)
 	cmd.Env = append(cmd.Env,
 		fmt.Sprintf("ISL_FILE=%s", f.Name()),
+		fmt.Sprintf("OUT_IMAGE_PATH=%s", imagePath),
 		fmt.Sprintf("PROBLEM_ID=%d", probID))
 	cmd.Dir = path.Join(RepoRoot, "eval-v2")
 
@@ -57,5 +60,6 @@ func execEvalV2(probID int, isl string) (*EvalResult, error) {
 		err = json.Unmarshal([]byte(result.Tail), result)
 	}
 	result.Output = string(out)
+	result.ImagePath = imagePath
 	return result, err
 }
