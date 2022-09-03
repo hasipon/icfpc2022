@@ -26,13 +26,7 @@ type Submission struct {
 	FileUrl   string `json:"file_url"`
 }
 
-type Solution struct {
-	Id    int    `json:"id"`
-	Any   any    `json:"any"`
-	Moves string `json:"moves"`
-}
-
-func getSubmitJson(id int) *Solution {
+func getSubmitIsl(id int) []byte {
 	url := fmt.Sprintf("https://robovinci.xyz/api/submissions/%d", id)
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", "Bearer "+os.Getenv("API_TOKEN"))
@@ -62,11 +56,7 @@ func getSubmitJson(id int) *Solution {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return &Solution{
-		Id:    sub.ProblemId,
-		Any:   nil,
-		Moves: string(body),
-	}
+	return body
 }
 
 func main() {
@@ -79,28 +69,26 @@ func main() {
 	}
 	for i, submit := range submissions.Submissions {
 		id := submit.Id
+		problemId := submit.ProblemId
 		log.Printf("%d/%d", i+1, len(submissions.Submissions))
-		path := fmt.Sprintf("./%d.json", id)
+		path := fmt.Sprintf("./%d.isl", id)
+
 		now := time.Now().Unix()
 		nowString := strconv.FormatInt(now, 10)
-		solutionPath := fmt.Sprintf("../solutions/%d-submitted-%s.json", id, nowString)
+		solutionPath := fmt.Sprintf("../solutions/%d-submitted-%s.isl", problemId, nowString)
 
 		if _, err := os.Stat(path); err == nil {
 			continue
 		}
-		sol := getSubmitJson(id)
-		j, err := json.Marshal(sol)
+		sol := getSubmitIsl(id)
+		err = os.WriteFile(path, sol, os.ModePerm)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		err = os.WriteFile(path, j, os.ModePerm)
+		err = os.WriteFile(solutionPath, sol, os.ModePerm)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		err = os.WriteFile(solutionPath, j, os.ModePerm)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		time.Sleep(time.Millisecond * 100)
+		time.Sleep(time.Millisecond * 300)
 	}
 }

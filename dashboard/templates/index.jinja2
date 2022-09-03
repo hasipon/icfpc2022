@@ -18,6 +18,10 @@
                 <th class="text-center">SubmittedCount</th>
                 <th class="text-center">LastSubmittedAt</th>
                 <th class="text-center">Thumb</th>
+                <th class="text-center">Solutions 1st score</th>
+                <th class="text-center">Solutions 1st img</th>
+                <th class="text-center">Solutions 2nd score</th>
+                <th class="text-center">Solutions 2nd img</th>
             </tr>
 
             {% for p in problems %}
@@ -30,6 +34,48 @@
                     <td class="text-center">
                         <a href="/problems/{{ p.name }}.png">
                             <img src="/thumb/{{ p.name }}.png" class="img-thumbnail"></a>
+                    </td>
+                    <td class="text-center">
+                        <dl>
+                            <dt>
+                                {{ solutions[p.name|int][0].cost }}
+                            </dt>
+                            <dd>
+                                {{ solutions[p.name|int][0].isl_cost }}(move)
+                                +
+                                {{ solutions[p.name|int][0].sim_cost }}(sim)
+                            </dd>
+
+                        </dl>
+                    </td>
+                    <td class="text-center">
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
+                            {{ solutions[p.name|int][0].id }}
+                        </a>
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
+                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png" class="img-thumbnail">
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <dl>
+                            <dt>
+                                {{ solutions[p.name|int][1].cost }}
+                            </dt>
+                            <dd>
+                                {{ solutions[p.name|int][1].isl_cost }}(move)
+                                +
+                                {{ solutions[p.name|int][1].sim_cost }}(sim)
+                            </dd>
+
+                        </dl>
+                    </td>
+                    <td class="text-center">
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
+                        {{ solutions[p.name|int][1].id }}
+                        </a>
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
+                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png" class="img-thumbnail">
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "canvas": "^2.9.3",
     "lodash": "^4.17.21",
     "ts-node": "^10.9.1"
   },
