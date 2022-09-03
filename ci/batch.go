@@ -14,6 +14,46 @@ import (
 	"time"
 )
 
+func RemoveDuplicatedSolutions(solutionsDir string) {
+	dirEntries, err := os.ReadDir(solutionsDir)
+	if err != nil {
+		log.Println("ReadDir failed", err)
+		return
+	}
+
+	m := map[string]os.DirEntry{}
+
+	for _, entry := range dirEntries {
+		if !strings.HasSuffix(entry.Name(), ".isl") {
+			continue
+		}
+
+		sp := strings.Split(entry.Name(), "-")
+		problemID, _ := strconv.Atoi(sp[0])
+		ans, err := ioutil.ReadFile(path.Join(solutionsDir, entry.Name()))
+		if err != nil {
+			log.Println("Read Solution failed", err)
+			continue
+		}
+
+		hash := solutionHash(problemID, string(ans))
+		if prev, ok := m[hash]; ok {
+			if strings.Contains(prev.Name(), "submitted") {
+				os.Remove(path.Join(solutionsDir, prev.Name()))
+				os.Remove(path.Join(solutionsDir, prev.Name()+".png"))
+				m[hash] = entry
+				continue
+			} else if strings.Contains(entry.Name(), "submitted") {
+				os.Remove(path.Join(solutionsDir, entry.Name()))
+				os.Remove(path.Join(solutionsDir, entry.Name()+".png"))
+				continue
+			}
+		} else {
+			m[hash] = entry
+		}
+	}
+}
+
 // InsertSolutionsInDirectory solutionsディレクトリにあるファイルたちをDBに登録します
 func InsertSolutionsInDirectory(solutionsDir string) {
 	dirEntries, err := os.ReadDir(solutionsDir)
