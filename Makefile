@@ -1,11 +1,3 @@
-.PHONY: problems
-problems:
-	for i in {1..25}; do \
-	  curl https://cdn.robovinci.xyz/imageframes/$${i}.json > problems.json/$${i}.json; \
-	  curl https://cdn.robovinci.xyz/imageframes/$${i}.png > problems/$${i}.png; \
-	  convert problems/$${i}.png problems.pam/$${i}.pam; \
-	done
-
 .PHONY: result-by-api
 result-by-api: api-token
 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/results/user | jq . > result_by_api.json
