@@ -166,7 +166,7 @@ ORDER BY cost LIMIT 1`,
 
 func (db DB) FindUnSubmittedSolutions() ([]*Solution, error) {
 	var solutions []*Solution
-	rows, err := db.Queryx(`SELECT solution.id FROM solution LEFT JOIN submission ON solution.hash = submission.hash WHERE submission.id IS NULL`)
+	rows, err := db.Queryx(`SELECT solution.* FROM solution LEFT JOIN submission ON solution.hash = submission.hash WHERE submission.id IS NULL`)
 	for rows.Next() {
 		var s Solution
 		if err := rows.StructScan(&s); err != nil {

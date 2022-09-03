@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"log"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 var (
@@ -57,13 +57,18 @@ func main() {
 	InsertSubmissionInDirectory(filepath.Join(RepoRoot, "submissions"))
 	InsertSolutionsInDirectory(filepath.Join(RepoRoot, "solutions"))
 
-	batchEvalDB()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		batchEvalDB()
+	}()
 
-	solutions, err := defaultDB.FindUnSubmittedSolutions()
-	if err != nil {
-		panic(err)
-	}
-	for _, s := range solutions {
-		log.Println(s.ID, "is not submitted")
-	}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		batchSubmit()
+	}()
+
+	wg.Wait()
 }
