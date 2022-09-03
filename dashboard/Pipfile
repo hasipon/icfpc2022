@@ -9,5 +9,6 @@ flask = "*"
 werkzeug = "*"
 pillow = "*"
 sqlalchemy = "*"
+pymysql = "*"
 
 [dev-packages]
