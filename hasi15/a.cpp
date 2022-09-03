@@ -57,22 +57,40 @@ map<pair<int,int>,uint32_t> colmap;
 vector<int> Ipos = {43,83,122,162,202,241,281,320,360,400};
 vector<int> Jpos = {0,40,79,119,159,198,238,277,317,357};
 uint32_t Cols[] = {4278190080, 4294967295};
-void cut(string blockId, int i0, int i1, int j0, int j1) {
-	vector<int> ii, jj;
+void cut0(string blockId, int i0) {
+	auto c1 = colmap[{i0,40}];
+	cout << "cut ["<<blockId<<"] [x] [277]" << endl;
+	col(blockId+".1", c1);
+	cout << "cut ["<<blockId<<".0] [x] [238]" << endl;
+	cout << "cut ["<<blockId<<".0.0] [x] [119]" << endl;
+	col(blockId+".0.0.1", c1);
+	cout << "cut ["<<blockId<<".0.0.0] [x] [40]" << endl;
+	cout << "cut ["<<blockId<<".0.0.0.1] [x] [79]" << endl;
+	cout << "cut ["<<blockId<<".0.0.1] [x] [159]" << endl;
+	cout << "cut ["<<blockId<<".0.0.1.1] [x] [198]" << endl;
+	cout << "swap ["<<blockId<<".0.0.0.1.0] ["<<blockId<<".0.0.1.1.0]" << endl;
+}
+void cut1(string blockId, int i0, int i1) {
+	vector<int> ii;
 	for (int i : Ipos) if (i0 <= i && i <= i1) ii.push_back(i);
-	for (int j : Jpos) if (j0 <= j && j <= j1) jj.push_back(j);
 	for (int p = 1; p < (int)ii.size(); ++ p) {
+		col(blockId, colmap[{ii[p-1],0}]);
 		string blockId2 = blockId;
 		if (p+1<(int)ii.size()) {
 			cout << "cut ["<<blockId<<"] [y] ["<<ii[p]<<"]" << endl;
 			blockId2 += ".0";
 		}
-		for (int q = 1; q < (int)jj.size(); ++ q) {
-			col(blockId2, colmap[{ii[p-1],jj[q-1]}]);
-			if (q+1<(int)jj.size()) {
-				cout << "cut ["<<blockId2<<"] [x] ["<<jj[q]<<"]" << endl;
-				blockId2 += ".1";
-			}
+		cut0(blockId2, ii[p-1]);
+		blockId += ".1";
+	}
+}
+void cut2(string blockId, int i0, int i1) {
+	vector<int> ii;
+	for (int i : Ipos) if (i0 <= i && i <= i1) ii.push_back(i);
+	for (int p = 1; p < (int)ii.size(); ++ p) {
+		col(blockId, colmap[{ii[p-1],317}]);
+		if (p+1<(int)ii.size()) {
+			cout << "cut ["<<blockId<<"] [y] ["<<ii[p]<<"]" << endl;
 		}
 		blockId += ".1";
 	}
@@ -89,9 +107,9 @@ void solve() {
 			colmap[{Ipos[i], Jpos[j]}] = Cols[(i+j+1)%2];
 		}
 	}
-	cut("0.0.3", 43,83,0,317);
-	cut("0.3.1", 83,400,317,357);
-	cut("0.3.0", 83,400,0,317);
+	cut1("0.0.3", 43,83);
+	cut1("0.3.0", 83,400);
+	cut2("0.3.1", 83,400);
 }
 int main() {
 	char buf[1000], name[1000];
