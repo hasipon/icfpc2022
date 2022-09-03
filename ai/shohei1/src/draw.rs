@@ -12,7 +12,7 @@ pub fn fill_color(commands:&mut Vec<Command>, image:&RgbaImage) {
     let mut tree = Tree::from_commands(commands);
     
     let mut root_size = match &tree {
-        Tree::Node(children) => children.len(),
+        Tree::Node(_, children) => children.len(),
         _ => panic!("failed get root"),
     };
     for j in 0..len {
@@ -54,12 +54,13 @@ fn fill_large_rects<R:Rng + Sized>(
         let mut rect_ids = Vec::new();
         let mut rects = Vec::new();
 
-        tree.find(&id).get_empty_rects(&mut id, &mut rects, &mut rect_ids);
+        let parent = tree.find(&id);
+        parent.get_empty_rects(&mut id, &mut rects, &mut rect_ids);
         if rects.len() == 0 { continue; }
-        let mut size = 0;
-        for rect in rects {
-            size += rect.w * rect.h;
-        }
+        let mut size = match &parent {
+            Tree::Node(rect, _) | Tree::Leaf(rect, _) => rect.w * rect.h,
+            _ => panic!("failed get rect"),
+        };
         if size <= min_size {
             min_size = size;
             min_id = i;
@@ -86,9 +87,17 @@ fn _fill_color<R:Rng + Sized>(
     let mut rects = Vec::new();
     tree.find(&id).get_empty_rects(id, &mut rects, &mut rect_ids);
     if rects.len() == 0 { return; }
-    let color = to_u8_color(get_rects_color(&rects, image, rng));
-    tree.find_mut(id).fill_color(color);
-    commands.insert(index, Command::Color(id.clone(), color));
+    
+    let mut color0 = Rgba::from([127.0, 127.0, 127.0, 150.0]);
+    let mut power = 130.0;
+    for _ in 0..11 {
+        let color1 = get_rects_color(&rects, image, color0, power, rng);
+        color0 = color1;
+        power *= 0.60;
+    }
+    let result_color = to_u8_color(color0);
+    tree.find_mut(id).fill_color(result_color);
+    commands.insert(index, Command::Color(id.clone(), result_color));
 }
 
 fn to_u8_color(color:Rgba<f64>) -> Rgba<u8> {
@@ -100,37 +109,47 @@ fn to_u8_color(color:Rgba<f64>) -> Rgba<u8> {
     ])
 }
 
-fn get_rects_color<R:Rng + Sized>(rects:&Vec<Rectangle>, image:&RgbaImage, rng:&mut R) -> Rgba<f64> {
-    let mut color = Rgba([0.0, 0.0, 0.0, 0.0]);
-    let mut weight = 0.0;
+fn get_rects_color<R:Rng + Sized>(rects:&Vec<Rectangle>, image:&RgbaImage, base_color:Rgba<f64>, power:f64, rng:&mut R) -> Rgba<f64> {
+    let mut size = 0.0;
     for rect in rects {
-        let color2 = get_rect_color(rect, image, rng);
-        let size = (rect.w * rect.h) as f64;
-        color[0] = (weight * color[0] + size * color2[0]) / (weight + size);
-        color[1] = (weight * color[1] + size * color2[1]) / (weight + size);
-        color[2] = (weight * color[2] + size * color2[2]) / (weight + size);
-        color[3] = (weight * color[3] + size * color2[3]) / (weight + size);
-        weight += size;
+        size += (rect.w * rect.h) as f64;
+    }
+    
+    let mut color:Rgba<f64> = base_color.clone();
+    for rect in rects {
+        for x in rect.x..rect.right() {
+            for y in rect.y..rect.bottom() {
+                let mut color2 = image.get_pixel(
+                    x as u32,
+                    399 - y as u32
+                );
+                let color3 = Rgba::from([
+                    color2[0] as f64 - base_color[0],
+                    color2[1] as f64 - base_color[1],
+                    color2[2] as f64 - base_color[2],
+                    color2[3] as f64 - base_color[3]
+                ]);
+                let mut d = (
+                    color3[0] * color3[0] +
+                    color3[1] * color3[1] +
+                    color3[2] * color3[2] +
+                    color3[3] * color3[3]
+                ).sqrt() * size / power;
+
+                color[0] += color3[0] / d;
+                color[1] += color3[1] / d;
+                color[2] += color3[2] / d;
+                color[3] += color3[3] / d;
+            }
+        }
     }
     color
 }
 
-fn get_rect_color<R:Rng + Sized>(rect:&Rectangle, image:&RgbaImage, rng:&mut R) -> Rgba<f64> {
+fn get_rect_color<R:Rng + Sized>(rect:&Rectangle, image:&RgbaImage, base_color:Rgba<f64>, rng:&mut R) -> Rgba<f64> {
     let mut color = Rgba([0.0, 0.0, 0.0, 0.0]);
     let mut weight = 0.0;
-    for x in rect.x..rect.right() {
-        for y in rect.y..rect.bottom() {
-            let color2 = image.get_pixel(
-                x as u32,
-                399 - y as u32
-            );
-            color[0] = (weight * color[0] + color2[0] as f64) / (weight + 1.0);
-            color[1] = (weight * color[1] + color2[1] as f64) / (weight + 1.0);
-            color[2] = (weight * color[2] + color2[2] as f64) / (weight + 1.0);
-            color[3] = (weight * color[3] + color2[3] as f64) / (weight + 1.0);
-            weight += 1.0;
-        }
-    }
+    
     color
 }
 

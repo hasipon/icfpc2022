@@ -5,7 +5,7 @@ use std::cmp;
 
 pub enum Tree {
     Leaf(Rectangle, Option<Rgba<u8>>),
-    Node(Vec<Tree>),
+    Node(Rectangle, Vec<Tree>),
     Merged(usize),
 }
 
@@ -18,7 +18,12 @@ impl Tree {
             w: 400,
             h: 400,
         }, Option::None));
-        let mut root = Tree::Node(nodes);
+        let mut root = Tree::Node(Rectangle{
+            x: 0,
+            y: 0,
+            w: 400,
+            h: 400,
+        }, nodes);
 
         for command in commands {
             match command {
@@ -33,7 +38,7 @@ impl Tree {
                 }
                 Command::Merge(id0, id1) => {
                     let index = match &root { 
-                        Tree::Node(nodes) => nodes.len(),
+                        Tree::Node(_, nodes) => nodes.len(),
                         _ => panic!("cannot merge"),
                     };
                     let tree = root.find_mut(id0);
@@ -58,7 +63,7 @@ impl Tree {
                         }
                     };
                     let index = match &mut root { 
-                        Tree::Node(nodes) => nodes.push(result),
+                        Tree::Node(_, nodes) => nodes.push(result),
                         _ => panic!("cannot merge"),
                     };
                 }
@@ -103,7 +108,7 @@ impl Tree {
                     }, Option::None));
                 }
                 if nodes.len() == 0 { panic!("a") }
-                *self = Tree::Node(nodes);
+                *self = Tree::Node(*rect, nodes);
             }
             _ => {
                 panic!("cant line cut: {} {}", is_x, pos);
@@ -140,7 +145,7 @@ impl Tree {
                     h:rect.bottom() - pos.y
                 }, Option::None));
                 if nodes.len() == 0 { panic!("b") }
-                *self = Tree::Node(nodes);
+                *self = Tree::Node(*rect, nodes);
             }
             _ => {
                 panic!("cant point cut: {}", pos);
@@ -156,7 +161,7 @@ impl Tree {
         let current = self;
         if id.len() > index {
             match current {
-                Tree::Node(children) => {
+                Tree::Node(_, children) => {
                     children[id[index]]._find_mut(id, index + 1)
                 }
                 _ => {
@@ -176,7 +181,7 @@ impl Tree {
         let current = self;
         if id.len() > index {
             match current {
-                Tree::Node(children) => {
+                Tree::Node(_, children) => {
                     children[id[index]]._find(id, index + 1)
                 }
                 _ => {
@@ -196,7 +201,7 @@ impl Tree {
                 rects.push(*rect);
                 ids  .push(id.clone());
             }
-            Tree::Node(children) => {
+            Tree::Node(_, children) => {
                 for i in 0..children.len() {
                     id.push(i);
                     children[i].get_empty_rects(id, rects, ids);
@@ -216,7 +221,7 @@ impl Tree {
                     _ => {}
                 }
             }
-            Tree::Node(children) => {
+            Tree::Node(_, children) => {
                 for child in children {
                     child.fill_color(color)
                 }
@@ -274,7 +279,7 @@ pub fn id_to_string(id:&Id) -> String {
 pub fn id_from_str(str:&str) -> Id {
     str.split(".").map(|x| x.trim().parse().unwrap()).collect()
 }
-pub fn color_to_string(color:&Rgba<u8>) -> String {
+pub fn color_to_string<T:std::fmt::Display>(color:&Rgba<T>) -> String {
     format!("{},{},{},{}", color[0], color[1], color[2], color[3])
 }
 pub fn color_from_str(str:&str) -> Rgba<u8> {
