@@ -157,9 +157,9 @@
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-03T04:21:15.558388Z",
-      "submission_count": 4,
-      "min_cost": 55603
+      "last_submitted_at": "2022-09-03T04:33:34.310086Z",
+      "submission_count": 6,
+      "min_cost": 34122
     },
     {
       "problem_id": 24,
@@ -176,6 +176,6 @@
       "min_cost": 34399
     }
   ],
-  "total_cost": 886604,
+  "total_cost": 865123,
   "solved_problem_count": 25
 }
