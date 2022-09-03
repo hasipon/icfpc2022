@@ -71,7 +71,7 @@ def eval_solution():
         fp.close()
     env = os.environ.copy()
     env["ISL_FILE"] = tmpfile
-    env["PROBLEM_ID"] = "1"
+    env["PROBLEM_ID"] = request.args["problem_id"]
     cp = subprocess.run(["node_modules/.bin/ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
     print(cp.stdout.decode(), file=sys.stderr)
     print(cp.stderr.decode(), file=sys.stderr)
