@@ -1,8 +1,9 @@
-
-.PHONY: problems.json
-problems.json:
+.PHONY: problems
+problems:
 	for i in {1..25}; do \
 	  curl https://cdn.robovinci.xyz/imageframes/$${i}.json > problems.json/$${i}.json; \
+	  curl https://cdn.robovinci.xyz/imageframes/$${i}.png > problems/$${i}.png; \
+	  convert problems/$${i}.png problems.pam/$${i}.pam; \
 	done
 
 .PHONY: result-by-api

@@ -4,16 +4,22 @@ import subprocess
 import pathlib
 import shutil
 import json
+import sys
+import tempfile
 from collections import defaultdict
+from flask_cors import CORS
 
+
+import flask
 from PIL import Image
 from typing import *
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from sqlalchemy import create_engine, VARCHAR, select
 from sqlalchemy import Column, Integer, String, Float, DateTime
 
 from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 
+visualizer_url = "http://34.85.55.117/repo/visualizer"
 static_path = pathlib.Path(__file__).resolve().parent / 'static'
 repo_path = pathlib.Path(__file__).resolve().parent.parent
 problems_path = repo_path / "problems"
@@ -27,6 +33,10 @@ engine = create_engine('mysql+pymysql://icfpc2022:icfpc2022@{host}/icfpc2022?cha
     'host': os.environ.get('DB_HOST', 'localhost'),
 }))
 
+CORS(
+    app,
+    supports_credentials=True
+)
 
 @app.after_request
 def add_header(response):
@@ -50,6 +60,26 @@ def load_problem_details(problem_files: List[str]):
         }
 
     return details
+
+@app.route('/eval_solution', methods=["GET", "POST"])
+def eval_solution():
+    solution = request.args["solution"]
+    fd, tmpfile = tempfile.mkstemp()
+    print(tmpfile)
+    with open(tmpfile, 'w+b') as fp:
+        fp.write(solution.encode())
+        fp.close()
+    env = os.environ.copy()
+    env["ISL_FILE"] = tmpfile
+    env["PROBLEM_ID"] = request.args["problem_id"]
+    cp = subprocess.run(["node_modules/.bin/ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
+    print(cp.stdout.decode(), file=sys.stderr)
+    print(cp.stderr.decode(), file=sys.stderr)
+    lines = cp.stdout.decode().splitlines()
+    if len(lines) == 0:
+        return "failed"
+    line = lines[-1]
+    return line
 
 
 @app.route('/')
@@ -94,6 +124,12 @@ def index():
         result_by_api=result_by_api,
         problems_dict=problems_dict
     )
+
+
+@app.route('/vis/<solution>')
+def get_vis(solution: str):
+    problem_id, isl = engine.execute("SELECT problem_id, isl FROM solution WHERE id=%s", (solution,)).fetchone()
+    return flask.redirect(visualizer_url + f"/#{problem_id};{isl}")
 
 
 @app.route('/filter')
