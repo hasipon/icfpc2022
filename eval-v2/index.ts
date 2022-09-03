@@ -34,8 +34,8 @@ const result = interpreter.run(input);
 const painter = new Painter();
 
 const diff = SimilarityChecker.imageDiff(painter.draw(result.canvas), raedProblemImage());
-console.log({
-  "cost": result.cost,
-  "similarity": diff,
-  "sum": result.cost + diff,
-});
+console.log(JSON.stringify({
+  "cost": result.cost + diff,
+  "isl_cost": result.cost,
+  "sim_cost": diff,
+}));

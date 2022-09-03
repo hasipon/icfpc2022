@@ -3,23 +3,31 @@ import js.html.svg.Rect;
 import pixi.core.graphics.Graphics;
 import pixi.core.math.Point;
 import pixi.core.math.shapes.Rectangle;
+import pixi.core.sprites.Sprite;
+import pixi.core.text.Text;
 
 class CutState 
 {
+	public var textLayer:Sprite;
 	public var borderLayer:Graphics;
 	public var roots:Array<CutNode>;
 	public var errorOutput:ErrorOutput;
 	public var lineNumber:Int;
 	public var height:Int;
 	public var width:Int;
-	
+	public var textFields:Array<Text>;
+	public var textPool:Array<Text>;
 	public function new(
 		borderLayer:Graphics, 
+		textLayer:Sprite, 
 		errorOutput:ErrorOutput
 	) 
 	{
+		this.textLayer = textLayer;
 		this.errorOutput = errorOutput;
 		this.borderLayer = borderLayer;
+		textFields = [];
+		textPool = [];
 	}
 	
 	public function init(width:Int, height:Int):Void
@@ -32,6 +40,11 @@ class CutState
 	public function draw():Void 
 	{
 		borderLayer.clear();
+		textLayer.removeChildren();
+		while (textFields.length > 0)
+		{
+			textPool.push(textFields.pop());
+		}
 		_draw([], roots);
 	}
 	
@@ -49,10 +62,27 @@ class CutState
 					borderLayer.lineStyle(0.5, 0xFF0000, 0.2);
 					borderLayer.drawRect(
 						rect.x, 
-						height - rect.bottom, 
+						height - rect.bottom,
 						rect.width, 
 						rect.height
 					);
+					
+					var text = if (textPool.length > 0)
+					{
+						textPool.pop();
+					}
+					else
+					{
+						new Text("", { fill: 0xFF0000 });
+					}
+					text.text = ids.join(".");
+					text.x = rect.x + 2;
+					text.y = height - rect.bottom;
+					text.alpha = 0.6;
+					text.scale.x = 0.25;
+					text.scale.y = 0.25;
+					textLayer.addChild(text);
+					textFields.push(text);
 					
 				case CutNode.Node(children):
 					_draw(ids, children);

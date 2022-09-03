@@ -2,6 +2,7 @@ package ;
 import js.html.CanvasRenderingContext2D;
 import pixi.core.graphics.Graphics;
 import pixi.core.math.Point;
+import pixi.core.sprites.Sprite;
 import pixi.plugins.spine.core.Color;
 import tweenxcore.color.ArgbColor;
 import tweenxcore.color.RgbColor;
@@ -18,12 +19,13 @@ class State
 	public function new(
 		outputLayer:CanvasRenderingContext2D, 
 		borderLayer:Graphics, 
+		textLayer:Sprite,
 		errorOutput:ErrorOutput
 	) 
 	{
 		this.errorOutput = errorOutput;
 		this.outputLayer = outputLayer;
-		this.cutState = new CutState(borderLayer, errorOutput);
+		this.cutState = new CutState(borderLayer, textLayer, errorOutput);
 	}
 	
 	public function update(value:String, width:Int, height:Int):Void 
