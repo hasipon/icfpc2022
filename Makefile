@@ -9,7 +9,7 @@ problems.json:
 result-by-api:
 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/results/user > result_by_api.json
 
-# .PHONY: submitted
-# submitted:
-# 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/submissions/6710
+.PHONY: submissions
+submissions:
+	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/submissions > submissions/list.json
 # 	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/submissions/6709
