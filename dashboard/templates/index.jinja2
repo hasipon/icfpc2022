@@ -51,6 +51,9 @@
                             <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
                                 {{ solutions[p.name|int][0].id }}
                             </a>
+                            <a href="/eval_output/{{ solutions[p.name|int][0].id }}">
+                                (eval-output)
+                            </a>
                             <dl>
                                 <dt> {{ solutions[p.name|int][0].cost }} </dt>
                                 <dd> {{ solutions[p.name|int][0].isl_cost }}(move)
@@ -69,6 +72,9 @@
                             <br/>
                             <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
                                 {{ solutions[p.name|int][1].id }}
+                            </a>
+                            <a href="/eval_output/{{ solutions[p.name|int][1].id }}">
+                                (eval-output)
                             </a>
                             <dl>
                                 <dt> {{ solutions[p.name|int][1].cost }} </dt>
