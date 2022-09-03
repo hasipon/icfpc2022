@@ -10,5 +10,7 @@ werkzeug = "*"
 pillow = "*"
 sqlalchemy = "*"
 pymysql = "*"
+cors = "*"
+flask-cors = "*"
 
 [dev-packages]
