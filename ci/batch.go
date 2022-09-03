@@ -22,7 +22,7 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 	}
 
 	for _, entry := range dirEntries {
-		if entry.IsDir() || strings.HasPrefix(entry.Name(), ".") {
+		if !strings.HasSuffix(entry.Name(), ".isl") {
 			continue
 		}
 
