@@ -73,4 +73,17 @@ export class ComplexBlock {
     getChildren() {
         return this.subBlocks;
     }
+
+    offsetChildren(newBottomLeft: Point) {
+        let newChildren: SimpleBlock[] = [];
+        this.subBlocks.forEach(block => {
+            newChildren.push(new SimpleBlock(
+                'child',
+                block.bottomLeft.add(newBottomLeft).subtract(this.bottomLeft),
+                block.topRight.add(newBottomLeft).subtract(this.bottomLeft),
+                block.color
+            ))
+        })
+        return newChildren;
+    }
 }
