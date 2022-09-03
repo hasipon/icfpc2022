@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -55,5 +56,14 @@ func main() {
 
 	InsertSubmissionInDirectory(filepath.Join(RepoRoot, "submissions"))
 	InsertSolutionsInDirectory(filepath.Join(RepoRoot, "solutions"))
+
 	batchEvalDB()
+
+	solutions, err := defaultDB.FindUnSubmittedSolutions()
+	if err != nil {
+		panic(err)
+	}
+	for _, s := range solutions {
+		log.Println(s.ID, "is not submitted")
+	}
 }

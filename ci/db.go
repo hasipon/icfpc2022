@@ -164,6 +164,20 @@ ORDER BY cost LIMIT 1`,
 	return solution, err
 }
 
+func (db DB) FindUnSubmittedSolutions() ([]*Solution, error) {
+	var solutions []*Solution
+	rows, err := db.Queryx(`SELECT solution.id FROM solution LEFT JOIN submission ON solution.hash = submission.hash WHERE submission.id IS NULL`)
+	for rows.Next() {
+		var s Solution
+		if err := rows.StructScan(&s); err != nil {
+			return nil, err
+		}
+		solutions = append(solutions, &s)
+	}
+
+	return solutions, err
+}
+
 func (db DB) ReplaceSubmission(submission *Submission) error {
 	submission.Hash = solutionHash(submission.ProblemID, submission.Isl)
 	_, err := db.NamedExec(`REPLACE INTO submission (
