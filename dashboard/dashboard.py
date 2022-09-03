@@ -72,7 +72,7 @@ def eval_solution():
 @app.route('/')
 def index():
     problem_files = [os.path.relpath(x, problems_path)
-                     for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png") ]
+                     for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png")]
     problem_files.sort(key=lambda x: int(x[:-4]))
     problems = [
         {
@@ -87,7 +87,8 @@ def index():
             p["initial"] = True
 
     result_by_api = json.load(open('../result_by_api.json', 'r'))
-    solutions_rows = engine.execute("select * from solution").all()
+    solutions_rows = engine.execute(
+        "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
     solutions = defaultdict(lambda: [])
     for row in solutions_rows:
         solutions[row.problem_id].append(row)
