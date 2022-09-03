@@ -65,7 +65,6 @@ pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
 	return {*(uint32_t*)res, score};
 }
 void col(string blockId, uint32_t c) {
-	if (c == 4294967295) return;
 	uint8_t* x = (uint8_t*)&c;
 	cout << "color ["<<blockId<<"] ["<<(int)x[0]<<","<<(int)x[1]<<","<<(int)x[2]<<","<<(int)x[3]<<"]"<<endl;
 }
