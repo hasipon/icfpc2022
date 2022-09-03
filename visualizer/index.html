@@ -83,7 +83,7 @@ S: マウスの点でCUT
 		document.getElementById("eval-button").addEventListener("click" , function (){
 			const xhr = new XMLHttpRequest();
 			var problemId = document.getElementById("problem").value
-			xhr.open('get', '/eval_solution?solution=' + encodeURI(document.getElementById("input").value)+'&problem_id='+problemId );
+			xhr.open('get', 'http://34.85.55.117:5000/eval_solution?solution=' + encodeURI(document.getElementById("input").value)+'&problem_id='+problemId );
 			xhr.send();
 
 			xhr.addEventListener('readystatechange', () => {
