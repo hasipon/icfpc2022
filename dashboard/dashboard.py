@@ -113,6 +113,14 @@ def get_vis(solution: str):
     return flask.redirect(visualizer_url + f"/#{problem_id};{isl}")
 
 
+@app.route('/eval_output/<solution>')
+def eval_output(solution: str):
+    (output,) = engine.execute("SELECT eval_output FROM solution WHERE id=%s", (solution,)).fetchone()
+    response = flask.make_response(output, 200)
+    response.mimetype = "text/plain"
+    return response
+
+
 @app.route('/filter')
 def get_filter():
     return render_template('filter.jinja2')
