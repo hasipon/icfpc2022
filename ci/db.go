@@ -14,9 +14,6 @@ type DB struct {
 }
 
 const schema = `
-DROP TABLE solution;
-DROP TABLE submission;
-
 CREATE TABLE IF NOT EXISTS solution
 (
     id           VARCHAR(255),
@@ -41,7 +38,7 @@ CREATE TABLE IF NOT EXISTS submission
     isl          MEDIUMTEXT,
     score        INT DEFAULT 0,
     status       VARCHAR(255),
-    submitted_at DATETIME,
+    submitted_at DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 `
 const indexes = `

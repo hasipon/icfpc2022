@@ -47,11 +47,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	connect()
+
 	if os.Getenv("INIT_DB") == "1" {
 		initDB()
 	}
-
-	connect()
 
 	InsertSubmissionInDirectory(filepath.Join(RepoRoot, "submissions"))
 	InsertSolutionsInDirectory(filepath.Join(RepoRoot, "solutions"))
