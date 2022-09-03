@@ -7,7 +7,7 @@ problems.json:
 
 .PHONY: result-by-api
 result-by-api: api-token
-	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/results/user > result_by_api.json
+	curl -H "Authorization: Bearer $$API_TOKEN" https://robovinci.xyz/api/results/user | jq . > result_by_api.json
 
 .PHONY: submissions
 submissions: api-token
