@@ -4,11 +4,14 @@ import subprocess
 import pathlib
 import shutil
 import json
+import tempfile
 from collections import defaultdict
+from flask_cors import CORS
+
 
 from PIL import Image
 from typing import *
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from sqlalchemy import create_engine, VARCHAR, select
 from sqlalchemy import Column, Integer, String, Float, DateTime
 
@@ -27,6 +30,10 @@ engine = create_engine('mysql+pymysql://icfpc2022:icfpc2022@{host}/icfpc2022?cha
     'host': os.environ.get('DB_HOST', 'localhost'),
 }))
 
+CORS(
+    app,
+    supports_credentials=True
+)
 
 @app.after_request
 def add_header(response):
@@ -50,6 +57,24 @@ def load_problem_details(problem_files: List[str]):
         }
 
     return details
+
+@app.route('/eval_solution', methods=["GET", "POST"])
+def eval_solution():
+    solution = request.args["solution"]
+    fd, tmpfile = tempfile.mkstemp()
+    print(tmpfile)
+    with open(tmpfile, 'w+b') as fp:
+        fp.write(solution.encode())
+        fp.close()
+    env = os.environ.copy()
+    env["ISL_FILE"] = tmpfile
+    env["PROBLEM_ID"] = "1"
+    cp = subprocess.run(["../eval-v2/node_modules/.bin/ts-node", "../eval-v2/index.ts"], capture_output=True, env=env)
+    print(cp.stdout.decode())
+    print(cp.stderr.decode())
+    lines = cp.stdout.decode().splitlines()
+    line = lines[-1]
+    return line
 
 
 @app.route('/')
