@@ -7,18 +7,19 @@ import * as os from "os";
 
 function raedProblemImage(): Frame{
   const problemId = process.env.PROBLEM_ID!.toString();
-  const input = fs.readFileSync(`../problems.pam.headerless/${problemId}.pam.headerless`);
+  const fileContent = fs.readFileSync(`../problems.json/${problemId}.json`, 'utf8');
 
-  const data: [number, number, number, number][] = new Array(400*400);
-  for(var i = 0; i <input.length; i+=4){
-    const r = input.readUInt8(i);
-    const g = input.readUInt8(i+1);
-    const b = input.readUInt8(i+2);
-    const a = input.readUInt8(i+3);
-    const id = i / 4;
-    data[id] = [r, g, b, a];
-  }
-  return SimilarityChecker.dataToFrame(data);
+  // for pam file
+  // const data: [number, number, number, number][] = new Array(400*400);
+  // for(var i = 0; i <input.length; i+=4){
+  //   const r = input.readUInt8(i);
+  //   const g = input.readUInt8(i+1);
+  //   const b = input.readUInt8(i+2);
+  //   const a = input.readUInt8(i+3);
+  //   const id = i / 4;
+  //   data[id] = [r, g, b, a];
+  // }
+  return SimilarityChecker.dataToFrame(JSON.parse(fileContent));
 }
 
 if(!process.env?.ISL_FILE || !process.env?.PROBLEM_ID){

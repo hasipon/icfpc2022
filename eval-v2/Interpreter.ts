@@ -57,7 +57,7 @@ export class Interpreter {
             const result = this.interpret(index, canvas, program.instructions[index]);
             canvas = result.canvas;
             totalCost += result.cost;
-            console.log("cost: " + `           ${result.cost}`.slice(-5) + "\t" + instructionToString(program.instructions[index]));
+	    console.log("cost: " + `           ${result.cost}`.slice(-5) + "\t" + instructionToString(program.instructions[index]));
         }
         return new InterpreterResult(canvas, totalCost);
     }
@@ -557,10 +557,42 @@ export class Interpreter {
 
         // Processing Starts
         if(block1.size.px === block2.size.px && block1.size.py === block2.size.py) {
-            block1.id = blockId2;
-            block2.id = blockId1;
-            context.blocks.set(blockId1, block2);
-            context.blocks.set(blockId2, block1);
+            let newBlock1, newBlock2;
+
+            if(block1.typ == BlockType.SimpleBlockType) {
+                newBlock2 = new SimpleBlock(
+                    blockId1,
+                    block2.bottomLeft,
+                    block2.topRight,
+                    (block1 as SimpleBlock).color
+                )
+            } else {
+                newBlock2 = new ComplexBlock(
+                    blockId1,
+                    block2.bottomLeft,
+                    block2.topRight,
+                    (block1 as ComplexBlock).offsetChildren(block2.bottomLeft)
+                )
+            }
+            if(block2.typ == BlockType.SimpleBlockType) {
+                newBlock1 = new SimpleBlock(
+                    blockId2,
+                    block1.bottomLeft,
+                    block1.topRight,
+                    (block2 as SimpleBlock).color
+                )
+            } else {
+                newBlock1 = new ComplexBlock(
+                    blockId2,
+                    block1.bottomLeft,
+                    block1.topRight,
+                    (block2 as ComplexBlock).offsetChildren(block1.bottomLeft)
+                )
+            }
+
+            context.blocks.set(blockId1, newBlock2);
+            context.blocks.set(blockId2, newBlock1);
+
             return new InterpreterResult(context, cost);
         } else {
             throw Error(`At ${line}, encountered: Blocks are not the same size, [${blockId1}] has size [${block1.size.px},${block1.size.py}] while [${blockId2}] has size [${block2.size.px},${block2.size.py}]`);
