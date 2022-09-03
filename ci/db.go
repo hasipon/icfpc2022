@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
+	"fmt"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -14,14 +17,12 @@ type DB struct {
 }
 
 const schema = `
-DROP TABLE solution;
-DROP TABLE submission;
-
 CREATE TABLE IF NOT EXISTS solution
 (
     id           VARCHAR(255),
     problem_id   INT NOT NULL,
     isl          MEDIUMTEXT NOT NULL,
+    hash         VARCHAR(255),
     valid        INT DEFAULT 0,
     cost         INT DEFAULT 0,
     isl_cost     INT DEFAULT 0,
@@ -36,11 +37,13 @@ CREATE TABLE IF NOT EXISTS solution
 
 CREATE TABLE IF NOT EXISTS submission
 (
+    id           int,
     problem_id   INT NOT NULL,
     isl          MEDIUMTEXT,
-    cost         INT DEFAULT 0,
-    updated_at   DATETIME,
-    PRIMARY KEY (problem_id)
+    hash         VARCHAR(255),
+    score        INT DEFAULT 0,
+    status       VARCHAR(255),
+    submitted_at DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 `
 const indexes = `
@@ -52,6 +55,7 @@ type Solution struct {
 	ID          string    `json:"id,omitempty" db:"id"`
 	ProblemID   int       `json:"problem_id,omitempty" db:"problem_id"`
 	Isl         string    `json:"isl,omitempty" db:"isl"`
+	Hash        string    `json:"hash,omitempty" db:"hash"`
 	Valid       int       `json:"valid,omitempty" db:"valid"`
 	Cost        int       `json:"cost,omitempty" db:"cost"`
 	IslCost     int       `json:"isl_cost,omitempty" db:"isl_cost"`
@@ -64,11 +68,13 @@ type Solution struct {
 }
 
 type Submission struct {
-	ProblemID int       `json:"problem_id,omitempty" db:"problem_id"`
-	Isl       string    `json:"isl,omitempty" db:"isl"`
-	Cost      int       `json:"cost,omitempty" db:"cost"`
-	Message   string    `json:"message,omitempty" db:"message"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID          int       `json:"id,omitempty" db:"id"`
+	ProblemID   int       `json:"problem_id,omitempty" db:"problem_id"`
+	Isl         string    `json:"isl,omitempty" db:"isl"`
+	Hash        string    `json:"hash,omitempty" db:"hash"`
+	Score       int       `json:"score,omitempty" db:"score"`
+	Status      string    `json:"status,omitempty" db:"status"`
+	SubmittedAt time.Time `json:"submitted_at" db:"submitted_at"`
 }
 
 func (db DB) Ok() bool {
@@ -80,12 +86,20 @@ func (db DB) Init() error {
 	return err
 }
 
+func solutionHash(problemID int, isl string) string {
+	h := sha1.New()
+	h.Write([]byte(isl))
+	return fmt.Sprintf("%d-%s", problemID, hex.EncodeToString(h.Sum(nil)))
+}
+
 func (db DB) RegisterSolution(name string, problemID int, isl string) (*Solution, error) {
 	now := time.Now()
+
 	solution := &Solution{
 		ID:        name,
 		ProblemID: problemID,
 		Isl:       isl,
+		Hash:      solutionHash(problemID, isl),
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -94,6 +108,7 @@ INSERT INTO solution (
     id,
     problem_id,
     isl,
+    hash,
     eval_message,
     eval_output,
     eval_error,
@@ -103,6 +118,7 @@ INSERT INTO solution (
     :id,
     :problem_id,
     :isl,
+    :hash,
     :eval_message,
     :eval_output,
     :eval_error,
@@ -148,24 +164,38 @@ ORDER BY cost LIMIT 1`,
 	return solution, err
 }
 
-func (db DB) GetSubmission(problemID int) (*Submission, error) {
-	submission := new(Submission)
-	err := db.QueryRowx("SELECT * FROM submission WHERE problem_id = ?", problemID).StructScan(submission)
-	return submission, err
+func (db DB) FindUnSubmittedSolutions() ([]*Solution, error) {
+	var solutions []*Solution
+	rows, err := db.Queryx(`SELECT solution.* FROM solution LEFT JOIN submission ON solution.hash = submission.hash WHERE submission.id IS NULL`)
+	for rows.Next() {
+		var s Solution
+		if err := rows.StructScan(&s); err != nil {
+			return nil, err
+		}
+		solutions = append(solutions, &s)
+	}
+
+	return solutions, err
 }
 
 func (db DB) ReplaceSubmission(submission *Submission) error {
-	submission.UpdatedAt = time.Now()
+	submission.Hash = solutionHash(submission.ProblemID, submission.Isl)
 	_, err := db.NamedExec(`REPLACE INTO submission (
+    id,
     problem_id,
     isl,
-    cost,
-	updated_at
+    hash,
+    score,
+    status,
+    submitted_at
 ) VALUES (
+    :id,
     :problem_id,
     :isl,
-    :cost,
-	:updated_at
+    :hash,
+    :score,
+    :status,
+    :submitted_at
 )`, submission)
 	return err
 }

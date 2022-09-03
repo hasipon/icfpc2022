@@ -8,5 +8,7 @@ jinja2 = "*"
 flask = "*"
 werkzeug = "*"
 pillow = "*"
+sqlalchemy = "*"
+pymysql = "*"
 
 [dev-packages]

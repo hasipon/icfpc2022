@@ -13,7 +13,7 @@ npm install
 ## How to run
 
 ````
-> ISL_FILE=in.isl PROBLEM_ID=1 npx ts-node index.ts
+> ISL_FILE=in.isl PROBLEM_ID=1 OUT_IMAGE_PATH=1.png npx ts-node index.ts
 ...
 cost:   233     cut [0.1.1.1.1.0] [x] [280]
 cost:   350     cut [0.1.1.1.1.0.0] [x] [240]

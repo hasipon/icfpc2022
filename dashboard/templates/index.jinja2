@@ -3,22 +3,83 @@
 
     <div class="container">
         <h2>問題一覧 ({{ problems|length }} 件)</h2>
+        <dl>
+            <dt>Solved</dt>
+            <dd>{{ result_by_api["solved_problem_count"] }} / {{ problems|length }}</dd>
+            <dt>TotalCost</dt>
+            <dd>{{ result_by_api.total_cost }}</dd>
+        </dl>
         <a href="/">すべて</a>
         <table class="table table-condensed table-striped">
             <tr>
+                <th class="text-center">Id</th>
                 <th class="text-center">Name</th>
+                <th class="text-center">SubmittedMinScore</th>
+                <th class="text-center">SubmittedCount</th>
+                <th class="text-center">LastSubmittedAt</th>
                 <th class="text-center">Thumb</th>
+                <th class="text-center">Solutions 1st score</th>
+                <th class="text-center">Solutions 1st img</th>
+                <th class="text-center">Solutions 2nd score</th>
+                <th class="text-center">Solutions 2nd img</th>
             </tr>
 
             {% for p in problems %}
                 <tr>
                     <td class="text-center" id="{{ p.name }}">{{ p.name }}</td>
+                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["problem_name"]}}</td>
+                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["min_cost"]}}</td>
+                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["submission_count"]}}</td>
+                    <td class="text-center">{{ result_by_api.results[p.name|int-1]["last_submitted_at"]}}</td>
                     <td class="text-center">
                         <a href="/problems/{{ p.name }}.png">
                             <img src="/thumb/{{ p.name }}.png" class="img-thumbnail"></a>
                     </td>
+                    <td class="text-center">
+                        <dl>
+                            <dt>
+                                {{ solutions[p.name|int][0].cost }}
+                            </dt>
+                            <dd>
+                                {{ solutions[p.name|int][0].isl_cost }}(move)
+                                +
+                                {{ solutions[p.name|int][0].sim_cost }}(sim)
+                            </dd>
+
+                        </dl>
+                    </td>
+                    <td class="text-center">
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
+                            {{ solutions[p.name|int][0].id }}
+                        </a>
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
+                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png" class="img-thumbnail">
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <dl>
+                            <dt>
+                                {{ solutions[p.name|int][1].cost }}
+                            </dt>
+                            <dd>
+                                {{ solutions[p.name|int][1].isl_cost }}(move)
+                                +
+                                {{ solutions[p.name|int][1].sim_cost }}(sim)
+                            </dd>
+
+                        </dl>
+                    </td>
+                    <td class="text-center">
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
+                        {{ solutions[p.name|int][1].id }}
+                        </a>
+                        <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
+                            <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png" class="img-thumbnail">
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
+        </table>
     </div>
 
 {% endblock %}

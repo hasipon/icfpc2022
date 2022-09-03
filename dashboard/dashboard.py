@@ -3,9 +3,16 @@ import os
 import subprocess
 import pathlib
 import shutil
+import json
+from collections import defaultdict
+
 from PIL import Image
 from typing import *
 from flask import Flask, request, render_template
+from sqlalchemy import create_engine, VARCHAR, select
+from sqlalchemy import Column, Integer, String, Float, DateTime
+
+from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 
 static_path = pathlib.Path(__file__).resolve().parent / 'static'
 repo_path = pathlib.Path(__file__).resolve().parent.parent
@@ -15,6 +22,10 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # global cache
 problem_details = {}
+
+engine = create_engine('mysql+pymysql://icfpc2022:icfpc2022@{host}/icfpc2022?charset=utf8'.format(**{
+    'host': os.environ.get('DB_HOST', 'localhost'),
+}))
 
 
 @app.after_request
@@ -64,10 +75,23 @@ def index():
 
     problems_dict = {x["name"]: x for x in problems}
 
+    result_by_api = json.load(open('../result_by_api.json', 'r'))
+
+    solutionsRows = engine.execute("select * from solution").all()
+    solutions = defaultdict(lambda: [])
+    for row in solutionsRows:
+        solutions[row.problem_id].append(row)
+
+    for k in solutions.keys():
+        sl = solutions[k]
+        solutions[k] = sorted(sl, key=lambda x: x.cost)
+
     return render_template(
         'index.jinja2',
         is_search=request.args.get("search"),
+        solutions=solutions,
         problems=problems,
+        result_by_api=result_by_api,
         problems_dict=problems_dict
     )
 

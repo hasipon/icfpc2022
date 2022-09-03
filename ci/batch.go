@@ -2,13 +2,16 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // InsertSolutionsInDirectory solutionsディレクトリにあるファイルたちをDBに登録します
@@ -20,7 +23,7 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 	}
 
 	for _, entry := range dirEntries {
-		if entry.IsDir() || strings.HasPrefix(entry.Name(), ".") {
+		if !strings.HasSuffix(entry.Name(), ".isl") {
 			continue
 		}
 
@@ -43,6 +46,60 @@ func InsertSolutionsInDirectory(solutionsDir string) {
 		} else {
 			fmt.Println("New solution added:", problemID, solutionName)
 		}
+	}
+}
+
+func InsertSubmissionInDirectory(submissionDir string) {
+	listJson, err := ioutil.ReadFile(path.Join(submissionDir, "list.json"))
+	if err != nil {
+		panic(err)
+	}
+
+	var jsonBody struct {
+		Submissions []*Submission `json:"submissions,omitempty"`
+	}
+
+	err = json.Unmarshal(listJson, &jsonBody)
+	if err != nil {
+		panic(err)
+	}
+
+	submissions := jsonBody.Submissions
+
+	for _, s := range submissions {
+		islFilePath := path.Join(submissionDir, fmt.Sprintf("%d.isl", s.ID))
+		_, err = os.Stat(islFilePath)
+		if err == nil {
+			islByte, err := ioutil.ReadFile(islFilePath)
+			if err != nil {
+				panic(err)
+			}
+
+			s.Isl = string(islByte)
+		}
+
+		err = defaultDB.ReplaceSubmission(s)
+		if err != nil {
+			log.Println("ReplaceSubmission err", err)
+		}
+	}
+}
+
+func batchSubmit() {
+	solutions, err := defaultDB.FindUnSubmittedSolutions()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, s := range solutions {
+		log.Println(s.ID, "is not submitted")
+
+		err = CallSubmitApi(s.ProblemID, s.ID, s.Isl)
+		if err != nil {
+			log.Println(err)
+		}
+
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -75,6 +132,13 @@ func batchEvalDB() {
 			solution.IslCost = result.IslCost
 			solution.SimCost = result.SimCost
 			solution.Cost = result.Cost
+			if result.ImagePath != "" {
+				p := filepath.Join(RepoRoot, "solutions", solution.ID+".png")
+				err = os.Rename(result.ImagePath, p)
+				if err != nil {
+					log.Println("image file rename failed: ", err)
+				}
+			}
 		}
 
 		err = defaultDB.UpdateSolution(solution)
