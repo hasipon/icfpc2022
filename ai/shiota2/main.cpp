@@ -13,6 +13,27 @@ public:
     string blockId;
     pii bottomLeft, topRight;
     vi color;
+    bool canMerge(Block &b) {
+        Block bl = min(*this, b);
+        Block tr = max(*this, b);
+        // tate
+        if(bl.topRight.second == tr.bottomLeft.second
+            && bl.bottomLeft.first == tr.bottomLeft.first
+            && bl.topRight.first == tr.topRight.first){
+            return true;
+        }
+        // yoko
+        if(bl.topRight.first == tr.bottomLeft.first
+            && bl.bottomLeft.second == tr.bottomLeft.second
+            && bl.topRight.second == tr.topRight.second){
+            return true;
+        }
+        return false;
+    }
+    bool operator<(const Block &b) const {
+        return this->bottomLeft < b.bottomLeft;
+    }
+
 };
 
 pii parsePoint(picojson::array p){
@@ -55,6 +76,15 @@ vector<Block> parseInitJson(string problemId){
 int main() {
     std::cout << "Hello, World!" << std::endl;
     auto vb = parseInitJson("26");
-    cout << vb.size() <<endl;
+    while(vb.size() != 1){
+        for(int i = 0; i < vb.size(); i++){
+            for(int j = j+1; j<vb.size(); j++){
+                if(vb[i].canMerge(vb[j])){
+                    cout << i <<' ' << j <<endl;
+                }
+            }
+        }
+        break;
+    }
     return 0;
 }
