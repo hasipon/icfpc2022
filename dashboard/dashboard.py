@@ -9,7 +9,6 @@ import tempfile
 from collections import defaultdict
 from flask_cors import CORS
 
-
 import flask
 from PIL import Image
 from typing import *
@@ -26,9 +25,6 @@ problems_path = repo_path / "problems"
 app = Flask(__name__, static_folder=str(static_path), static_url_path='')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-# global cache
-problem_details = {}
-
 engine = create_engine('mysql+pymysql://icfpc2022:icfpc2022@{host}/icfpc2022?charset=utf8'.format(**{
     'host': os.environ.get('DB_HOST', 'localhost'),
 }))
@@ -37,6 +33,7 @@ CORS(
     app,
     supports_credentials=True
 )
+
 
 @app.after_request
 def add_header(response):
@@ -50,16 +47,6 @@ def gen_thumbnail(src_path: pathlib.Path, dst_path: pathlib.Path):
     img = Image.open(src_path)
     img.resize((100, 100)).save(dst_path)
 
-
-def load_problem_details(problem_files: List[str]):
-    details = {}
-
-    for prob in problem_files:
-        details[prob] = {
-            "name": prob
-        }
-
-    return details
 
 @app.route('/eval_solution', methods=["GET", "POST"])
 def eval_solution():
@@ -84,12 +71,8 @@ def eval_solution():
 
 @app.route('/')
 def index():
-    problem_files = [os.path.relpath(x, problems_path) for x in glob.glob(str(problems_path / "*"))]
+    problem_files = [os.path.relpath(x, problems_path) for x in glob.glob(str(problems_path / "*.png"))]
     problem_files.sort(key=lambda x: int(x[:-4]))
-
-    global problem_details
-    if len(problem_details) != len(problem_files):
-        problem_details = load_problem_details(problem_files)
 
     for png_file in problem_files:
         png_path = problems_path / png_file
