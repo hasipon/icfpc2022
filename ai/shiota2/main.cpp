@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <set>
 #include "picojson.h"
 
 using namespace std;
@@ -8,12 +9,27 @@ using namespace std;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
 
+int globalcnt = 0;
+
 class Block{
 public:
     string blockId;
     pii bottomLeft, topRight;
     vi color;
-    bool canMerge(Block &b) {
+    Block merge(const Block &b){
+        globalcnt++;
+        stringstream ss;
+        ss << globalcnt;
+        Block bl = min(*this, b);
+        Block tr = max(*this, b);
+        return (Block){
+                ss.str(),
+                bl.bottomLeft,
+                tr.topRight,
+                // TODO: invalid
+                color};
+    }
+    bool canMerge(const Block &b) {
         Block bl = min(*this, b);
         Block tr = max(*this, b);
         // tate
@@ -62,6 +78,7 @@ vector<Block> parseInitJson(string problemId){
     for(auto jb : vb){
         auto b = jb.get<picojson::object>();
         string id = b["blockId"].get<string>();
+        globalcnt = max(atoi(id.c_str()), globalcnt);
         auto bl = parsePoint(b["bottomLeft"].get<picojson::array >());
         auto tr = parsePoint(b["topRight"].get<picojson::array>());
         auto c = parseColor(b["color"].get<picojson::array>());
@@ -74,17 +91,34 @@ vector<Block> parseInitJson(string problemId){
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
     auto vb = parseInitJson("26");
     while(vb.size() != 1){
+        vector<Block> next;
+        set<string> merged;
         for(int i = 0; i < vb.size(); i++){
-            for(int j = j+1; j<vb.size(); j++){
+            if(merged.count(vb[i].blockId) != 0){
+                continue ;
+            }
+            for(int j = i+1; j<vb.size(); j++){
+                if(merged.count(vb[j].blockId) != 0){
+                    continue ;
+                }
                 if(vb[i].canMerge(vb[j])){
-                    cout << i <<' ' << j <<endl;
+                    cout << vb[i].blockId << ' ' << vb[j].blockId <<endl;
+                    next.push_back(vb[i].merge(vb[j]));
+                    merged.insert(vb[i].blockId);
+                    merged.insert(vb[j].blockId);
                 }
             }
         }
-        break;
+        if(merged.size() == 0){
+            break;
+        }
+        for(auto b : vb){
+            if(merged.count(b.blockId))continue;
+            next.push_back(b);
+        }
+        vb = next;
     }
     return 0;
 }
