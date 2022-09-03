@@ -10,6 +10,7 @@ from collections import defaultdict
 from flask_cors import CORS
 
 
+import flask
 from PIL import Image
 from typing import *
 from flask import Flask, request, render_template, jsonify
@@ -18,6 +19,7 @@ from sqlalchemy import Column, Integer, String, Float, DateTime
 
 from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 
+visualizer_url = "http://34.85.55.117/repo/visualizer"
 static_path = pathlib.Path(__file__).resolve().parent / 'static'
 repo_path = pathlib.Path(__file__).resolve().parent.parent
 problems_path = repo_path / "problems"
@@ -69,8 +71,8 @@ def eval_solution():
         fp.close()
     env = os.environ.copy()
     env["ISL_FILE"] = tmpfile
-    env["PROBLEM_ID"] = "1"
-    cp = subprocess.run(["/home/ubuntu/.nvm/versions/node/v18.8.0/bin/npx", "ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
+    env["PROBLEM_ID"] = request.args["problem_id"]
+    cp = subprocess.run(["node_modules/.bin/ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
     print(cp.stdout.decode(), file=sys.stderr)
     print(cp.stderr.decode(), file=sys.stderr)
     lines = cp.stdout.decode().splitlines()
@@ -122,6 +124,12 @@ def index():
         result_by_api=result_by_api,
         problems_dict=problems_dict
     )
+
+
+@app.route('/vis/<solution>')
+def get_vis(solution: str):
+    problem_id, isl = engine.execute("SELECT problem_id, isl FROM solution WHERE id=%s", (solution,)).fetchone()
+    return flask.redirect(visualizer_url + f"/#{problem_id};{isl}")
 
 
 @app.route('/filter')
