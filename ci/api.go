@@ -8,12 +8,11 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
 var client = &http.Client{}
 
-func CallSubmitApi(problemID int, islFilePath string) error {
+func CallSubmitApi(problemID int, name string, isl string) error {
 	url := fmt.Sprintf("https://robovinci.xyz/api/submissions/%d/create", problemID)
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
@@ -24,12 +23,8 @@ func CallSubmitApi(problemID int, islFilePath string) error {
 	{
 		body := new(bytes.Buffer)
 		writer := multipart.NewWriter(body)
-		part, err := writer.CreateFormFile("file", filepath.Base(islFilePath))
-		b, err := ioutil.ReadFile(islFilePath)
-		if err != nil {
-			return err
-		}
-		_, err = part.Write(b)
+		part, err := writer.CreateFormFile("file", name)
+		_, err = part.Write([]byte(isl))
 		if err != nil {
 			return err
 		}

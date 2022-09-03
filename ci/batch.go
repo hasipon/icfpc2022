@@ -94,7 +94,7 @@ func batchSubmit() {
 	for _, s := range solutions {
 		log.Println(s.ID, "is not submitted")
 
-		err = CallSubmitApi(s.ProblemID, s.Isl)
+		err = CallSubmitApi(s.ProblemID, s.ID, s.Isl)
 		if err != nil {
 			log.Println(err)
 		}
