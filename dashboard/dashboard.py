@@ -70,7 +70,7 @@ def eval_solution():
     env = os.environ.copy()
     env["ISL_FILE"] = tmpfile
     env["PROBLEM_ID"] = "1"
-    cp = subprocess.run(["/home/ubuntu/.nvm/versions/node/v18.8.0/bin/npx", "ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
+    cp = subprocess.run(["node_modules/.bin/ts-node", "index.ts"], capture_output=True, env=env, cwd="../eval-v2")
     print(cp.stdout.decode(), file=sys.stderr)
     print(cp.stderr.decode(), file=sys.stderr)
     lines = cp.stdout.decode().splitlines()
