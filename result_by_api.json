@@ -283,9 +283,9 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-04T20:57:06.912696Z",
-      "submission_count": 8,
-      "min_cost": 36371,
+      "last_submitted_at": "2022-09-04T21:57:04.913816Z",
+      "submission_count": 9,
+      "min_cost": 36279,
       "overall_best_cost": 32832
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1010403,
+  "total_cost": 1010311,
   "solved_problem_count": 40
 }
