@@ -119,7 +119,7 @@ int main() {
     string filename = "../../problems.kyopro/" + problemId + ".kyopro";
     ifstream ifs(filename);
     auto vb = inputInit(ifs);
-    globalcnt = max(int(vb.size() -1), 1);
+    globalcnt = max(int(vb.size() -1), 0);
     while(vb.size() != 1){
         sort(vb.begin(), vb.end(), [](const Block & l, const Block& r) -> bool
              {

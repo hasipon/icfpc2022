@@ -50,6 +50,29 @@ func RemoveDuplicatedSolutions(solutionsDir string) {
 				os.Remove(path.Join(solutionsDir, entry.Name()+".png"))
 				continue
 			}
+
+			pInfo, err := prev.Info()
+			if err != nil {
+				continue
+			}
+
+			eInfo, err := entry.Info()
+			if err != nil {
+				continue
+			}
+
+			if eInfo.ModTime().Before(pInfo.ModTime()) {
+				log.Println("Removing", prev.Name())
+				os.Remove(path.Join(solutionsDir, prev.Name()))
+				os.Remove(path.Join(solutionsDir, prev.Name()+".png"))
+				m[hash] = entry
+				continue
+			} else {
+				log.Println("Removing", entry.Name())
+				os.Remove(path.Join(solutionsDir, entry.Name()))
+				os.Remove(path.Join(solutionsDir, entry.Name()+".png"))
+				continue
+			}
 		} else {
 			m[hash] = entry
 		}
