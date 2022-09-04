@@ -44,15 +44,15 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 20;
+    let beam_w = 30;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..2000 {
+    for step in 0..2500 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
-        if step % 10 != 9 {
+        if step % 5 != 4 {
             for i in 0..size {
                 next.push(current[i].clone());
             }
@@ -78,7 +78,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                     let by = std::cmp::max(y1, y2);
                     if ax == bx { continue; }
                     if ay == by { continue; }
-                    rects.push(Rectangle { 
+                    rects.insert(rng.gen_range(0, rects.len() + 1), Rectangle { 
                         x: ax,
                         y: ay,
                         w: bx - ax,
@@ -185,7 +185,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 _ => {} 
             }
 
-            let result = eval(target, &mut rects, &mut gray_image, true);
+            let result = eval(target, &mut rects, &mut gray_image, true, &mut rng);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
@@ -200,14 +200,15 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         current = next;
     }
 
-    eval(target, &mut best_rects, &mut gray_image, false)
+    eval(target, &mut best_rects, &mut gray_image, false, &mut rng)
 }
 
-fn eval(
+fn eval<R:Rng>(
     target:&RgbaImage, 
-    rects:&Vec<Rectangle>, 
+    rects:&mut Vec<Rectangle>, 
     gray_image:&mut GrayImage,
-    fast:bool
+    fast:bool,
+    rng:&mut R
 ) -> PainterResult {
     gray_image.fill(0u8);
 
@@ -480,9 +481,9 @@ fn eval(
     }
 
     for j in 0..rects.len() {
-        let i = rects.len() - j - i;
+        let i = rects.len() - j - 1;
         if fill_size[i + 1] == 0.0 { 
-            rects.remove(i);
+            if rng.gen_bool(0.5) { rects.remove(i); }
         }
     }
 
