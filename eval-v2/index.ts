@@ -97,6 +97,9 @@ function main(){
       const frameBottomRight = new Point([block.topRight.px, result.canvas.height - block.bottomLeft.py]);
       var id = block.id;
       while(!coloered.has(id)){
+        if(id == ""){
+          return ;
+        }
         const ids = id.split(".");
         ids.pop();
         id = ids.join(".")
