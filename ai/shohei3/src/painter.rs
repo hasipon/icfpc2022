@@ -142,40 +142,41 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 9 => {
                     if rects.len() < 1 { continue; }
                     let mut rect = rects[rng.gen_range(0, rects.len())];
+                    let mut offset = rng.gen_range(1, 20);
                     if rng.gen_bool(0.5) {
                         if rng.gen_bool(0.5) {
                             if rng.gen_bool(0.5) {
-                                if rect.y == rect.bottom() - 1 { continue; }
-                                rect.y += 1;
+                                if rect.y + offset >= rect.bottom() - 1 { continue; }
+                                rect.y += offset;
                             } else {
-                                if rect.x == 0 { continue; }
-                                rect.y -= 1;
+                                if rect.y - offset < 0 { continue; }
+                                rect.y -= offset;
                             }
                         } else {
                             if rng.gen_bool(0.5) {
-                                if rect.x == rect.right() - 1 { continue; }
+                                if rect.x + offset > rect.right() { continue; }
                                 rect.x += 1;
                             } else {
-                                if rect.x == 0 { continue; }
-                                rect.x -= 1;
+                                if rect.x - offset < 0 { continue; }
+                                rect.x -= offset;
                             }
                         }
                     } else {
                         if rng.gen_bool(0.5) {
                             if rng.gen_bool(0.5) {
-                                if rect.bottom() == h { continue; }
-                                rect.h += 1;
+                                if rect.bottom() + offset > h { continue; }
+                                rect.h += offset;
                             } else {
-                                if rect.bottom() - 1  == rect.y { continue; }
-                                rect.h -= 1;
+                                if rect.bottom() - offset <= rect.y { continue; }
+                                rect.h -= offset;
                             }
                         } else {
                             if rng.gen_bool(0.5) {
-                                if rect.right() == w { continue; }
-                                rect.w += 1;
+                                if rect.right() + offset > w { continue; }
+                                rect.w += offset;
                             } else {
-                                if rect.right() - 1  == rect.x { continue; }
-                                rect.w -= 1;
+                                if rect.right() - offset <= rect.x { continue; }
+                                rect.w -= offset;
                             }
                         }
                     }

@@ -48,7 +48,10 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
             Rectangle::new(325, 144, 48, 66),
             Rectangle::new(283, 342, 79, 37),
             Rectangle::new(10, 309, 80, 64),
-            Rectangle::new(144, 164, 72, 102),
+            Rectangle::new(148, 164, 70, 102),
+            Rectangle::new(144, 164, 65, 52),
+            Rectangle::new(231, 22, 65, 73),
+            Rectangle::new(52, 60, 52, 60),
         ],
         score: i64::MAX
     };
@@ -56,10 +59,11 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
 
     let mut current = vec![initial_state];
 
-    let beam_w = 15;
+    let beam_w = 25;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..100 {
+    for step in 0..700 {
+        println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
@@ -70,7 +74,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
             let source = &current[i % size];
             let mut rects = source.rects.clone();
 
-            match rng.gen_range(0, 1) {
+            match rng.gen_range(0, 2) {
                 0 => {
                     let x0 = rng.gen_range(0, target.width () as i32);
                     let x1 = rng.gen_range(0, target.width () as i32);
@@ -94,40 +98,41 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 1 => {
                     if rects.len() < 1 { continue; }
                     let mut rect = rects[rng.gen_range(0, rects.len())];
+                    let mut offset = rng.gen_range(1, 20);
                     if rng.gen_bool(0.5) {
                         if rng.gen_bool(0.5) {
                             if rng.gen_bool(0.5) {
-                                if rect.y == rect.bottom() - 1 { continue; }
-                                rect.y += 1;
+                                if rect.y + offset >= rect.bottom() - 1 { continue; }
+                                rect.y += offset;
                             } else {
-                                if rect.x == 0 { continue; }
-                                rect.y -= 1;
+                                if rect.y - offset < 0 { continue; }
+                                rect.y -= offset;
                             }
                         } else {
                             if rng.gen_bool(0.5) {
-                                if rect.x == rect.right() - 1 { continue; }
+                                if rect.x + offset > rect.right() { continue; }
                                 rect.x += 1;
                             } else {
-                                if rect.x == 0 { continue; }
-                                rect.x -= 1;
+                                if rect.x - offset < 0 { continue; }
+                                rect.x -= offset;
                             }
                         }
                     } else {
                         if rng.gen_bool(0.5) {
                             if rng.gen_bool(0.5) {
-                                if rect.bottom() == h { continue; }
-                                rect.h += 1;
+                                if rect.bottom() + offset > h { continue; }
+                                rect.h += offset;
                             } else {
-                                if rect.bottom() - 1  == rect.y { continue; }
-                                rect.h -= 1;
+                                if rect.bottom() - offset <= rect.y { continue; }
+                                rect.h -= offset;
                             }
                         } else {
                             if rng.gen_bool(0.5) {
-                                if rect.right() == w { continue; }
-                                rect.w += 1;
+                                if rect.right() + offset > w { continue; }
+                                rect.w += offset;
                             } else {
-                                if rect.right() - 1  == rect.x { continue; }
-                                rect.w -= 1;
+                                if rect.right() - offset <= rect.x { continue; }
+                                rect.w -= offset;
                             }
                         }
                     }
