@@ -17,23 +17,23 @@
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T07:16:16.955183Z",
-      "submission_count": 28,
-      "min_cost": 29875
+      "last_submitted_at": "2022-09-04T08:07:26.448756Z",
+      "submission_count": 29,
+      "min_cost": 29797
     },
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T07:16:19.411546Z",
-      "submission_count": 25,
-      "min_cost": 22881
+      "last_submitted_at": "2022-09-04T08:07:27.706311Z",
+      "submission_count": 26,
+      "min_cost": 22879
     },
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T07:16:21.862373Z",
-      "submission_count": 25,
-      "min_cost": 27159
+      "last_submitted_at": "2022-09-04T08:07:28.957909Z",
+      "submission_count": 26,
+      "min_cost": 27076
     },
     {
       "problem_id": 6,
@@ -45,9 +45,9 @@
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T07:16:26.840685Z",
-      "submission_count": 26,
-      "min_cost": 30568
+      "last_submitted_at": "2022-09-04T08:07:30.188885Z",
+      "submission_count": 27,
+      "min_cost": 30151
     },
     {
       "problem_id": 8,
@@ -94,9 +94,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T07:15:36.277998Z",
-      "submission_count": 24,
-      "min_cost": 35962
+      "last_submitted_at": "2022-09-04T08:07:23.992626Z",
+      "submission_count": 25,
+      "min_cost": 35882
     },
     {
       "problem_id": 15,
@@ -171,9 +171,9 @@
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-04T07:16:14.508294Z",
-      "submission_count": 26,
-      "min_cost": 29582
+      "last_submitted_at": "2022-09-04T08:07:25.221786Z",
+      "submission_count": 27,
+      "min_cost": 29569
     },
     {
       "problem_id": 26,
@@ -185,8 +185,8 @@
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-04T07:04:58.347035Z",
-      "submission_count": 6,
+      "last_submitted_at": "2022-09-04T08:09:24.720318Z",
+      "submission_count": 7,
       "min_cost": 34859
     },
     {
@@ -206,9 +206,9 @@
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-04T07:20:26.974394Z",
-      "submission_count": 4,
-      "min_cost": 69895
+      "last_submitted_at": "2022-09-04T08:09:25.975533Z",
+      "submission_count": 5,
+      "min_cost": 69545
     },
     {
       "problem_id": 31,
@@ -220,16 +220,16 @@
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T07:33:26.928981Z",
-      "submission_count": 7,
-      "min_cost": 35835
+      "last_submitted_at": "2022-09-04T08:09:27.206833Z",
+      "submission_count": 8,
+      "min_cost": 33780
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-04T07:33:28.224039Z",
-      "submission_count": 6,
-      "min_cost": 46918
+      "last_submitted_at": "2022-09-04T08:09:28.43374Z",
+      "submission_count": 7,
+      "min_cost": 46840
     },
     {
       "problem_id": 34,
@@ -246,6 +246,6 @@
       "min_cost": 43218
     }
   ],
-  "total_cost": 1084463,
+  "total_cost": 1081307,
   "solved_problem_count": 35
 }
