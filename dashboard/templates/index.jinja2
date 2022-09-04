@@ -28,6 +28,8 @@
                             <dd> Top: {{ p.overall_best_cost }} </dd>
                             <dd> Diff: {{ p.min_cost - p.overall_best_cost }} </dd>
                         </dl>
+                        <br>
+                        <a href="/solutions/{{ p.id }}">回答一覧</a>
                     </td>
                     <td class="text-center">
                         {% if p.initial %}
