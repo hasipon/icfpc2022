@@ -94,7 +94,7 @@
       "last_submitted_at": "2022-09-04T15:57:44.631005Z",
       "submission_count": 30,
       "min_cost": 14156,
-      "overall_best_cost": 5860
+      "overall_best_cost": 5404
     },
     {
       "problem_id": 13,
@@ -219,65 +219,65 @@
     {
       "problem_id": 28,
       "problem_name": "Obfuscated Starry Night",
-      "last_submitted_at": "2022-09-04T15:28:41.3524Z",
-      "submission_count": 6,
-      "min_cost": 33327,
+      "last_submitted_at": "2022-09-04T16:34:44.044268Z",
+      "submission_count": 7,
+      "min_cost": 33160,
       "overall_best_cost": 15806
     },
     {
       "problem_id": 29,
       "problem_name": "Unrecognizable Kiss",
-      "last_submitted_at": "2022-09-04T15:28:42.577397Z",
-      "submission_count": 6,
-      "min_cost": 42336,
+      "last_submitted_at": "2022-09-04T16:34:45.27617Z",
+      "submission_count": 7,
+      "min_cost": 41238,
       "overall_best_cost": 36572
     },
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-04T15:28:43.845317Z",
-      "submission_count": 6,
-      "min_cost": 69545,
+      "last_submitted_at": "2022-09-04T16:34:46.55303Z",
+      "submission_count": 7,
+      "min_cost": 57756,
       "overall_best_cost": 44274
     },
     {
       "problem_id": 31,
       "problem_name": "tepInncio",
-      "last_submitted_at": "2022-09-04T15:28:45.074262Z",
-      "submission_count": 6,
-      "min_cost": 35806,
+      "last_submitted_at": "2022-09-04T16:34:47.814034Z",
+      "submission_count": 7,
+      "min_cost": 35784,
       "overall_best_cost": 24830
     },
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T15:28:46.307478Z",
-      "submission_count": 9,
+      "last_submitted_at": "2022-09-04T16:34:49.056154Z",
+      "submission_count": 10,
       "min_cost": 33780,
       "overall_best_cost": 22056
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-04T15:28:47.551911Z",
-      "submission_count": 8,
-      "min_cost": 46840,
+      "last_submitted_at": "2022-09-04T16:34:50.295593Z",
+      "submission_count": 9,
+      "min_cost": 46416,
       "overall_best_cost": 31515
     },
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-04T15:28:48.799494Z",
-      "submission_count": 8,
-      "min_cost": 40206,
+      "last_submitted_at": "2022-09-04T16:34:51.541775Z",
+      "submission_count": 9,
+      "min_cost": 34177,
       "overall_best_cost": 26573
     },
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-04T15:28:50.048087Z",
-      "submission_count": 7,
-      "min_cost": 42755,
+      "last_submitted_at": "2022-09-04T16:34:52.777403Z",
+      "submission_count": 8,
+      "min_cost": 42753,
       "overall_best_cost": 31919
     },
     {
@@ -286,7 +286,7 @@
       "last_submitted_at": "2022-09-04T15:24:01.010878Z",
       "submission_count": 1,
       "min_cost": 71523,
-      "overall_best_cost": 33350
+      "overall_best_cost": 32937
     },
     {
       "problem_id": 37,
@@ -294,7 +294,7 @@
       "last_submitted_at": "2022-09-04T15:24:09.912046Z",
       "submission_count": 1,
       "min_cost": 60149,
-      "overall_best_cost": 16532
+      "overall_best_cost": 16528
     },
     {
       "problem_id": 38,
@@ -302,7 +302,7 @@
       "last_submitted_at": "2022-09-04T15:24:20.587422Z",
       "submission_count": 1,
       "min_cost": 48723,
-      "overall_best_cost": 22656
+      "overall_best_cost": 22642
     },
     {
       "problem_id": 39,
@@ -310,7 +310,7 @@
       "last_submitted_at": "2022-09-04T15:24:29.889162Z",
       "submission_count": 1,
       "min_cost": 46041,
-      "overall_best_cost": 19680
+      "overall_best_cost": 19634
     },
     {
       "problem_id": 40,
@@ -318,9 +318,9 @@
       "last_submitted_at": "2022-09-04T15:24:40.246576Z",
       "submission_count": 1,
       "min_cost": 55768,
-      "overall_best_cost": 10537
+      "overall_best_cost": 10342
     }
   ],
-  "total_cost": 1278261,
+  "total_cost": 1258730,
   "solved_problem_count": 40
 }
