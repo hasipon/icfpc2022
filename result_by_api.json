@@ -14,30 +14,30 @@
       "last_submitted_at": "2022-09-04T09:20:40.977639Z",
       "submission_count": 36,
       "min_cost": 6403,
-      "overall_best_cost": 2331
+      "overall_best_cost": 2317
     },
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T09:20:49.640854Z",
-      "submission_count": 31,
-      "min_cost": 29797,
+      "last_submitted_at": "2022-09-04T09:57:31.555321Z",
+      "submission_count": 32,
+      "min_cost": 28943,
       "overall_best_cost": 3773
     },
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T09:03:06.826732Z",
-      "submission_count": 27,
-      "min_cost": 22879,
-      "overall_best_cost": 5927
+      "last_submitted_at": "2022-09-04T09:57:32.782788Z",
+      "submission_count": 28,
+      "min_cost": 22856,
+      "overall_best_cost": 5908
     },
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T09:20:50.898644Z",
-      "submission_count": 27,
-      "min_cost": 27076,
+      "last_submitted_at": "2022-09-04T09:57:34.013173Z",
+      "submission_count": 28,
+      "min_cost": 26891,
       "overall_best_cost": 9124
     },
     {
@@ -46,14 +46,14 @@
       "last_submitted_at": "2022-09-04T09:20:52.156315Z",
       "submission_count": 29,
       "min_cost": 11626,
-      "overall_best_cost": 4162
+      "overall_best_cost": 4157
     },
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T09:20:53.399596Z",
-      "submission_count": 29,
-      "min_cost": 30151,
+      "last_submitted_at": "2022-09-04T09:57:35.24244Z",
+      "submission_count": 30,
+      "min_cost": 29328,
       "overall_best_cost": 12677
     },
     {
@@ -62,7 +62,7 @@
       "last_submitted_at": "2022-09-04T09:03:16.667273Z",
       "submission_count": 16,
       "min_cost": 21818,
-      "overall_best_cost": 13045
+      "overall_best_cost": 12913
     },
     {
       "problem_id": 9,
@@ -94,7 +94,7 @@
       "last_submitted_at": "2022-09-04T09:20:31.092723Z",
       "submission_count": 25,
       "min_cost": 17405,
-      "overall_best_cost": 6046
+      "overall_best_cost": 6012
     },
     {
       "problem_id": 13,
@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T09:20:33.595495Z",
-      "submission_count": 26,
-      "min_cost": 35882,
+      "last_submitted_at": "2022-09-04T09:57:27.854792Z",
+      "submission_count": 27,
+      "min_cost": 35816,
       "overall_best_cost": 18932
     },
     {
@@ -171,17 +171,17 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T09:34:36.737741Z",
-      "submission_count": 28,
-      "min_cost": 27198,
+      "last_submitted_at": "2022-09-04T09:57:29.088313Z",
+      "submission_count": 29,
+      "min_cost": 27062,
       "overall_best_cost": 15203
     },
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-04T09:20:45.94406Z",
-      "submission_count": 29,
-      "min_cost": 30778,
+      "last_submitted_at": "2022-09-04T09:57:30.318469Z",
+      "submission_count": 30,
+      "min_cost": 30642,
       "overall_best_cost": 18553
     },
     {
@@ -281,6 +281,6 @@
       "overall_best_cost": 31919
     }
   ],
-  "total_cost": 1080857,
+  "total_cost": 1078634,
   "solved_problem_count": 35
 }
