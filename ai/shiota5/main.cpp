@@ -1,6 +1,8 @@
 #include <iostream>
+#include<cmath>
 #include <sstream>
 #include <fstream>
+#include<map>
 #include<algorithm>
 #include<numeric>
 #include <set>
@@ -92,11 +94,8 @@ vector<Block> inputInit(ifstream &ifs){
 
 Canvas inputPng(ifstream &ifs){
     int N;
-    cerr << __LINE__ <<endl;
     ifs >> N;
     Canvas can;
-    cerr << __LINE__ <<endl;
-    cout << can.vvc.size() <<endl;
     rep(i, N){
         int y = 400 - (i/400) - 1;
 
@@ -104,9 +103,7 @@ Canvas inputPng(ifstream &ifs){
         rep(j, 4){
             ifs >> can.vvc[x][y][j];
         }
-        cerr << __LINE__ <<endl;
     }
-    cerr << __LINE__ <<endl;
     return can;
 }
 
@@ -136,7 +133,6 @@ double dist(Color c1, Color c2){
 Color solveColor(const vii &points, const Canvas &canvas){
     int sum[3] = {0};
 
-    cerr << __LINE__ <<endl;
     for(auto p : points) {
         rep(i, 3){
             sum[i] += canvas.vvc[p.first][p.second][i];
@@ -145,13 +141,11 @@ Color solveColor(const vii &points, const Canvas &canvas){
 
     double res[3];
 
-    cerr << __LINE__ <<endl;
     int area = points.size();
     for (int k = 0; k < 3; ++ k) {
         res[k] = (sum[k] + area/2) / area;
     }
 
-    cerr << __LINE__ <<endl;
     // Weiszfeld's algorithm
     // https://en.wikipedia.org/wiki/Geometric_median
     for (auto it = 0; it < 20; it++) {
@@ -185,7 +179,6 @@ Color solveColor(const vii &points, const Canvas &canvas){
         if (difference < 0.1) {
             break;
         }
-        cerr << __LINE__ <<endl;
     }
 
     Color  resInt(4);
@@ -200,13 +193,11 @@ Color solveColor(const vii &points, const Canvas &canvas){
             resInt[k] = rounded;
         }
     }
-    cerr << __LINE__ <<endl;
 
     double score = 0;
     for(auto p : points){
         score += sqrt(dist(canvas.vvc[p.first][p.second], resInt));
     }
-    cerr << __LINE__ <<endl;
 
     // 山登りで最後まで収束させる
     for (;;) {
@@ -241,13 +232,21 @@ Color solveColor(const vii &points, const Canvas &canvas){
         break;
     next:;
     }
-    cerr << __LINE__ <<endl;
-
-    cerr << score <<endl;
     return resInt;
 }
 
-
+map<string, vii>  getBlockIdInfo(){
+    map<string, vii> ret;
+    auto ifs = fstream(string(getenv("BLOCK_ID_INFO")));
+    rep(i, 400)rep(j,400){
+        int y = 400 - i -1;
+        int x = j;
+       string id;
+        ifs >> id;
+        ret["["+id+"]"].push_back(make_pair(x, y));
+    }
+    return ret;
+}
 
 int main() {
     string problemId = string(getenv("PROBLEM_ID"));
@@ -271,15 +270,9 @@ int main() {
         }
     }
 
+    auto blockIdInfo = getBlockIdInfo();
+
     Canvas target = inputPng(ifs);
-
-    Color  resC = solveColor(points, target);
-    for(auto c : resC){
-        cout << c << ' ';
-    }
-    cout <<endl;
-    return 0;
-
 
     string MERGE_ISL = string(getenv("MERGE_ISL"));
     ifs = ifstream (MERGE_ISL);
@@ -290,38 +283,23 @@ int main() {
         if(!(ss >> cmd)){
             continue;
         }
-        if(cmd[0] == '#'){
+        if(cmd != "color"){
             cout << line <<endl;
             continue;
         }
-        if(cmd == "cut" || cmd=="color"){
-            cout << cmd <<' ';
-            string bid;
-            ss >> bid;
-            cout << convBid(bid);
-            string tmp;
-            while(ss >> tmp){
-                cout <<' ' <<tmp;
-            }
-            cout <<endl;
+        // color
+        string bid;
+        ss >> bid;
+        auto points = blockIdInfo[bid];
+        if(points.empty()){
             continue;
-        } else if(cmd == "swap" || cmd=="merge"){
-            cout << cmd <<' ';
-            string bid;
-            ss >> bid;
-            cout << convBid(bid);
-            ss >> bid;
-            cout << ' ' << convBid(bid);
-            string tmp;
-            while(ss >> tmp){
-                cout <<' ' <<tmp;
-            }
-            cout <<endl;
-            continue;
-        }else {
-            cout << "unknown cmd: " << cmd <<endl;
-            break;
         }
+        cout << cmd <<' ';
+        cout << bid;
+        string colorStr;
+        ss >> colorStr;
+        auto c = solveColor(points, target);
+        cout << " [" << c[0] <<","<<c[1]<<","<<c[2]<<","<<c[3]<<"]"<<endl;
     }
     return 0;
 }

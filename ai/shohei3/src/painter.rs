@@ -29,6 +29,7 @@ pub struct PainterResult {
 }
 
 pub fn solve(target:&RgbaImage) -> PainterResult {
+    let mut best_rects = Vec::new();
     let mut best_result = PainterResult {
         commands: Vec::new(),
         cost: 0,
@@ -36,37 +37,39 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         image:RgbaImage::new(1, 1)
     };
     let mut rng = thread_rng();
-    let mut initial_state = PainterState {
+    let initial_state = PainterState {
         rects: Vec::new(),
         score: i64::MAX
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 200;
+    let beam_w = 20;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..1000 {
-        //println!("step {}", step);
+    for step in 0..2000 {
+        println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
-        for i in 0..size {
-            next.push(current[i].clone());
+        if step % 10 != 9 {
+            for i in 0..size {
+                next.push(current[i].clone());
+            }
         }
         for i in 0..beam_w {
             let source = &current[i % size];
             let mut rects = source.rects.clone();
 
-            match rng.gen_range(0, if step == 0 { 1 } else { 5 }) {
-                0 => {
-                    let (diff, x1) = solver::find_x_boundary(0, w, 0, h, &target, &mut rng);
+            match rng.gen_range(0, if step == 0 { 1 } else { 8 }) {
+                0 | 5 | 7 => {
+                    let (diff, x1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, x2) = solver::find_x_boundary(0, w, 0, h, &target, &mut rng);
+                    let (diff, x2) = if rng.gen_bool(0.1) { (10000.0, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y1) = solver::find_y_boundary(0, w, 0, h, &target, &mut rng);
+                    let (diff, y1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y2) = solver::find_y_boundary(0, w, 0, h, &target, &mut rng);
+                    let (diff, y2) = if rng.gen_bool(0.1) { (10000.0, h) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
 
                     let ax = std::cmp::min(x1, x2);
@@ -135,19 +138,59 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 },
                 4 => {
                     if rects.len() < 1 { continue; }
-                    let i0 = rng.gen_range(0, rects.len()); 
-                    let i1 = rng.gen_range(0, rects.len());
-                    if i0 == i1 { continue; }
+                    rects.remove(rng.gen_range(0, rects.len()));
+                },
+                6 => {
+                    if rects.len() < 1 { continue; }
+                    let mut rect = rects[rng.gen_range(0, rects.len())];
+                    if rng.gen_bool(0.5) {
+                        if rng.gen_bool(0.5) {
+                            if rng.gen_bool(0.5) {
+                                if rect.y == rect.bottom() - 1 { continue; }
+                                rect.y += 1;
+                            } else {
+                                if rect.x == 0 { continue; }
+                                rect.y -= 1;
+                            }
+                        } else {
+                            if rng.gen_bool(0.5) {
+                                if rect.x == rect.right() - 1 { continue; }
+                                rect.x += 1;
+                            } else {
+                                if rect.x == 0 { continue; }
+                                rect.x -= 1;
+                            }
+                        }
+                    } else {
+                        if rng.gen_bool(0.5) {
+                            if rng.gen_bool(0.5) {
+                                if rect.bottom() == h { continue; }
+                                rect.h += 1;
+                            } else {
+                                if rect.bottom() - 1  == rect.y { continue; }
+                                rect.h -= 1;
+                            }
+                        } else {
+                            if rng.gen_bool(0.5) {
+                                if rect.right() == w { continue; }
+                                rect.w += 1;
+                            } else {
+                                if rect.right() - 1  == rect.x { continue; }
+                                rect.w -= 1;
+                            }
+                        }
+                    }
                     rects.remove(rng.gen_range(0, rects.len()));
                 },
                 _ => {} 
             }
 
-            let result = eval(target, &rects, &mut gray_image);
+            let result = eval(target, &mut rects, &mut gray_image, true);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
                 best_result = result;
+                best_rects = rects.clone();
             }
 
             next.push(PainterState { rects, score });
@@ -157,13 +200,14 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         current = next;
     }
 
-    best_result
+    eval(target, &mut best_rects, &mut gray_image, false)
 }
 
 fn eval(
     target:&RgbaImage, 
     rects:&Vec<Rectangle>, 
     gray_image:&mut GrayImage,
+    fast:bool
 ) -> PainterResult {
     gray_image.fill(0u8);
 
@@ -189,13 +233,15 @@ fn eval(
         }
     }
 
-    let mut power = 130.0;
-    for _ in 0..15 {
+    let mut power = 127.0;
+    let (len, scale) = if fast { (3, 0.28) } else { (18, 0.65) };
+    
+    for _ in 0..len {
         for x in 0..gray_image.width() {
             for y in 0..gray_image.height() {
                 let index = gray_image.get_pixel(x, y)[0] as usize;
                 let size = fill_size[index];
-                let mut color = fill_colors[index];
+                let color = fill_colors[index];
                 let color2 = target.get_pixel(
                     x as u32,
                     399 - y as u32
@@ -219,7 +265,7 @@ fn eval(
                 fill_colors[index][3] += color3[3] / d;
             }
         }
-        power *= 0.57;
+        power *= scale;
     }
 
     let mut out_image= RgbaImage::new(target.width(), target.height());
@@ -430,6 +476,13 @@ fn eval(
         commands.reverse();
         for command in &commands {
             state.revert_command(command);
+        }
+    }
+
+    for j in 0..rects.len() {
+        let i = rects.len() - j - i;
+        if fill_size[i + 1] == 0.0 { 
+            rects.remove(i);
         }
     }
 
