@@ -4,7 +4,6 @@ use image::RgbaImage;
 use imageproc::drawing::draw_filled_rect_mut;
 use std::mem;
 use std::cmp;
-use imageproc::drawing::draw_hollow_rect_mut;
 use imageproc::rect::Rect;
 
 #[derive(Clone)]
