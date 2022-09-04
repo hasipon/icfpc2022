@@ -17,10 +17,14 @@ pub fn solve(target:&RgbaImage) -> State {
     let mut current = vec![min_state.clone()];
     let beam_w = 1000;
 
-    for step in 0..25 {
+    for step in 0..30 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
+        if size == 0 { break; }
+        for i in 0..size / 20 {
+            next.push(current[i].clone());
+        }
         for i in 0..beam_w
         {
             let mut element = current[i % size].clone();
@@ -33,26 +37,129 @@ pub fn solve(target:&RgbaImage) -> State {
                     match rng.gen_range(0, 4) {
                         0 => {
                             if rect.w < 5 { continue; }
-                            let x = rng.gen_range(rect.x + 2, rect.right() - 2);
+                            let x = {
+                                let x1 = rng.gen_range(rect.x + 2, rect.right() - 2);
+                                let x2 = rng.gen_range(rect.x + 2, rect.right() - 2);
+                                let y = rng.gen_range(rect.y, rect.bottom());
+                                let ax = i32::min(x1, x2);
+                                let bx = i32::max(x1, x2);
+                                let mut max_diff= 0.0;
+                                let mut max_val = x1;
+                                for i in ax..bx {
+                                    let diff = compare(i, y, i + 1, y, &target);
+                                    if max_diff < diff {
+                                        max_diff = diff;
+                                        max_val = i;
+                                    }
+                                }
+                                if max_diff < 40.0 { continue; }
+                                max_val + 1
+                            };
                             element.state.apply_command(&Command::LineCut(id.clone(), true, x));
                         },
                         1 => {
                             if rect.h < 5 { continue; }
-                            let y = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                            let y = {
+                                let x = rng.gen_range(rect.x, rect.right());
+                                let y1 = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                                let y2 = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                                let ay = i32::min(y1, y2);
+                                let by = i32::max(y1, y2);
+                                let mut max_diff= 0.0;
+                                let mut max_val = y1;
+                                for i in ay..by {
+                                    let diff = compare(x, i, x, i + 1, &target);
+                                    if max_diff < diff {
+                                        max_diff = diff;
+                                        max_val = i;
+                                    }
+                                }
+                                if max_diff < 40.0 { continue; }
+                                max_val + 1
+                            };
+                            
                             element.state.apply_command(&Command::LineCut(id.clone(), false, y));
                         },
                         2 => {
                             if rect.w < 5 { continue; }
                             if rect.h < 5 { continue; }
-                            let x = rng.gen_range(rect.x + 2, rect.right() - 2);
-                            let y = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                            let x = {
+                                let x1 = rng.gen_range(rect.x + 2, rect.right() - 2);
+                                let x2 = rng.gen_range(rect.x + 2, rect.right() - 2);
+                                let y = rng.gen_range(rect.y, rect.bottom());
+                                let ax = i32::min(x1, x2);
+                                let bx = i32::max(x1, x2);
+                                let mut max_diff= 0.0;
+                                let mut max_val = x1;
+                                for i in ax..bx + 1 {
+                                    let diff = compare(i, y, i + 1, y, &target);
+                                    if max_diff < diff {
+                                        max_diff = diff;
+                                        max_val = i;
+                                    }
+                                }
+                                if max_diff < 40.0 { continue; }
+                                max_val + 1
+                            };
+                            let y = {
+                                let x = rng.gen_range(rect.x, rect.right());
+                                let y1 = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                                let y2 = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                                let ay = i32::min(y1, y2);
+                                let by = i32::max(y1, y2);
+                                let mut max_diff= 0.0;
+                                let mut max_val = y1;
+                                for i in ay..by + 1 {
+                                    let diff = compare(x, i, x, i + 1, &target);
+                                    if max_diff < diff {
+                                        max_diff = diff;
+                                        max_val = i;
+                                    }
+                                }
+                                if max_diff < 40.0 { continue; }
+                                max_val + 1
+                            };
                             element.state.apply_command(&Command::PointCut(id.clone(), Point{x, y}));
                         },
                         3 => {
                             if rect.w < 5 { continue; }
                             if rect.h < 5 { continue; }
-                            let x = rng.gen_range(rect.x + 2, rect.right() - 2);
-                            let y = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                            let x = {
+                                let x1 = rng.gen_range(rect.x + 2, rect.right() - 2);
+                                let x2 = rng.gen_range(rect.x + 2, rect.right() - 2);
+                                let y = rng.gen_range(rect.y, rect.bottom());
+                                let ax = i32::min(x1, x2);
+                                let bx = i32::max(x1, x2);
+                                let mut max_diff= 0.0;
+                                let mut max_val = x1;
+                                for i in ax..bx + 1 {
+                                    let diff = compare(i, y, i + 1, y, &target);
+                                    if max_diff < diff {
+                                        max_diff = diff;
+                                        max_val = i;
+                                    }
+                                }
+                                if max_diff < 40.0 { continue; }
+                                max_val + 1
+                            };
+                            let y = {
+                                let x = rng.gen_range(rect.x, rect.right());
+                                let y1 = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                                let y2 = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                                let ay = i32::min(y1, y2);
+                                let by = i32::max(y1, y2);
+                                let mut max_diff= 0.0;
+                                let mut max_val = y1;
+                                for i in ay..by + 1 {
+                                    let diff = compare(x, i, x, i + 1, &target);
+                                    if max_diff < diff {
+                                        max_diff = diff;
+                                        max_val = i;
+                                    }
+                                }
+                                if max_diff < 40.0 { continue; }
+                                max_val + 1
+                            };
                             element.state.apply_command(&Command::PointCut(id.clone(), Point{x, y}));
                             let mut a = id.clone();
                             let mut b = id.clone();
@@ -75,10 +182,27 @@ pub fn solve(target:&RgbaImage) -> State {
             }
             next.push(element);
         }
+        
         next.sort_by(|a, b| a.score.cmp(&b.score));
         current = next;
     }
     calc_colored_state(&min_state.state, target, false)
+}
+
+fn compare(x1:i32, y1:i32, x2:i32, y2:i32, target:&RgbaImage) -> f64 {
+    let p0 = target.get_pixel(
+        x1 as u32,
+        399 - y1 as u32
+    );
+    let p1 = target.get_pixel(
+        x2 as u32,
+        399 - y2 as u32
+    );
+    let r = p0[0] as f64 - p1[0] as f64;
+    let g = p0[1] as f64 - p1[1] as f64;
+    let b = p0[2] as f64 - p1[2] as f64;
+    let a = p0[3] as f64 - p1[3] as f64;
+    r * r + g * g + b * b + a * a
 }
 
 #[derive(Clone)]
