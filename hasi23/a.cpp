@@ -209,15 +209,16 @@ struct Hoge {
 		if (t == -1) {
 			return calcSim();
 		} else {
+			auto curColor = getRootColor();
 			double r = round(7.0*400*400/((i1-i0)*(j1-j0)));
 			if (t == 0) {
 				int area0 = (v-i0)*(j1-j0);
 				int area1 = (i1-v)*(j1-j0);
-				r += round(5.0*400*400/max(area0,area1));
+				if (a[area0 <= area1 ? 1 : 0].getRootColor() != curColor) r += round(5.0*400*400/max(area0,area1));
 			} else {
 				int area0 = (i1-i0)*(v-j0);
 				int area1 = (i1-i0)*(j1-v);
-				r += round(5.0*400*400/max(area0,area1));
+				if (a[area0 <= area1 ? 1 : 0].getRootColor() != curColor) r += round(5.0*400*400/max(area0,area1));
 			}
 			r += a[0].calcScore();
 			r += a[1].calcScore();
@@ -254,8 +255,9 @@ struct Hoge {
 		}
 	}
 	void output(string blockId, bool isRoot=false) {
+		auto curColor = getRootColor();
 		if (isRoot) {
-			col(blockId, getRootColor());
+			col(blockId, curColor);
 		}
 		if (t == -1) {
 			// do nothing
@@ -264,9 +266,11 @@ struct Hoge {
 			int area1 = (i1-v)*(j1-j0);
 			cout << "cut ["<<blockId<<"] [Y] ["<<v<<"]"<<endl;
 			if (area0 <= area1) {
-				col(blockId+".1", a[1].getRootColor());
+				auto cc = a[1].getRootColor();
+				if (cc != curColor) col(blockId+".1", cc);
 			} else {
-				col(blockId+".0", a[0].getRootColor());
+				auto cc = a[0].getRootColor();
+				if (cc != curColor) col(blockId+".0", cc);
 			}
 			a[0].output(blockId+".0");
 			a[1].output(blockId+".1");
@@ -275,9 +279,11 @@ struct Hoge {
 			int area1 = (i1-i0)*(j1-v);
 			cout << "cut ["<<blockId<<"] [X] ["<<v<<"]"<<endl;
 			if (area0 <= area1) {
-				col(blockId+".1", a[1].getRootColor());
+				auto cc = a[1].getRootColor();
+				if (cc != curColor) col(blockId+".1", cc);
 			} else {
-				col(blockId+".0", a[0].getRootColor());
+				auto cc = a[0].getRootColor();
+				if (cc != curColor) col(blockId+".0", cc);
 			}
 			a[0].output(blockId+".0");
 			a[1].output(blockId+".1");
