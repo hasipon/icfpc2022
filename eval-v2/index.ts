@@ -9,6 +9,8 @@ import * as buffer from "buffer";
 import {Block, SimpleBlock} from "./Block";
 import {Point} from "./Point";
 import {RGBA} from "./Color";
+import {InstructionCostCalculator} from "./InstructionCostCalculator";
+import {InstructionType} from "./Instruction";
 
 function readProblemImage(problemId: string): Frame{
   const fileContent = fs.readFileSync(`../problems.json/${problemId}.json`, 'utf8');
@@ -72,6 +74,11 @@ function main(){
         color,
       ));
     })
+  }
+  if(Number(problemId) >= 36) {
+    InstructionCostCalculator.baseCostMap.set(InstructionType.VerticalCutInstructionType, 2);
+    InstructionCostCalculator.baseCostMap.set(InstructionType.HorizontalCutInstructionType, 2);
+    InstructionCostCalculator.baseCostMap.set(InstructionType.PointCutInstructionType, 3);
   }
 
   const result = interpreter.run(input, blocks);
