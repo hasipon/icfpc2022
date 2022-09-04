@@ -97,26 +97,36 @@ int main() {
 		Sim[i][j] = calcSim(i, j, CurImage[i][j]);
 		BlockIds[i][j] = b.blockId;
 	}
-	int retry = 0, counter = 0;
+	int counter = 0;
 	for (;;) {
-		int i0 = rand() % ImageSize;
-		int j0 = rand() % ImageSize;
-		int i1 = rand() % ImageSize;
-		int j1 = rand() % ImageSize;
-		auto prev = Sim[i0][j0] + Sim[i1][j1];
-		auto s0 = calcSim(i0, j0, CurImage[i1][j1]);
-		auto s1 = calcSim(i1, j1, CurImage[i0][j0]);
-		auto delta = (prev-(s0+s1))*0.005;
-		if (delta > costSwap) {
+		int I0 = -1, J0 = -1, I1 = -1, J1 = -1;
+		double bestDelta = costSwap;
+		for (int tt = 0; tt < 100000; ++ tt) {
+			int i0 = rand() % ImageSize;
+			int j0 = rand() % ImageSize;
+			int i1 = rand() % ImageSize;
+			int j1 = rand() % ImageSize;
+			auto prev = Sim[i0][j0] + Sim[i1][j1];
+			auto s0 = calcSim(i0, j0, CurImage[i1][j1]);
+			auto s1 = calcSim(i1, j1, CurImage[i0][j0]);
+			auto delta = (prev-(s0+s1))*0.005;
+			if (delta > bestDelta) {
+				I0 = i0;
+				J0 = j0;
+				I1 = i1;
+				J1 = j1;
+				bestDelta = delta;
+			}
+		}
+		if (I0 == -1) break;
+		{
+			int i0 = I0, j0 = J0, i1 = I1, j1 = J1;
+			Sim[i0][j0] = calcSim(i0, j0, CurImage[i1][j1]);
+			Sim[i1][j1] = calcSim(i1, j1, CurImage[i0][j0]);
 			swap(CurImage[i0][j0], CurImage[i1][j1]);
-			Sim[i0][j0] = s0;
-			Sim[i1][j1] = s1;
-			retry = 0;
 			++ counter;
 			cout << "swap ["<<BlockIds[i0][j0]<<"] ["<<BlockIds[i1][j1]<<"]" <<endl;
 			swap(BlockIds[i0][j0], BlockIds[i1][j1]);
-		} else {
-			if (++ retry >= 100000) break;
 		}
 	}
 	double sumSim = 0;
