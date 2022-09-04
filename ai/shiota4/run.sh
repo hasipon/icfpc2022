@@ -24,3 +24,9 @@ PROBLEM_ID=34
 PROBLEM_ID=34 MERGE_ISL=../../solutions.best/7.isl  ./a.out > ../../solutions/$PROBLEM_ID-shiota4-`date +%s`.isl
 PROBLEM_ID=35
 PROBLEM_ID=35 MERGE_ISL=../../solutions.best/25.isl ./a.out > ../../solutions/$PROBLEM_ID-shiota4-`date +%s`.isl
+PROBLEM_ID=36
+PROBLEM_ID=36 MERGE_ISL=../../solutions.best/17.isl ./a.out > ../../solutions/$PROBLEM_ID-shiota4-`date +%s`.isl
+PROBLEM_ID=37
+PROBLEM_ID=37 MERGE_ISL=../../solutions.best/16.isl ./a.out > ../../solutions/$PROBLEM_ID-shiota4-`date +%s`.isl
+PROBLEM_ID=40
+PROBLEM_ID=40 MERGE_ISL=../../solutions.best/5.isl ./a.out > ../../solutions/$PROBLEM_ID-shiota4-`date +%s`.isl

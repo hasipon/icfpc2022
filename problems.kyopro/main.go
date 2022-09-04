@@ -65,22 +65,43 @@ func main() {
 				log.Fatalln(err)
 			}
 		}
-		pngJson, err := os.ReadFile(fmt.Sprintf("../problems.json/%d.json", i))
-		if err != nil {
-			log.Fatalln(err)
+		{
+			pngJson, err := os.ReadFile(fmt.Sprintf("../problems.json/%d.json", i))
+			if err != nil {
+				log.Fatalln(err)
+			}
+			pngObj := make([][]int, 0)
+			err = json.Unmarshal(pngJson, &pngObj)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			_, err = fmt.Fprintln(outFile, len(pngObj))
+			if err != nil {
+				log.Fatalln(err)
+			}
+			for _, c := range pngObj {
+				printIntArray(outFile, c)
+			}
 		}
-		pngObj := make([][]int, 0)
-		err = json.Unmarshal(pngJson, &pngObj)
-		if err != nil {
-			log.Fatalln(err)
+		if i > 35 {
+			pngJson, err := os.ReadFile(fmt.Sprintf("../problems.json/%d.source.json", i))
+			if err != nil {
+				log.Fatalln(err)
+			}
+			pngObj := make([][]int, 0)
+			err = json.Unmarshal(pngJson, &pngObj)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			_, err = fmt.Fprintln(outFile, len(pngObj))
+			if err != nil {
+				log.Fatalln(err)
+			}
+			for _, c := range pngObj {
+				printIntArray(outFile, c)
+			}
 		}
-		_, err = fmt.Fprintln(outFile, len(pngObj))
-		if err != nil {
-			log.Fatalln(err)
-		}
-		for _, c := range pngObj {
-			printIntArray(outFile, c)
-		}
+
 		err = outFile.Close()
 		if err != nil {
 			log.Fatalln(err)
