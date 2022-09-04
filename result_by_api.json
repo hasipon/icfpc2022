@@ -19,9 +19,9 @@
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T14:45:38.594043Z",
-      "submission_count": 37,
-      "min_cost": 28943,
+      "last_submitted_at": "2022-09-04T15:43:39.543848Z",
+      "submission_count": 38,
+      "min_cost": 8588,
       "overall_best_cost": 3773
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 10790
     }
   ],
-  "total_cost": 1330231,
+  "total_cost": 1309876,
   "solved_problem_count": 40
 }
