@@ -229,12 +229,9 @@ double calcSimulality(int mni, int mnj, int mxi, int mxj, Color c)
       b *= b;
       a *= a;
       z += sqrt(r + g + b + a);
-      // z += round(sqrt(r + g + b + a));
     }
   }
-  // return z;
   return round(z * 0.005);
-  // return z * 0.005;
 }
 
 Color findColor(int mni, int mnj, int mxi, int mxj)
@@ -363,19 +360,19 @@ Block initialBlock(void) { return Block(0, 0, 400, 400, "0", Color(255, 255, 255
 
 lli calcCost(int move, const Block& b)
 {
-  lli area = b.area();
-  // area *= 2000;
+  double area = b.area();
+  double C = height * width;
   switch (move) {
     case TYPE_LINE_CUT:
-      return BASECOST_LINE_CUT * area / b.area();
+      return BASECOST_LINE_CUT * C / area;
     case TYPE_POINT_CUT:
-      return BASECOST_POINT_CUT * area / b.area();
+      return BASECOST_POINT_CUT * C / area;
     case TYPE_COLOR:
-      return BASECOST_COLOR * area / b.area();
+      return BASECOST_COLOR * C / area;
     case TYPE_SWAP:
-      return BASECOST_SWAP * area / b.area();
+      return BASECOST_SWAP * C / area;
     case TYPE_MERGE:
-      return BASECOST_MERGE * area / b.area();
+      return BASECOST_MERGE * C / area;
   };
   return 1LL << 60;
 }
@@ -615,7 +612,7 @@ void solve(void)
   State best(initialBlock());
   priority_queue<State> q;
   q.push(best);
-  const lli WIDTH = 1000;
+  const lli WIDTH = 800;
   for (int _ = 0; _ < 40 && q.size(); ++_) {
     clog << _ << "th-gen,queue.size:=" << q.size() << "," << "best.score=" << best.sim <<"＋" << best.cost << ",H:=" << best.ifColorAv() << ",cmd.size:=" << best.cmd.size() << endl;
     priority_queue<State> nq;
@@ -637,7 +634,7 @@ void solve(void)
   }
   best = colorBlockAvAll(best);
   best.output();
-  clog << best.cost << "," << best.sim << endl;
+  clog << best.score() << "," << best.cmd.size() << endl;
   return ;
 }
 
