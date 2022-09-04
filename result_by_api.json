@@ -178,9 +178,9 @@
     {
       "problem_id": 26,
       "problem_name": "Puzzled Logo",
-      "last_submitted_at": "2022-09-03T12:54:59.946275Z",
-      "submission_count": 1,
-      "min_cost": 168752
+      "last_submitted_at": "2022-09-04T00:42:35.839499Z",
+      "submission_count": 2,
+      "min_cost": 49412
     },
     {
       "problem_id": 27,
@@ -209,8 +209,43 @@
       "last_submitted_at": "2022-09-03T12:55:47.665456Z",
       "submission_count": 1,
       "min_cost": 95765
+    },
+    {
+      "problem_id": 31,
+      "problem_name": "tepInncio",
+      "last_submitted_at": "0001-01-01T00:00:00Z",
+      "submission_count": 0,
+      "min_cost": 0
+    },
+    {
+      "problem_id": 32,
+      "problem_name": "LiaSmpis",
+      "last_submitted_at": "0001-01-01T00:00:00Z",
+      "submission_count": 0,
+      "min_cost": 0
+    },
+    {
+      "problem_id": 33,
+      "problem_name": "TSchreaem",
+      "last_submitted_at": "0001-01-01T00:00:00Z",
+      "submission_count": 0,
+      "min_cost": 0
+    },
+    {
+      "problem_id": 34,
+      "problem_name": "SvloFelagnai",
+      "last_submitted_at": "0001-01-01T00:00:00Z",
+      "submission_count": 0,
+      "min_cost": 0
+    },
+    {
+      "problem_id": 35,
+      "problem_name": "lThrGei",
+      "last_submitted_at": "0001-01-01T00:00:00Z",
+      "submission_count": 0,
+      "min_cost": 0
     }
   ],
-  "total_cost": 1365495,
+  "total_cost": 1246155,
   "solved_problem_count": 30
 }
