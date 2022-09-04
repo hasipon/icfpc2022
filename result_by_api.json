@@ -51,8 +51,8 @@
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T17:49:03.575516Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-04T18:34:57.125405Z",
+      "submission_count": 42,
       "min_cost": 20541,
       "overall_best_cost": 12634
     },
@@ -91,8 +91,8 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-04T17:04:07.689264Z",
-      "submission_count": 35,
+      "last_submitted_at": "2022-09-04T18:34:52.197441Z",
+      "submission_count": 36,
       "min_cost": 14156,
       "overall_best_cost": 5404
     },
@@ -147,9 +147,9 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-04T17:48:52.459942Z",
-      "submission_count": 32,
-      "min_cost": 27299,
+      "last_submitted_at": "2022-09-04T18:34:53.456801Z",
+      "submission_count": 33,
+      "min_cost": 26745,
       "overall_best_cost": 20788
     },
     {
@@ -299,9 +299,9 @@
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-04T17:46:29.270217Z",
-      "submission_count": 3,
-      "min_cost": 31647,
+      "last_submitted_at": "2022-09-04T18:34:55.901866Z",
+      "submission_count": 5,
+      "min_cost": 27660,
       "overall_best_cost": 22605
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1104745,
+  "total_cost": 1100204,
   "solved_problem_count": 40
 }
