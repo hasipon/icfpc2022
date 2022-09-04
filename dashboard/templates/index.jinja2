@@ -9,7 +9,8 @@
             <dt>TotalCost</dt>
             <dd>{{ result_by_api.total_cost }}</dd>
         </dl>
-        <a href="/">すべて</a>
+        <a href="https://robovinci.xyz/results">https://robovinci.xyz/results</a>
+        <br/>
         <table class="table table-condensed table-striped">
             <tr>
                 <th class="text-center">Problem</th>
@@ -24,7 +25,9 @@
                     <td class="text-center" id="{{ p.name }}">
                         {{ p.name }}.{{ result_by_api.results[p.name|int-1]["problem_name"] }}
                         <br/>
-                        {{ result_by_api.results[p.name|int-1]["min_cost"] }}
+                        Cost: {{ result_by_api.results[p.name|int-1]["min_cost"] }}
+                        <br/>
+                        Top: {{ result_by_api.results[p.name|int-1]["overall_best_cost"] }} ({{ result_by_api.results[p.name|int-1]["min_cost"] - result_by_api.results[p.name|int-1]["overall_best_cost"] }})
                     </td>
                     <td class="text-center">
                         {% if p.initial %}
