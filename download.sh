@@ -1,4 +1,4 @@
-for i in $(seq 26 30); do \
+for i in $(seq 31 35); do \
     echo ${i}
     curl https://cdn.robovinci.xyz/imageframes/${i}.json > problems.json/${i}.json; \
     curl https://cdn.robovinci.xyz/imageframes/${i}.png > problems/${i}.png; \
