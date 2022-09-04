@@ -20,14 +20,6 @@ impl State {
     pub fn new(
         image:RgbaImage,
     ) -> Self {
-        let mut nodes = Vec::new();
-        nodes.push(Tree::Leaf(Rectangle{
-            x: 0,
-            y: 0,
-            w: image.width() as i32,
-            h: image.height() as i32,
-        }, Option::None));
-
         State {
             size: (image.width() * image.height()) as f64,
             tree:Tree::Node(Rectangle{
@@ -35,10 +27,38 @@ impl State {
                 y: 0,
                 w: image.width() as i32,
                 h: image.height() as i32,
-            }, nodes),
+            }, vec![
+                Tree::Leaf(Rectangle{
+                    x: 0,
+                    y: 0,
+                    w: image.width() as i32,
+                    h: image.height() as i32,
+                }, Option::None)
+            ]),
             image: image,
             cost: 0,
             commands: Vec::new()
+        }
+    }
+
+    pub fn remove_command_at(&mut self, index:usize) {
+        self.commands.remove(index);
+        self.tree = Tree::Node(Rectangle{
+            x: 0,
+            y: 0,
+            w: self.image.width() as i32,
+            h: self.image.height() as i32,
+        }, vec![
+            Tree::Leaf(Rectangle{
+                x: 0,
+                y: 0,
+                w: self.image.width() as i32,
+                h: self.image.height() as i32,
+            }, Option::None)
+        ]);
+        self.cost = 0;
+        for command in self.commands.clone() {
+            self.process_command(&command);
         }
     }
 
@@ -50,6 +70,9 @@ impl State {
     
     pub fn apply_command(&mut self, command:&Command) {
         self.commands.push(command.clone());
+        self.process_command(command);
+    }
+    pub fn process_command(&mut self, command:&Command) {
         match command {
             Command::PointCut(id, point) => {
                 let target = self.tree.find_mut(&id);
