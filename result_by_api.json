@@ -51,16 +51,16 @@
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T12:59:48.191034Z",
-      "submission_count": 31,
-      "min_cost": 29328,
+      "last_submitted_at": "2022-09-04T14:55:43.549717Z",
+      "submission_count": 32,
+      "min_cost": 20541,
       "overall_best_cost": 12677
     },
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-04T14:35:01.669794Z",
-      "submission_count": 18,
+      "last_submitted_at": "2022-09-04T14:55:44.815449Z",
+      "submission_count": 19,
       "min_cost": 21818,
       "overall_best_cost": 12840
     },
@@ -91,17 +91,17 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-04T09:20:31.092723Z",
-      "submission_count": 25,
-      "min_cost": 17405,
+      "last_submitted_at": "2022-09-04T14:55:36.147881Z",
+      "submission_count": 26,
+      "min_cost": 14156,
       "overall_best_cost": 5860
     },
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T12:58:55.653564Z",
-      "submission_count": 25,
-      "min_cost": 20414,
+      "last_submitted_at": "2022-09-04T14:55:37.379306Z",
+      "submission_count": 26,
+      "min_cost": 17194,
       "overall_best_cost": 8744
     },
     {
@@ -123,25 +123,25 @@
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-04T12:58:56.894911Z",
-      "submission_count": 27,
-      "min_cost": 25345,
+      "last_submitted_at": "2022-09-04T14:55:38.613486Z",
+      "submission_count": 28,
+      "min_cost": 22626,
       "overall_best_cost": 16934
     },
     {
       "problem_id": 17,
       "problem_name": "\"The\" Starry Night",
-      "last_submitted_at": "2022-09-04T14:34:39.476728Z",
-      "submission_count": 24,
-      "min_cost": 40483,
+      "last_submitted_at": "2022-09-04T14:55:39.838551Z",
+      "submission_count": 25,
+      "min_cost": 39058,
       "overall_best_cost": 33431
     },
     {
       "problem_id": 18,
       "problem_name": "\"The\" Kiss",
-      "last_submitted_at": "2022-09-04T14:34:40.703847Z",
-      "submission_count": 63,
-      "min_cost": 39478,
+      "last_submitted_at": "2022-09-04T14:55:41.067576Z",
+      "submission_count": 64,
+      "min_cost": 38380,
       "overall_best_cost": 33393
     },
     {
@@ -171,10 +171,10 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T09:57:29.088313Z",
-      "submission_count": 29,
+      "last_submitted_at": "2022-09-04T14:55:42.315525Z",
+      "submission_count": 30,
       "min_cost": 27062,
-      "overall_best_cost": 14887
+      "overall_best_cost": 14744
     },
     {
       "problem_id": 23,
@@ -321,6 +321,6 @@
       "overall_best_cost": 12107
     }
   ],
-  "total_cost": 1072097,
+  "total_cost": 1051599,
   "solved_problem_count": 35
 }
