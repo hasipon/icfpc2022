@@ -11,24 +11,24 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T15:19:48.792187Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-04T15:57:47.185684Z",
+      "submission_count": 42,
       "min_cost": 6403,
       "overall_best_cost": 2315
     },
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T15:43:39.543848Z",
-      "submission_count": 38,
+      "last_submitted_at": "2022-09-04T15:57:52.137258Z",
+      "submission_count": 40,
       "min_cost": 8588,
       "overall_best_cost": 3773
     },
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T15:08:40.995911Z",
-      "submission_count": 33,
+      "last_submitted_at": "2022-09-04T15:57:59.441535Z",
+      "submission_count": 39,
       "min_cost": 22856,
       "overall_best_cost": 5888
     },
@@ -43,8 +43,8 @@
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-04T15:19:54.946674Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-04T15:58:03.106495Z",
+      "submission_count": 44,
       "min_cost": 11619,
       "overall_best_cost": 4155
     },
@@ -59,17 +59,17 @@
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-04T15:19:57.424709Z",
-      "submission_count": 20,
+      "last_submitted_at": "2022-09-04T15:58:04.327477Z",
+      "submission_count": 21,
       "min_cost": 21658,
       "overall_best_cost": 12840
     },
     {
       "problem_id": 9,
       "problem_name": "SimpLisa",
-      "last_submitted_at": "2022-09-04T15:19:58.670848Z",
-      "submission_count": 31,
-      "min_cost": 20130,
+      "last_submitted_at": "2022-09-04T15:58:05.568309Z",
+      "submission_count": 32,
+      "min_cost": 20033,
       "overall_best_cost": 9007
     },
     {
@@ -83,16 +83,16 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T15:19:38.930047Z",
-      "submission_count": 33,
-      "min_cost": 40612,
+      "last_submitted_at": "2022-09-04T15:57:40.947024Z",
+      "submission_count": 34,
+      "min_cost": 30291,
       "overall_best_cost": 19638
     },
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-04T15:19:40.180537Z",
-      "submission_count": 27,
+      "last_submitted_at": "2022-09-04T15:57:44.631005Z",
+      "submission_count": 30,
       "min_cost": 14156,
       "overall_best_cost": 5860
     },
@@ -115,8 +115,8 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-04T15:19:42.637253Z",
-      "submission_count": 29,
+      "last_submitted_at": "2022-09-04T15:57:45.935957Z",
+      "submission_count": 30,
       "min_cost": 32780,
       "overall_best_cost": 17143
     },
@@ -163,9 +163,9 @@
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T15:19:51.253276Z",
-      "submission_count": 30,
-      "min_cost": 22596,
+      "last_submitted_at": "2022-09-04T15:57:48.407483Z",
+      "submission_count": 31,
+      "min_cost": 20340,
       "overall_best_cost": 12661
     },
     {
@@ -187,8 +187,8 @@
     {
       "problem_id": 24,
       "problem_name": "Inception",
-      "last_submitted_at": "2022-09-04T15:19:52.475995Z",
-      "submission_count": 26,
+      "last_submitted_at": "2022-09-04T15:57:49.644485Z",
+      "submission_count": 27,
       "min_cost": 22148,
       "overall_best_cost": 12363
     },
@@ -318,9 +318,9 @@
       "last_submitted_at": "2022-09-04T15:24:40.246576Z",
       "submission_count": 1,
       "min_cost": 55768,
-      "overall_best_cost": 10790
+      "overall_best_cost": 10537
     }
   ],
-  "total_cost": 1309876,
+  "total_cost": 1297202,
   "solved_problem_count": 40
 }
