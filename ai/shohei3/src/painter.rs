@@ -233,7 +233,7 @@ fn eval<R:Rng>(
         }
     }
 
-    let mut power = 130.0;
+    let mut power = 180.0;
     let (len, scale) = if fast { (4, 0.33) } else { (20, 0.65) };
     
     for _ in 0..len {

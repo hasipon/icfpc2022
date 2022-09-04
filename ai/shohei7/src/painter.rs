@@ -39,25 +39,32 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut rng = thread_rng();
     let mut initial_state = PainterState {
         rects: vec![
-            Rectangle::new(),
-            Rectangle::new(),
-            Rectangle::new(),
-            Rectangle::new(),
-            Rectangle::new(),
-            Rectangle::new(),
-            Rectangle::new(),
-            Rectangle::new(),
+           //Rectangle::new(0, 40, 400, 28),
+           //Rectangle::new(150, 40, 250, 28),
+           ////Rectangle::new(0, 94, 400, 28),
+           ////Rectangle::new(0, 94, 270, 28),
+           ////Rectangle::new(0, 94, 185, 28),
+           //Rectangle::new(0, 150, 400, 28),
+           //Rectangle::new(0, 150, 285, 28),
+           //Rectangle::new(0, 150, 229, 28),
+           //Rectangle::new(0, 150, 136, 28),
+           //Rectangle::new(114, 204, 158, 28),
+           //Rectangle::new(92, 135, 217, 28),
+           Rectangle::new(157, 43, 150, 19),
+           Rectangle::new(150, 202, 122, 20),
         ],
         score: i64::MAX
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
+    
+    //return eval(target, &mut initial_state.rects, &mut gray_image, false, &mut rng);
 
     let mut current = vec![initial_state];
 
-    let beam_w = 25;
+    let beam_w = 8;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..700 {
+    for step in 0..100 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
@@ -135,7 +142,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 _ => {} 
             }
 
-            let result = eval(target, &mut rects, &mut gray_image, true, &mut rng);
+            let result = eval(target, &mut rects, &mut gray_image, false, &mut rng);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
@@ -184,7 +191,7 @@ fn eval<R:Rng>(
         }
     }
 
-    let mut power = 130.0;
+    let mut power = 180.0;
     let (len, scale) = if fast { (4, 0.33) } else { (20, 0.65) };
     
     for _ in 0..len {
