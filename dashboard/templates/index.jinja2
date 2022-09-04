@@ -1,38 +1,37 @@
 {% extends "base.jinja2" %}
 {% block content %}
-
     <div class="container-fluid">
         <h2>問題一覧 ({{ problems|length }} 件)</h2>
         <dl>
             <dt>Solved</dt>
-            <dd>{{ result_by_api["solved_problem_count"] }} / {{ problems|length }}</dd>
+            <dd>{{ result_by_api.solved_problem_count }} / {{ problems|length }}</dd>
             <dt>TotalCost</dt>
             <dd>{{ result_by_api.total_cost }}</dd>
         </dl>
         <a href="https://robovinci.xyz/results">https://robovinci.xyz/results</a>
         <br/>
-        <table class="table table-condensed table-striped">
+        <table class="table">
             <tr>
-                <th class="text-center">Problem</th>
-                <th class="text-center">Source</th>
-                <th class="text-center">Target</th>
-                <th class="text-center">Solutions 1st</th>
-                <th class="text-center">Solutions 2nd</th>
+                <th class="text-center" scope="col">Problem</th>
+                <th class="text-center" scope="col">Source</th>
+                <th class="text-center" scope="col">Target</th>
+                <th class="text-center" scope="col">Solutions 1st</th>
+                <th class="text-center" scope="col">Solutions 2nd</th>
             </tr>
 
             {% for p in problems %}
                 <tr>
-                    <td class="text-center" id="{{ p.name }}">
-                        {{ p.name }}.{{ result_by_api.results[p.name|int-1]["problem_name"] }}
+                    <td class="text-center" id="{{ p.problem_name }}">
+                        {{ p.id }}.{{ p.problem_name }}
                         <br/>
-                        Cost: {{ result_by_api.results[p.name|int-1]["min_cost"] }}
+                        Cost: {{ p.min_cost }}
                         <br/>
-                        Top: {{ result_by_api.results[p.name|int-1]["overall_best_cost"] }} ({{ result_by_api.results[p.name|int-1]["min_cost"] - result_by_api.results[p.name|int-1]["overall_best_cost"] }})
+                        Top: {{ p.overall_best_cost }} ({{ p.min_cost - p.overall_best_cost }})
                     </td>
                     <td class="text-center">
                         {% if p.initial %}
-                            <a href="http://34.85.55.117/repo/problems/{{ p.name }}.initial.png">
-                                <img src="http://34.85.55.117/repo/problems/{{ p.name }}.initial.png">
+                            <a href="http://34.85.55.117/repo/problems/{{ p.id }}.initial.png">
+                                <img src="http://34.85.55.117/repo/problems/{{ p.id }}.initial.png">
                             </a>
                         {% else %}
                             No initial.json
@@ -40,50 +39,44 @@
                     </td>
 
                     <td class="text-center">
-                        <a href="http://34.85.55.117/repo/problems/{{ p.name }}.png">
-                            <img src="http://34.85.55.117/repo/problems/{{ p.name }}.png">
+                        <a href="http://34.85.55.117/repo/problems/{{ p.id }}.png">
+                            <img src="http://34.85.55.117/repo/problems/{{ p.id }}.png">
                         </a>
                     </td>
 
                     <td class="text-center">
-                        {% if 0 < solutions[p.name|int] | length %}
-                            <a href="/vis/{{ solutions[p.name|int][0].id }}">
-                                <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}.png">
+                        {% if 0 < solutions[p.id] | length %}
+                            {% set s = solutions[p.id][0] %}
+                            <a href="/vis/{{ s.id }}">
+                                <img src="http://34.85.55.117/repo/solutions/{{ s.id }}.png">
                             </a>
                             <br/>
-                            <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][0].id }}">
-                                {{ solutions[p.name|int][0].id }}
+                            <a href="http://34.85.55.117/repo/solutions/{{ s.id }}">
+                                {{ s.id }}
                             </a>
-                            <a href="/eval_output/{{ solutions[p.name|int][0].id }}">
-                                (eval-output)
-                            </a>
+                            <a href="/eval_output/{{ s.id }}"> (eval-output) </a>
                             <dl>
-                                <dt> {{ solutions[p.name|int][0].cost }} </dt>
-                                <dd> {{ solutions[p.name|int][0].isl_cost }}(move)
-                                    + {{ solutions[p.name|int][0].sim_cost }}(sim)
-                                </dd>
+                                <dt> {{ s.cost }} </dt>
+                                <dd> {{ s.isl_cost }}(move) + {{ s.sim_cost }}(sim)</dd>
                             </dl>
                         {% else %}
                             <p>No submission</p>
                         {% endif %}
                     </td>
                     <td class="text-center">
-                        {% if 1 < solutions[p.name|int] | length %}
-                            <a href="/vis/{{ solutions[p.name|int][1].id }}">
-                                <img src="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}.png">
+                        {% if 1 < solutions[p.id] | length %}
+                            {% set s = solutions[p.id][1] %}
+                            <a href="/vis/{{ s.id }}">
+                                <img src="http://34.85.55.117/repo/solutions/{{ s.id }}.png">
                             </a>
                             <br/>
-                            <a href="http://34.85.55.117/repo/solutions/{{ solutions[p.name|int][1].id }}">
-                                {{ solutions[p.name|int][1].id }}
+                            <a href="http://34.85.55.117/repo/solutions/{{ s.id }}">
+                                {{ s.id }}
                             </a>
-                            <a href="/eval_output/{{ solutions[p.name|int][1].id }}">
-                                (eval-output)
-                            </a>
+                            <a href="/eval_output/{{ s.id }}"> (eval-output) </a>
                             <dl>
-                                <dt> {{ solutions[p.name|int][1].cost }} </dt>
-                                <dd> {{ solutions[p.name|int][1].isl_cost }}(move)
-                                    + {{ solutions[p.name|int][1].sim_cost }}(sim)
-                                </dd>
+                                <dt> {{ s.cost }} </dt>
+                                <dd> {{ s.isl_cost }}(move) + {{ s.sim_cost }}(sim)</dd>
                             </dl>
                         {% else %}
                             <p>No submission</p>
