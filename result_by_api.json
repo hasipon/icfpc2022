@@ -214,7 +214,7 @@
       "last_submitted_at": "2022-09-04T15:28:40.121567Z",
       "submission_count": 8,
       "min_cost": 34859,
-      "overall_best_cost": 26356
+      "overall_best_cost": 22297
     },
     {
       "problem_id": 28,
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-04T16:34:44.044268Z",
       "submission_count": 7,
       "min_cost": 33160,
-      "overall_best_cost": 15806
+      "overall_best_cost": 15351
     },
     {
       "problem_id": 29,
@@ -230,7 +230,7 @@
       "last_submitted_at": "2022-09-04T16:34:45.27617Z",
       "submission_count": 7,
       "min_cost": 41238,
-      "overall_best_cost": 36572
+      "overall_best_cost": 36198
     },
     {
       "problem_id": 30,
@@ -238,7 +238,7 @@
       "last_submitted_at": "2022-09-04T16:34:46.55303Z",
       "submission_count": 7,
       "min_cost": 57756,
-      "overall_best_cost": 44274
+      "overall_best_cost": 39849
     },
     {
       "problem_id": 31,
@@ -246,7 +246,7 @@
       "last_submitted_at": "2022-09-04T16:34:47.814034Z",
       "submission_count": 7,
       "min_cost": 35784,
-      "overall_best_cost": 24830
+      "overall_best_cost": 22622
     },
     {
       "problem_id": 32,
@@ -254,7 +254,7 @@
       "last_submitted_at": "2022-09-04T16:34:49.056154Z",
       "submission_count": 10,
       "min_cost": 33780,
-      "overall_best_cost": 22056
+      "overall_best_cost": 19385
     },
     {
       "problem_id": 33,
@@ -262,7 +262,7 @@
       "last_submitted_at": "2022-09-04T16:34:50.295593Z",
       "submission_count": 9,
       "min_cost": 46416,
-      "overall_best_cost": 31515
+      "overall_best_cost": 27735
     },
     {
       "problem_id": 34,
@@ -270,7 +270,7 @@
       "last_submitted_at": "2022-09-04T16:34:51.541775Z",
       "submission_count": 9,
       "min_cost": 34177,
-      "overall_best_cost": 26573
+      "overall_best_cost": 23025
     },
     {
       "problem_id": 35,
@@ -278,7 +278,7 @@
       "last_submitted_at": "2022-09-04T16:34:52.777403Z",
       "submission_count": 8,
       "min_cost": 42753,
-      "overall_best_cost": 31919
+      "overall_best_cost": 29604
     },
     {
       "problem_id": 36,
@@ -307,9 +307,9 @@
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-04T15:24:29.889162Z",
-      "submission_count": 1,
-      "min_cost": 46041,
+      "last_submitted_at": "2022-09-04T17:00:47.584979Z",
+      "submission_count": 3,
+      "min_cost": 28990,
       "overall_best_cost": 19634
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 10342
     }
   ],
-  "total_cost": 1156811,
+  "total_cost": 1139760,
   "solved_problem_count": 40
 }
