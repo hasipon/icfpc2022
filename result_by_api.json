@@ -227,9 +227,9 @@
     {
       "problem_id": 29,
       "problem_name": "Unrecognizable Kiss",
-      "last_submitted_at": "2022-09-04T20:25:00.742604Z",
-      "submission_count": 8,
-      "min_cost": 40531,
+      "last_submitted_at": "2022-09-04T23:38:07.952429Z",
+      "submission_count": 9,
+      "min_cost": 39336,
       "overall_best_cost": 35876
     },
     {
@@ -243,17 +243,17 @@
     {
       "problem_id": 31,
       "problem_name": "tepInncio",
-      "last_submitted_at": "2022-09-04T20:25:03.355419Z",
-      "submission_count": 8,
-      "min_cost": 35417,
+      "last_submitted_at": "2022-09-04T23:38:09.197618Z",
+      "submission_count": 9,
+      "min_cost": 29388,
       "overall_best_cost": 21684
     },
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T20:25:04.604442Z",
-      "submission_count": 11,
-      "min_cost": 33780,
+      "last_submitted_at": "2022-09-04T23:38:10.455877Z",
+      "submission_count": 12,
+      "min_cost": 32131,
       "overall_best_cost": 18237
     },
     {
@@ -267,17 +267,17 @@
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-04T16:34:51.541775Z",
-      "submission_count": 9,
-      "min_cost": 34177,
+      "last_submitted_at": "2022-09-04T23:38:11.71728Z",
+      "submission_count": 10,
+      "min_cost": 33673,
       "overall_best_cost": 21864
     },
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-04T20:25:07.115841Z",
-      "submission_count": 9,
-      "min_cost": 42753,
+      "last_submitted_at": "2022-09-04T23:38:12.976577Z",
+      "submission_count": 10,
+      "min_cost": 36759,
       "overall_best_cost": 29225
     },
     {
@@ -291,8 +291,8 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-04T23:18:23.115105Z",
-      "submission_count": 7,
+      "last_submitted_at": "2022-09-04T23:38:14.203349Z",
+      "submission_count": 8,
       "min_cost": 19991,
       "overall_best_cost": 16328
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 995610,
+  "total_cost": 980239,
   "solved_problem_count": 40
 }
