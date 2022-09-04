@@ -178,16 +178,16 @@
     {
       "problem_id": 26,
       "problem_name": "Puzzled Logo",
-      "last_submitted_at": "2022-09-04T05:32:18.344624Z",
-      "submission_count": 4,
-      "min_cost": 49412
+      "last_submitted_at": "2022-09-04T05:37:19.112859Z",
+      "submission_count": 5,
+      "min_cost": 45618
     },
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-04T05:32:19.554502Z",
-      "submission_count": 4,
-      "min_cost": 173295
+      "last_submitted_at": "2022-09-04T05:37:20.350797Z",
+      "submission_count": 5,
+      "min_cost": 95094
     },
     {
       "problem_id": 28,
@@ -220,22 +220,22 @@
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T05:32:25.665628Z",
-      "submission_count": 3,
+      "last_submitted_at": "2022-09-04T05:37:21.598911Z",
+      "submission_count": 4,
       "min_cost": 118805
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-04T05:32:26.90838Z",
-      "submission_count": 3,
+      "last_submitted_at": "2022-09-04T05:37:22.833181Z",
+      "submission_count": 4,
       "min_cost": 88743
     },
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-04T05:32:28.134965Z",
-      "submission_count": 3,
+      "last_submitted_at": "2022-09-04T05:37:24.079478Z",
+      "submission_count": 4,
       "min_cost": 139680
     },
     {
@@ -246,6 +246,6 @@
       "min_cost": 96587
     }
   ],
-  "total_cost": 1699856,
+  "total_cost": 1617861,
   "solved_problem_count": 35
 }
