@@ -40,6 +40,8 @@ export class Interpreter {
     }
 
     run(code: string, blocks: Map<string, Block>): InterpreterResult {
+        this.topLevelIdCounter = blocks.size-1;
+        console.log(blocks.size);
         let parser = new Parser();
         let result = parser.parse(code);
         if (result.typ === 'error') {

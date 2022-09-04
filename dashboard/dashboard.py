@@ -6,6 +6,7 @@ import shutil
 import json
 import sys
 import tempfile
+import urllib
 from collections import defaultdict
 from flask_cors import CORS
 
@@ -110,7 +111,7 @@ def index():
 @app.route('/vis/<solution>')
 def get_vis(solution: str):
     problem_id, isl = engine.execute("SELECT problem_id, isl FROM solution WHERE id=%s", (solution,)).fetchone()
-    return flask.redirect(visualizer_url + f"/#{problem_id};{isl}")
+    return flask.redirect(visualizer_url + f"/#{problem_id};{urllib.parse.quote(isl)}")
 
 
 @app.route('/eval_output/<solution>')
