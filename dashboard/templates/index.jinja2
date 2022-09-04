@@ -22,16 +22,21 @@
             {% for p in problems %}
                 <tr>
                     <td class="text-center" id="{{ p.problem_name }}">
-                        {{ p.id }}.{{ p.problem_name }}
-                        <br/>
-                        Cost: {{ p.min_cost }}
-                        <br/>
-                        Top: {{ p.overall_best_cost }} ({{ p.min_cost - p.overall_best_cost }})
+                        <dl>
+                            <dt> {{ p.id }}.{{ p.problem_name }} </dt>
+                            <dd> Cost: {{ p.min_cost }} </dd>
+                            <dd> Top: {{ p.overall_best_cost }} </dd>
+                            <dd> Diff: {{ p.min_cost - p.overall_best_cost }} </dd>
+                        </dl>
                     </td>
                     <td class="text-center">
                         {% if p.initial %}
                             <a href="http://34.85.55.117/repo/problems/{{ p.id }}.initial.png">
                                 <img src="http://34.85.55.117/repo/problems/{{ p.id }}.initial.png">
+                            </a>
+                            <br/>
+                            <a href="http://34.85.55.117/repo/problems/{{ p.id }}.initial.json">
+                                {{ p.id }}.initial.json
                             </a>
                         {% else %}
                             No initial.json
