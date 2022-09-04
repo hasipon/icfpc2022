@@ -14,7 +14,7 @@
       "last_submitted_at": "2022-09-04T09:20:40.977639Z",
       "submission_count": 36,
       "min_cost": 6403,
-      "overall_best_cost": 2333
+      "overall_best_cost": 2331
     },
     {
       "problem_id": 3,
@@ -30,7 +30,7 @@
       "last_submitted_at": "2022-09-04T09:03:06.826732Z",
       "submission_count": 27,
       "min_cost": 22879,
-      "overall_best_cost": 6197
+      "overall_best_cost": 5927
     },
     {
       "problem_id": 5,
@@ -38,7 +38,7 @@
       "last_submitted_at": "2022-09-04T09:20:50.898644Z",
       "submission_count": 27,
       "min_cost": 27076,
-      "overall_best_cost": 11167
+      "overall_best_cost": 9124
     },
     {
       "problem_id": 6,
@@ -46,7 +46,7 @@
       "last_submitted_at": "2022-09-04T09:20:52.156315Z",
       "submission_count": 29,
       "min_cost": 11626,
-      "overall_best_cost": 4293
+      "overall_best_cost": 4162
     },
     {
       "problem_id": 7,
@@ -62,7 +62,7 @@
       "last_submitted_at": "2022-09-04T09:03:16.667273Z",
       "submission_count": 16,
       "min_cost": 21818,
-      "overall_best_cost": 14343
+      "overall_best_cost": 13045
     },
     {
       "problem_id": 9,
@@ -75,8 +75,8 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-04T09:20:28.630297Z",
-      "submission_count": 31,
+      "last_submitted_at": "2022-09-04T09:34:28.147093Z",
+      "submission_count": 32,
       "min_cost": 30469,
       "overall_best_cost": 12421
     },
@@ -94,7 +94,7 @@
       "last_submitted_at": "2022-09-04T09:20:31.092723Z",
       "submission_count": 25,
       "min_cost": 17405,
-      "overall_best_cost": 6197
+      "overall_best_cost": 6046
     },
     {
       "problem_id": 13,
@@ -115,16 +115,16 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-04T09:20:34.821722Z",
-      "submission_count": 24,
+      "last_submitted_at": "2022-09-04T09:34:30.61822Z",
+      "submission_count": 25,
       "min_cost": 33204,
       "overall_best_cost": 17143
     },
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-04T09:20:36.049524Z",
-      "submission_count": 25,
+      "last_submitted_at": "2022-09-04T09:34:31.834145Z",
+      "submission_count": 26,
       "min_cost": 25345,
       "overall_best_cost": 16937
     },
@@ -171,8 +171,8 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T09:20:44.714447Z",
-      "submission_count": 27,
+      "last_submitted_at": "2022-09-04T09:34:36.737741Z",
+      "submission_count": 28,
       "min_cost": 27198,
       "overall_best_cost": 15203
     },
@@ -195,8 +195,8 @@
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-04T09:20:48.415638Z",
-      "submission_count": 31,
+      "last_submitted_at": "2022-09-04T09:34:37.954685Z",
+      "submission_count": 32,
       "min_cost": 29119,
       "overall_best_cost": 19233
     },
