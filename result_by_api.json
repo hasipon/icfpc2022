@@ -3,8 +3,8 @@
     {
       "problem_id": 1,
       "problem_name": "Chess Table",
-      "last_submitted_at": "2022-09-04T14:34:34.537575Z",
-      "submission_count": 36,
+      "last_submitted_at": "2022-09-04T16:38:39.717436Z",
+      "submission_count": 37,
       "min_cost": 20140,
       "overall_best_cost": 5300
     },
@@ -283,17 +283,17 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-04T15:24:01.010878Z",
-      "submission_count": 1,
-      "min_cost": 71523,
+      "last_submitted_at": "2022-09-04T16:40:47.032764Z",
+      "submission_count": 2,
+      "min_cost": 38835,
       "overall_best_cost": 32937
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-04T15:24:09.912046Z",
-      "submission_count": 1,
-      "min_cost": 60149,
+      "last_submitted_at": "2022-09-04T16:40:48.271606Z",
+      "submission_count": 2,
+      "min_cost": 21202,
       "overall_best_cost": 16528
     },
     {
@@ -315,12 +315,12 @@
     {
       "problem_id": 40,
       "problem_name": "Logo Wars",
-      "last_submitted_at": "2022-09-04T15:24:40.246576Z",
-      "submission_count": 1,
-      "min_cost": 55768,
+      "last_submitted_at": "2022-09-04T16:40:49.493605Z",
+      "submission_count": 3,
+      "min_cost": 25484,
       "overall_best_cost": 10342
     }
   ],
-  "total_cost": 1258730,
+  "total_cost": 1156811,
   "solved_problem_count": 40
 }
