@@ -18,7 +18,7 @@ uint8_t* image;
 
 #define LOCAL_DEBUG 1
 
-void applyMove(std::string line, Canvas &c) {
+void applyMove(std::string line, Canvas& c) {
     std::stringstream ss;
     ss << line;
 
@@ -37,10 +37,12 @@ void applyMove(std::string line, Canvas &c) {
         if (orient_or_point == "[X]" || orient_or_point == "[x]") {
             int line_number = read_line_number(ss);
             c.VerticalCutCanvas(block, line_number);
-        } else if (orient_or_point == "[Y]" || orient_or_point == "[y]") {
+        }
+        else if (orient_or_point == "[Y]" || orient_or_point == "[y]") {
             int line_number = read_line_number(ss);
             c.HorizontalCutCanvas(block, line_number);
-        } else {
+        }
+        else {
             auto p = read_point(orient_or_point);
             c.PointCut(block, p);
         }
@@ -82,16 +84,16 @@ GV_RGB gvColor(const Color& c) {
 }
 
 void gvLine4(double x, double y, double w, double h, GV_RGB rgb) {
-    gvLine(x, y, x+w, y, rgb);
-    gvLine(x+w, y, x+w, y+h, rgb);
-    gvLine(x+w, y+h, x, y+h, rgb);
-    gvLine(x, y+h, x, y, rgb);
+    gvLine(x, y, x + w, y, rgb);
+    gvLine(x + w, y, x + w, y + h, rgb);
+    gvLine(x + w, y + h, x, y + h, rgb);
+    gvLine(x, y + h, x, y, rgb);
 }
 
 void gvBlock(const Block& b) {
     if (b.typ == SimpleBlockType) {
         auto p = reinterpret_cast<const SimpleBlock*>(&b);
-        gvRect(p->bottomLeft.p[0], 400-p->topRight.p[1], p->size.p[0], p->size.p[1], gvColor(p->color));
+        gvRect(p->bottomLeft.p[0], 400 - p->topRight.p[1], p->size.p[0], p->size.p[1], gvColor(p->color));
     }
     if (b.typ == ComplexBlockType) {
         auto p = reinterpret_cast<const ComplexBlock*>(&b);
@@ -104,7 +106,7 @@ void gvBlock(const Block& b) {
 void gvOverlay(const Block& b) {
     if (b.typ == SimpleBlockType) {
         auto p = reinterpret_cast<const SimpleBlock*>(&b);
-        gvLine4(p->bottomLeft.p[0], 400-p->topRight.p[1], p->size.p[0], p->size.p[1], gvRGB(255, 64, 64, 128));
+        gvLine4(p->bottomLeft.p[0], 400 - p->topRight.p[1], p->size.p[0], p->size.p[1], gvRGB(255, 64, 64, 128));
         gvText(p->bottomLeft.p[0] + p->size.p[0] / 2.0, 400 - p->topRight.p[1] + p->size.p[1] / 2.0, 3, gvRGB(255, 64, 64, 128), p->id.c_str());
     }
     if (b.typ == ComplexBlockType) {
@@ -115,7 +117,7 @@ void gvOverlay(const Block& b) {
     }
 }
 
-void gvCanvas(Canvas &c) {
+void gvCanvas(Canvas& c) {
     for (auto& block : c.blocks) {
         gvBlock(*block.second);
     }
@@ -165,15 +167,34 @@ int main(int argc, char* argv[]) {
     fs::current_path(R"(c:\projects\icfpc2022\ai\inada)");
 #endif
 
-    FILE* fp = fopen("1.pam", "rb");
-    if (fp == NULL) {
-        printf("failed to open pam");
-        exit(EXIT_FAILURE);
-    }
-    image = hasiImageRead(fp, width, height);
-    fclose(fp);
 
-    auto moves = readIsl("1.isl");
+    if (getenv("PROBLEM_ID")) {
+        auto pamPath = "../../problems.pam/" + string(getenv("PROBLEM_ID")) + ".pam";
+        FILE* fp = fopen(pamPath.c_str(), "rb");
+        if (fp == NULL) {
+            printf("failed to open pam");
+            exit(EXIT_FAILURE);
+        }
+        image = hasiImageRead(fp, width, height);
+        fclose(fp);
+    }
+    else {
+        FILE* fp = fopen("1.pam", "rb");
+        if (fp == NULL) {
+            printf("failed to open 1.pam");
+            exit(EXIT_FAILURE);
+        }
+        image = hasiImageRead(fp, width, height);
+        fclose(fp);
+    }
+
+    vector<string> moves;
+    if (getenv("ISL_FILE")) {
+        moves = readIsl(getenv("ISL_FILE"));
+    }
+    else {
+        moves = readIsl("1.isl");
+    }
 
     Canvas c = Canvas(width, height);
     gvNewTime();

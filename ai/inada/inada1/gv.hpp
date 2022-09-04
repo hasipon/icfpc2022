@@ -750,7 +750,13 @@ void gvRollbackAll() {
     }
 }
 #else
-#define gvRGB(...)
+struct GV_RGB {
+    int r;
+    int g;
+    int b;
+    int a;
+};
+#define gvRGB(...) GV_RGB{0}
 #define gvSetEnable(...)
 #define gvClose(...)
 #define gvConnect(...)
