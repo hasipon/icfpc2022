@@ -15,9 +15,9 @@ pub fn solve(target:&RgbaImage) -> State {
     };
     let mut rng = thread_rng();
     let mut current = vec![min_state.clone()];
-    let beam_w = 50;
+    let beam_w = 1000;
 
-    for step in 0..30 {
+    for step in 0..25 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
@@ -30,7 +30,7 @@ pub fn solve(target:&RgbaImage) -> State {
             match node {
                 Tree::Leaf(rect, _) => {
                     if rect.w * rect.h < 200 { continue; }
-                    match rng.gen_range(0, 3) {
+                    match rng.gen_range(0, 4) {
                         0 => {
                             if rect.w < 5 { continue; }
                             let x = rng.gen_range(rect.x + 2, rect.right() - 2);
@@ -48,6 +48,19 @@ pub fn solve(target:&RgbaImage) -> State {
                             let y = rng.gen_range(rect.y + 2, rect.bottom() - 2);
                             element.state.apply_command(&Command::PointCut(id.clone(), Point{x, y}));
                         },
+                        3 => {
+                            if rect.w < 5 { continue; }
+                            if rect.h < 5 { continue; }
+                            let x = rng.gen_range(rect.x + 2, rect.right() - 2);
+                            let y = rng.gen_range(rect.y + 2, rect.bottom() - 2);
+                            element.state.apply_command(&Command::PointCut(id.clone(), Point{x, y}));
+                            let mut a = id.clone();
+                            let mut b = id.clone();
+                            let i = rng.gen_range(0, 4);
+                            a.push(i);
+                            b.push((i + 1) % 4); 
+                            element.state.apply_command(&Command::Merge(a, b));
+                        },
                         _ => {}
                     }
                 },
@@ -55,7 +68,7 @@ pub fn solve(target:&RgbaImage) -> State {
             }
 
             // eval
-            let colored_state = calc_colored_state(&element.state, target);
+            let colored_state = calc_colored_state(&element.state, target, true);
             element.score = colored_state.cost + similarity(&colored_state.image, &target);
             if min_state.score > element.score {
                 min_state = element.clone();
@@ -65,7 +78,7 @@ pub fn solve(target:&RgbaImage) -> State {
         next.sort_by(|a, b| a.score.cmp(&b.score));
         current = next;
     }
-    calc_colored_state(&min_state.state, target)
+    calc_colored_state(&min_state.state, target, false)
 }
 
 #[derive(Clone)]
