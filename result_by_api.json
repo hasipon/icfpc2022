@@ -43,16 +43,16 @@
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-04T18:24:55.35247Z",
-      "submission_count": 55,
+      "last_submitted_at": "2022-09-04T20:30:19.929347Z",
+      "submission_count": 57,
       "min_cost": 11619,
       "overall_best_cost": 4155
     },
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T18:34:57.125405Z",
-      "submission_count": 42,
+      "last_submitted_at": "2022-09-04T20:30:21.165765Z",
+      "submission_count": 43,
       "min_cost": 20541,
       "overall_best_cost": 12607
     },
@@ -70,7 +70,7 @@
       "last_submitted_at": "2022-09-04T17:46:32.937654Z",
       "submission_count": 42,
       "min_cost": 20033,
-      "overall_best_cost": 9007
+      "overall_best_cost": 8926
     },
     {
       "problem_id": 10,
@@ -91,25 +91,25 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-04T18:34:52.197441Z",
-      "submission_count": 36,
+      "last_submitted_at": "2022-09-04T20:29:56.637215Z",
+      "submission_count": 37,
       "min_cost": 14156,
       "overall_best_cost": 5404
     },
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T19:01:54.194258Z",
-      "submission_count": 35,
+      "last_submitted_at": "2022-09-04T20:29:57.866108Z",
+      "submission_count": 36,
       "min_cost": 14002,
       "overall_best_cost": 8741
     },
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T19:24:55.106654Z",
-      "submission_count": 30,
-      "min_cost": 35816,
+      "last_submitted_at": "2022-09-04T20:30:07.646822Z",
+      "submission_count": 38,
+      "min_cost": 35113,
       "overall_best_cost": 18932
     },
     {
@@ -163,17 +163,17 @@
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T19:25:02.506833Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-04T20:30:08.865917Z",
+      "submission_count": 44,
       "min_cost": 17419,
       "overall_best_cost": 12647
     },
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T17:48:57.406467Z",
-      "submission_count": 37,
-      "min_cost": 27062,
+      "last_submitted_at": "2022-09-04T20:30:11.329197Z",
+      "submission_count": 39,
+      "min_cost": 25954,
       "overall_best_cost": 14699
     },
     {
@@ -283,33 +283,33 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-04T20:25:08.340353Z",
-      "submission_count": 6,
+      "last_submitted_at": "2022-09-04T20:30:12.546023Z",
+      "submission_count": 7,
       "min_cost": 36371,
       "overall_best_cost": 32833
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-04T19:25:06.200255Z",
-      "submission_count": 5,
-      "min_cost": 20383,
+      "last_submitted_at": "2022-09-04T20:30:13.780814Z",
+      "submission_count": 6,
+      "min_cost": 19991,
       "overall_best_cost": 16328
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-04T18:34:55.901866Z",
-      "submission_count": 5,
+      "last_submitted_at": "2022-09-04T20:30:16.279037Z",
+      "submission_count": 7,
       "min_cost": 27660,
       "overall_best_cost": 22568
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-04T18:08:53.146616Z",
-      "submission_count": 5,
-      "min_cost": 26248,
+      "last_submitted_at": "2022-09-04T20:30:17.497043Z",
+      "submission_count": 6,
+      "min_cost": 24048,
       "overall_best_cost": 19527
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1052725,
+  "total_cost": 1048322,
   "solved_problem_count": 40
 }
