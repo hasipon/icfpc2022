@@ -28,7 +28,7 @@ pub struct PainterResult {
     pub image:RgbaImage,
 }
 
-pub fn solve(target:&RgbaImage) -> PainterResult {
+pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
     let mut best_rects = Vec::new();
     let mut best_result = PainterResult {
         commands: Vec::new(),
@@ -44,10 +44,10 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 32;
+    let beam_w = 10;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..2100 {
+    for step in 0..800 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
@@ -186,7 +186,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 _ => {} 
             }
 
-            let result = eval(target, &mut rects, &mut gray_image, true, &mut rng);
+            let result = eval(target, initial, &mut rects, &mut gray_image, true, &mut rng);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
@@ -201,11 +201,12 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         current = next;
     }
 
-    eval(target, &mut best_rects, &mut gray_image, false, &mut rng)
+    eval(target, initial, &mut best_rects, &mut gray_image, false, &mut rng)
 }
 
 fn eval<R:Rng>(
-    target:&RgbaImage, 
+    target:&RgbaImage,
+    initial:&RgbaImage,
     rects:&mut Vec<Rectangle>, 
     gray_image:&mut GrayImage,
     fast:bool,
@@ -242,6 +243,7 @@ fn eval<R:Rng>(
         for x in 0..gray_image.width() {
             for y in 0..gray_image.height() {
                 let index = gray_image.get_pixel(x, y)[0] as usize;
+                if index == 0 { continue; }
                 let size = fill_size[index];
                 let color = fill_colors[index];
                 let color2 = target.get_pixel(
@@ -270,21 +272,8 @@ fn eval<R:Rng>(
         power *= scale;
     }
 
-    let mut out_image= RgbaImage::new(target.width(), target.height());
-    out_image.fill(255);
-    let mut state = State::new(out_image);
-    if fill_size[0] > 0.0 {
-        let color = fill_colors[0];
-        state.apply_command(&Command::Color(
-            vec![state.get_last_node()], 
-            Rgba([
-                color[0].round() as u8,
-                color[1].round() as u8,
-                color[2].round() as u8,
-                color[3].round() as u8,
-            ])
-        ));
-    }
+    let mut state = State::new(initial.clone());
+    
     for (i, rect) in rects.iter().enumerate() {
         if fill_size[i + 1] == 0.0 { continue; }
         let mut commands =  Vec::new();
