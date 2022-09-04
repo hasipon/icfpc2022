@@ -35,10 +35,10 @@
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T14:45:39.821642Z",
-      "submission_count": 31,
+      "last_submitted_at": "2022-09-04T16:11:51.473017Z",
+      "submission_count": 32,
       "min_cost": 26891,
-      "overall_best_cost": 9098
+      "overall_best_cost": 9061
     },
     {
       "problem_id": 6,
@@ -83,9 +83,9 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T15:57:40.947024Z",
-      "submission_count": 34,
-      "min_cost": 30291,
+      "last_submitted_at": "2022-09-04T16:11:42.220336Z",
+      "submission_count": 35,
+      "min_cost": 29305,
       "overall_best_cost": 19638
     },
     {
@@ -99,9 +99,9 @@
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T16:01:41.974716Z",
-      "submission_count": 28,
-      "min_cost": 14864,
+      "last_submitted_at": "2022-09-04T16:11:43.477083Z",
+      "submission_count": 29,
+      "min_cost": 14765,
       "overall_best_cost": 8744
     },
     {
@@ -155,17 +155,17 @@
     {
       "problem_id": 20,
       "problem_name": "\"The\" Son of Man",
-      "last_submitted_at": "2022-09-04T15:19:50.020437Z",
-      "submission_count": 31,
-      "min_cost": 20956,
+      "last_submitted_at": "2022-09-04T16:11:44.707075Z",
+      "submission_count": 32,
+      "min_cost": 19381,
       "overall_best_cost": 14982
     },
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T15:57:48.407483Z",
-      "submission_count": 31,
-      "min_cost": 20340,
+      "last_submitted_at": "2022-09-04T16:11:46.469043Z",
+      "submission_count": 32,
+      "min_cost": 17419,
       "overall_best_cost": 12661
     },
     {
@@ -179,9 +179,9 @@
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-04T14:45:37.342489Z",
-      "submission_count": 32,
-      "min_cost": 30642,
+      "last_submitted_at": "2022-09-04T16:11:50.245298Z",
+      "submission_count": 35,
+      "min_cost": 29436,
       "overall_best_cost": 18011
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 10537
     }
   ],
-  "total_cost": 1285048,
+  "total_cost": 1278261,
   "solved_problem_count": 40
 }
