@@ -185,9 +185,9 @@
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-03T12:55:12.68802Z",
-      "submission_count": 1,
-      "min_cost": 174950
+      "last_submitted_at": "2022-09-04T01:09:14.433309Z",
+      "submission_count": 2,
+      "min_cost": 173295
     },
     {
       "problem_id": 28,
@@ -227,16 +227,16 @@
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "0001-01-01T00:00:00Z",
-      "submission_count": 0,
-      "min_cost": 0
+      "last_submitted_at": "2022-09-04T01:09:15.671964Z",
+      "submission_count": 1,
+      "min_cost": 118808
     },
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "0001-01-01T00:00:00Z",
-      "submission_count": 0,
-      "min_cost": 0
+      "last_submitted_at": "2022-09-04T01:09:16.89682Z",
+      "submission_count": 1,
+      "min_cost": 139680
     },
     {
       "problem_id": 35,
@@ -246,6 +246,6 @@
       "min_cost": 0
     }
   ],
-  "total_cost": 1242633,
-  "solved_problem_count": 30
+  "total_cost": 1499466,
+  "solved_problem_count": 32
 }
