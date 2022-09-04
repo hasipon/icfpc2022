@@ -220,8 +220,8 @@
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T05:37:21.598911Z",
-      "submission_count": 4,
+      "last_submitted_at": "2022-09-04T05:43:19.72712Z",
+      "submission_count": 5,
       "min_cost": 118805
     },
     {
@@ -234,9 +234,9 @@
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-04T05:37:24.079478Z",
-      "submission_count": 4,
-      "min_cost": 139680
+      "last_submitted_at": "2022-09-04T05:43:20.957616Z",
+      "submission_count": 5,
+      "min_cost": 109626
     },
     {
       "problem_id": 35,
@@ -246,6 +246,6 @@
       "min_cost": 96587
     }
   ],
-  "total_cost": 1617861,
+  "total_cost": 1587807,
   "solved_problem_count": 35
 }
