@@ -11,18 +11,18 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T17:48:56.16446Z",
-      "submission_count": 45,
+      "last_submitted_at": "2022-09-04T18:08:50.653647Z",
+      "submission_count": 46,
       "min_cost": 6403,
       "overall_best_cost": 2315
     },
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T17:46:25.562117Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-04T18:08:51.893137Z",
+      "submission_count": 42,
       "min_cost": 8588,
-      "overall_best_cost": 3716
+      "overall_best_cost": 3708
     },
     {
       "problem_id": 4,
@@ -35,8 +35,8 @@
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T17:05:11.039566Z",
-      "submission_count": 36,
+      "last_submitted_at": "2022-09-04T18:08:56.876125Z",
+      "submission_count": 37,
       "min_cost": 26891,
       "overall_best_cost": 9061
     },
@@ -174,7 +174,7 @@
       "last_submitted_at": "2022-09-04T17:48:57.406467Z",
       "submission_count": 37,
       "min_cost": 27062,
-      "overall_best_cost": 14744
+      "overall_best_cost": 14703
     },
     {
       "problem_id": 23,
@@ -198,7 +198,7 @@
       "last_submitted_at": "2022-09-04T17:49:01.097205Z",
       "submission_count": 34,
       "min_cost": 25164,
-      "overall_best_cost": 19218
+      "overall_best_cost": 19214
     },
     {
       "problem_id": 26,
@@ -294,7 +294,7 @@
       "last_submitted_at": "2022-09-04T17:46:28.030693Z",
       "submission_count": 3,
       "min_cost": 21202,
-      "overall_best_cost": 16375
+      "overall_best_cost": 16328
     },
     {
       "problem_id": 38,
@@ -307,20 +307,20 @@
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-04T17:46:30.498265Z",
-      "submission_count": 4,
-      "min_cost": 28990,
-      "overall_best_cost": 19577
+      "last_submitted_at": "2022-09-04T18:08:53.146616Z",
+      "submission_count": 5,
+      "min_cost": 26248,
+      "overall_best_cost": 19527
     },
     {
       "problem_id": 40,
       "problem_name": "Logo Wars",
-      "last_submitted_at": "2022-09-04T17:46:31.720417Z",
-      "submission_count": 4,
+      "last_submitted_at": "2022-09-04T18:08:55.625147Z",
+      "submission_count": 6,
       "min_cost": 25484,
-      "overall_best_cost": 7240
+      "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1111338,
+  "total_cost": 1108596,
   "solved_problem_count": 40
 }
