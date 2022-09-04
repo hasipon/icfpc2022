@@ -74,10 +74,6 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                     let (diff, by) = if rng.gen_bool(0.2) { (10000.0, h) } else { find_bottom_boundary(cx, cy, &target, &mut rng) };
                     if diff < 40.0 { continue; }
 
-                    let ax = std::cmp::min(x1, x2);
-                    let bx = std::cmp::max(x1, x2);
-                    let ay = std::cmp::min(y1, y2);
-                    let by = std::cmp::max(y1, y2);
                     if ax == bx { continue; }
                     if ay == by { continue; }
                     if by - ay * bx - bx < 20 { continue; }
@@ -500,7 +496,82 @@ fn eval<R:Rng>(
     }
 }
 
-pub fn find_x_boundary<R:Rng>(cx:i32, cy:i32, target:&RgbaImage, rng:&R) {
-    let min_x = 0;
+fn find_x_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, i32) {
+    let mut min = 0;
+    let mut max: i32 = x;
+    let pixel = target.get_pixel(x as u32, y as u32);
+    let mut max_diff = 0.0;
+    while min < max {
+        let value = min + (max - min) / 2;
+        let diff = compare(target.get_pixel(value as u32, y as u32), pixel);
+        if diff > max_diff {  max_diff = diff; }
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
+            max = value;
+        } else {
+            min = value;
+        }
+    }
+    (max_diff, max)
+}
 
+fn find_right_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, i32)   {
+    let mut min = x;
+    let mut max: i32 = target.width() as i32 - 1;
+    let pixel = target.get_pixel(x as u32, y as u32);
+    let mut max_diff = 0.0;
+    while min < max {
+        let value = min + (max - min) / 2;
+        let diff = compare(target.get_pixel(value as u32, y as u32), pixel);
+        if diff > max_diff {  max_diff = diff; }
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
+            min = value;
+        } else {
+            max = value;
+        }
+    }
+    (max_diff, min)
+}
+
+fn find_y_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, i32) {
+    let mut min = 0;
+    let mut max: i32 = y;
+    let pixel = target.get_pixel(x as u32, y as u32);
+    let mut max_diff = 0.0;
+    while min < max {
+        let value = min + (max - min) / 2;
+        let diff = compare(target.get_pixel(x as u32, value as u32), pixel);
+        if diff > max_diff {  max_diff = diff; }
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
+            max = value;
+        } else {
+            min = value;
+        }
+    }
+    (max_diff, max)
+}
+
+fn find_bottom_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, i32)   {
+    let mut min = y;
+    let mut max: i32 = target.height() as i32 - 1;
+    let pixel = target.get_pixel(x as u32, y as u32);
+    let mut max_diff = 0.0;
+    while min < max {
+        let value = min + (max - min) / 2;
+        let diff = compare(target.get_pixel(x as u32, value as u32), pixel);
+        if diff > max_diff {  max_diff = diff; }
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
+            min = value;
+        } else {
+            max = value;
+        }
+    }
+    (max_diff, min)
+}
+
+fn compare(p0:&Rgba<u8>, p1:&Rgba<u8>) -> f64 {
+    let r = p0[0] as f64 - p1[0] as f64;
+    let g = p0[1] as f64 - p1[1] as f64;
+    let b = p0[2] as f64 - p1[2] as f64;
+    let a = p0[3] as f64 - p1[3] as f64;
+    r * r + g * g + b * b + a * a
 }
