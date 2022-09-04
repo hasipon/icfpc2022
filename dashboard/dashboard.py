@@ -75,19 +75,20 @@ def index():
     problem_files = [os.path.relpath(x, problems_path)
                      for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png")]
     problem_files.sort(key=lambda x: int(x[:-4]))
-    problems = [
-        {
-            "name": x[:-4],
-        } for x in problem_files
-    ]
-    problems_dict = {x["name"]: x for x in problems}
+    problems = [{"id": int(x[:-4])} for x in problem_files]
+    problems_dict = {int(x["id"]): x for x in problems}
 
     for p in problems:
-        initial = problems_path / (p["name"] + ".initial.png")
+        initial = problems_path / (str(p["id"]) + ".initial.png")
         if os.path.exists(initial):
             p["initial"] = True
 
     result_by_api = json.load(open('../result_by_api.json', 'r'))
+    for result in result_by_api["results"]:
+        if result["problem_id"] in problems_dict:
+            problem = problems_dict[result["problem_id"]]
+            problem.update(result)
+
     solutions_rows = engine.execute(
         "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
     solutions = defaultdict(lambda: [])
