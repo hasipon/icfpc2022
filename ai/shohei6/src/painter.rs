@@ -37,18 +37,29 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         image:RgbaImage::new(1, 1)
     };
     let mut rng = thread_rng();
-    let initial_state = PainterState {
-        rects: Vec::new(),
+    let mut initial_state = PainterState {
+        rects: vec![
+            Rectangle::new(80, 103, 208, 208),
+            Rectangle::new(73, 148, 225, 128),
+            Rectangle::new(118, 103, 142, 222),
+            Rectangle::new(100, 133, 168, 168),
+            Rectangle::new(30, 26, 61, 64),
+            Rectangle::new(243, 14, 86, 82),
+            Rectangle::new(325, 144, 48, 66),
+            Rectangle::new(283, 342, 79, 37),
+            Rectangle::new(10, 309, 80, 64),
+            Rectangle::new(144, 164, 72, 102),
+        ],
         score: i64::MAX
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 10;
+
+    let beam_w = 15;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..8000 {
-        println!("step {}", step);
+    for step in 0..100 {
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
@@ -59,87 +70,8 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
             let source = &current[i % size];
             let mut rects = source.rects.clone();
 
-            match rng.gen_range(0, if step == 0 { 1 } else { 10 }) {
-                0..=5  => {
-                    let cx = rng.gen_range(0, w);
-                    let cy = rng.gen_range(0, h);
-                    let (diff, ax) = if rng.gen_bool(0.2) { (10000.0, 0) } else { find_x_boundary(cx, cy, &target, &mut rng) };
-                    if diff < 40.0 { continue; }
-                    let (diff, bx) = if rng.gen_bool(0.2) { (10000.0, w) } else { find_right_boundary(cx, cy, &target, &mut rng) };
-                    if diff < 40.0 { continue; }
-                    let (diff, ay) = if rng.gen_bool(0.2) { (10000.0, 0) } else { find_y_boundary(cx, cy, &target, &mut rng) };
-                    if diff < 40.0 { continue; }
-                    let (diff, by) = if rng.gen_bool(0.2) { (10000.0, h) } else { find_bottom_boundary(cx, cy, &target, &mut rng) };
-                    if diff < 40.0 { continue; }
-
-                    if ax == bx { continue; }
-                    if ay == by { continue; }
-
-                    if (by - ay) * (bx - ax) < 20 { continue; }
-                    rects.insert(rng.gen_range(0, rects.len() + 1), Rectangle { 
-                        x: ax,
-                        y: ay,
-                        w: bx - ax,
-                        h: by - ay,
-                    });
-                },
-                6 => {
-                    if rects.len() < 2 { continue; }
-                    let i0 = rng.gen_range(0, rects.len()); 
-                    let i1 = rng.gen_range(0, rects.len());
-                    if i0 == i1 { continue; }
-                    let is_t0 = rng.gen_bool(0.5);
-                    let is_t1 = rng.gen_bool(0.5);
-                    let av0 = if is_t0 { rects[i0].x } else { rects[i0].right() };
-                    let av1 = if is_t1 { rects[i1].x } else { rects[i1].right() };
-                    let bv0 = if is_t1 { rects[i1].right() } else { rects[i1].x };
-                    let bv1 = if is_t0 { rects[i0].right() } else { rects[i0].x };
-                    if av0 == bv0 { continue; }
-                    if av1 == bv1 { continue; }
-                    let l0 = std::cmp::min(av0, bv0);
-                    let r0 = std::cmp::max(av0, bv0);
-                    let l1 = std::cmp::min(av1, bv1);
-                    let r1 = std::cmp::max(av1, bv1);
-                    rects[i0].x = l0;
-                    rects[i0].w = r0 - l0;
-                    rects[i1].x = l1;
-                    rects[i1].w = r1 - l1;
-                },
-                7 => {
-                    if rng.gen_bool(0.8) {
-                        if rects.len() < 2 { continue; }
-                        let i0 = rng.gen_range(0, rects.len()); 
-                        let i1 = rng.gen_range(0, rects.len());
-                        if i0 == i1 { continue; }
-                        let is_t0 = rng.gen_bool(0.5);
-                        let is_t1 = rng.gen_bool(0.5);
-                        let av0 = if is_t0 { rects[i0].y } else { rects[i0].bottom() };
-                        let av1 = if is_t1 { rects[i1].y } else { rects[i1].bottom() };
-                        let bv0 = if is_t1 { rects[i1].bottom() } else { rects[i1].y };
-                        let bv1 = if is_t0 { rects[i0].bottom() } else { rects[i0].y };
-                        if av0 == bv0 { continue; }
-                        if av1 == bv1 { continue; }
-                        let l0 = std::cmp::min(av0, bv0);
-                        let r0 = std::cmp::max(av0, bv0);
-                        let l1 = std::cmp::min(av1, bv1);
-                        let r1 = std::cmp::max(av1, bv1);
-                        rects[i0].y = l0;
-                        rects[i0].h = r0 - l0;
-                        rects[i1].y = l1;
-                        rects[i1].h = r1 - l1;
-                    } else {
-                            if rects.len() < 1 { continue; }
-                            rects.remove(rng.gen_range(0, rects.len()));
-                        }
-                    },
-                8 => {
-                    if rects.len() < 2 { continue; }
-                    let i0 = rng.gen_range(0, rects.len()); 
-                    let i1 = rng.gen_range(0, rects.len());
-                    if i0 == i1 { continue; }
-                    rects.swap(i0, i1);
-                },
-                9 => {
+            match rng.gen_range(0, 1) {
+                0 => {
                     if rects.len() < 1 { continue; }
                     let mut rect = rects[rng.gen_range(0, rects.len())];
                     if rng.gen_bool(0.5) {
@@ -456,7 +388,8 @@ fn eval<R:Rng>(
     let len = rects.len();
     for j in 0..len {
         let i =  len - j - 1;
-        if fill_size[i + 1] == 0.0 { 
+        if fill_size[i + 1] == 0.0 {
+            println!("remove");
             if rng.gen_bool(0.5) { rects.remove(i); }
         }
     }

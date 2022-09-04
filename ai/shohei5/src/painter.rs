@@ -62,13 +62,12 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
-    return eval(target, &mut initial_state.rects, &mut gray_image, true, &mut rng);
     let mut current = vec![initial_state];
 
     let beam_w = 20;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..180 {
+    for step in 0..4000 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
