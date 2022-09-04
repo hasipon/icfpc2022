@@ -52,7 +52,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
-        if step % 5 != 4 {
+        if step % 10 != 9 {
             for i in 0..size {
                 next.push(current[i].clone());
             }
@@ -61,8 +61,8 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
             let source = &current[i % size];
             let mut rects = source.rects.clone();
 
-            match rng.gen_range(0, if step == 0 { 1 } else { 7 }) {
-                0 | 5 => {
+            match rng.gen_range(0, if step == 0 { 1 } else { 8 }) {
+                0 | 5 | 7 => {
                     let (diff, x1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
                     let (diff, x2) = if rng.gen_bool(0.1) { (10000.0, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
@@ -185,7 +185,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 _ => {} 
             }
 
-            let result = eval(target, &rects, &mut gray_image, true);
+            let result = eval(target, &mut rects, &mut gray_image, true);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
@@ -200,7 +200,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         current = next;
     }
 
-    eval(target, &best_rects, &mut gray_image, false)
+    eval(target, &mut best_rects, &mut gray_image, false)
 }
 
 fn eval(
@@ -476,6 +476,13 @@ fn eval(
         commands.reverse();
         for command in &commands {
             state.revert_command(command);
+        }
+    }
+
+    for j in 0..rects.len() {
+        let i = rects.len() - j - i;
+        if fill_size[i + 1] == 0.0 { 
+            rects.remove(i);
         }
     }
 
