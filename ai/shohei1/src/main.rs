@@ -25,7 +25,10 @@ fn main() -> std::io::Result<()>  {
     if arg.len() >= 3 {
         initial_file_path = arg[2].to_owned();
     }
-    
+    let mut program_name = "shohei1".to_owned();
+    if arg.len() >= 4 {
+        program_name = arg[3].to_owned();
+    }
     let mut contents = String::new();
     if std::path::Path::new(&initial_file_path).exists() {
         let mut f = File::open(initial_file_path).expect("file not found");
@@ -40,7 +43,7 @@ fn main() -> std::io::Result<()>  {
     writer::write(&mut string, &commands);
 
     let text = Utc::now().format("%Y%m%d%H%M%S%f3").to_string();
-    let mut file = File::create(format!("../../solutions/{}-shohei1-{}.isl", problem, text))?;
+    let mut file = File::create(format!("../../solutions/{}-{}-{}.isl", problem, program_name, text))?;
     let mut writer = BufWriter::new(file);
     writer.write_all(string.as_bytes())?;
     writer.flush()?;

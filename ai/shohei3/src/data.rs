@@ -166,6 +166,7 @@ impl Tree {
                 draw_filled_rect_mut(
                     image, 
                     Rect::at(rect.x, image.height() as i32 - rect.bottom()).of_size(rect.w as u32, rect.h as u32), color);
+                    
             }
             _ => panic!("cannot color"),
         }
