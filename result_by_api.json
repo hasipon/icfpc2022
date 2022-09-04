@@ -11,8 +11,8 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T14:34:44.407819Z",
-      "submission_count": 38,
+      "last_submitted_at": "2022-09-04T15:08:38.554228Z",
+      "submission_count": 40,
       "min_cost": 6403,
       "overall_best_cost": 2315
     },
@@ -27,8 +27,8 @@
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T14:34:54.285379Z",
-      "submission_count": 32,
+      "last_submitted_at": "2022-09-04T15:08:40.995911Z",
+      "submission_count": 33,
       "min_cost": 22856,
       "overall_best_cost": 5888
     },
@@ -83,8 +83,8 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T14:45:34.863998Z",
-      "submission_count": 31,
+      "last_submitted_at": "2022-09-04T14:58:31.501074Z",
+      "submission_count": 32,
       "min_cost": 40612,
       "overall_best_cost": 19638
     },
@@ -115,8 +115,8 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-04T14:34:36.995315Z",
-      "submission_count": 27,
+      "last_submitted_at": "2022-09-04T15:08:36.078289Z",
+      "submission_count": 28,
       "min_cost": 33204,
       "overall_best_cost": 17143
     },
@@ -171,8 +171,8 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T14:55:42.315525Z",
-      "submission_count": 30,
+      "last_submitted_at": "2022-09-04T15:08:39.778435Z",
+      "submission_count": 31,
       "min_cost": 27062,
       "overall_best_cost": 14744
     },
@@ -286,7 +286,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 34407
+      "overall_best_cost": 33685
     },
     {
       "problem_id": 37,
@@ -294,7 +294,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 16626
+      "overall_best_cost": 16532
     },
     {
       "problem_id": 38,
@@ -302,7 +302,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 22916
+      "overall_best_cost": 22656
     },
     {
       "problem_id": 39,
@@ -310,7 +310,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 19853
+      "overall_best_cost": 19680
     },
     {
       "problem_id": 40,
@@ -318,7 +318,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 12107
+      "overall_best_cost": 11526
     }
   ],
   "total_cost": 1051599,
