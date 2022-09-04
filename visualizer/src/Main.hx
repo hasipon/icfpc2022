@@ -209,6 +209,12 @@ class Main
 		var nodes = [];
 		for (block in (data.blocks:Array<Dynamic>))
 		{
+			trace(
+					block.color[3],
+					block.color[0],
+					block.color[1],
+					block.color[2]
+			);
 			nodes[Std.parseInt(block.blockId)] = new InitialNode(
 				new Rectangle(
 					block.bottomLeft[1],
@@ -217,10 +223,10 @@ class Main
 					block.topRight[0] - block.bottomLeft[0]
 				),
 				new ArgbColor(
-					block.color[3],
-					block.color[0],
-					block.color[1],
-					block.color[2]
+					block.color[3] / 255,
+					block.color[0] / 255,
+					block.color[1] / 255,
+					block.color[2] / 255
 				)
 			);
 		}

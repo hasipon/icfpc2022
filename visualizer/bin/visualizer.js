@@ -452,7 +452,8 @@ Main.onJsonLoaded = function(data) {
 	while(_g < _g1.length) {
 		var block = _g1[_g];
 		++_g;
-		nodes[Std.parseInt(block.blockId)] = new InitialNode(new PIXI.Rectangle(block.bottomLeft[1],block.bottomLeft[0],block.topRight[1] - block.bottomLeft[1],block.topRight[0] - block.bottomLeft[0]),new tweenxcore_color_ArgbColor(block.color[3],block.color[0],block.color[1],block.color[2]));
+		haxe_Log.trace(block.color[3],{ fileName : "src/Main.hx", lineNumber : 212, className : "Main", methodName : "onJsonLoaded", customParams : [block.color[0],block.color[1],block.color[2]]});
+		nodes[Std.parseInt(block.blockId)] = new InitialNode(new PIXI.Rectangle(block.bottomLeft[1],block.bottomLeft[0],block.topRight[1] - block.bottomLeft[1],block.topRight[0] - block.bottomLeft[0]),new tweenxcore_color_ArgbColor(block.color[3] / 255,block.color[0] / 255,block.color[1] / 255,block.color[2] / 255));
 	}
 	Main.initialState = new InitialState(data1.width,data1.height,nodes);
 	Main.onInputChanged();
@@ -857,6 +858,31 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 		return this.__nativeException;
 	}
 });
+var haxe_Log = function() { };
+haxe_Log.__name__ = true;
+haxe_Log.formatOutput = function(v,infos) {
+	var str = Std.string(v);
+	if(infos == null) {
+		return str;
+	}
+	var pstr = infos.fileName + ":" + infos.lineNumber;
+	if(infos.customParams != null) {
+		var _g = 0;
+		var _g1 = infos.customParams;
+		while(_g < _g1.length) {
+			var v = _g1[_g];
+			++_g;
+			str += ", " + Std.string(v);
+		}
+	}
+	return pstr + ": " + str;
+};
+haxe_Log.trace = function(v,infos) {
+	var str = haxe_Log.formatOutput(v,infos);
+	if(typeof(console) != "undefined" && console.log != null) {
+		console.log(str);
+	}
+};
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
 	this.value = value;
