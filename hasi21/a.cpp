@@ -5,7 +5,6 @@
 #include <set>
 #include <algorithm>
 using namespace std;
-long long sumTime1,  sumTime2,  sumTime3;
 long long getTime() {
 	timespec ts;
 	clock_gettime(CLOCK_REALTIME_COARSE, &ts);
@@ -52,8 +51,6 @@ pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
         res[k] = (sum[k] + area/2) / area;
     }
 
-	auto tttt0 = getTime();
-
     // Weiszfeld's algorithm
     // https://en.wikipedia.org/wiki/Geometric_median
     for (auto it = 0; it < 20; it++) {
@@ -91,8 +88,6 @@ pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
         }
     }
 
-	auto tttt1 = getTime();
-
     uint8_t resInt[4];
     resInt[3] = 255;
     for (int k = 0; k < 3; ++ k) {
@@ -112,8 +107,6 @@ pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
             score += sqrt(d(get(i,j), *(uint32_t*)resInt));
         }
     }
-
-	auto tttt2 = getTime();
 
     // 山登りで最後まで収束させる
     for (;;) {
@@ -150,11 +143,6 @@ pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
         break;
         next:;
     }
-
-	auto tttt3 = getTime();
-	sumTime1 += tttt1-tttt0;
-	sumTime2 += tttt2-tttt1;
-	sumTime3 += tttt3-tttt2;
 
     return {*(uint32_t*)resInt, score};
 }
@@ -218,11 +206,10 @@ struct Hoge {
 		a.push_back(y);
 	}
 	double calcScore() {
-		double r = 0;
 		if (t == -1) {
-			return r + calcSim();
+			return calcSim();
 		} else {
-			r += round(7.0*400*400/((i1-i0)*(j1-j0)));
+			double r = round(7.0*400*400/((i1-i0)*(j1-j0)));
 			if (t == 0) {
 				int area0 = (v-i0)*(j1-j0);
 				int area1 = (i1-v)*(j1-j0);
@@ -309,8 +296,8 @@ Hoge walk(int i0, int i1, int j0, int j1) {
 	vector<pair<int,int>> cuts2(cuts.begin(), cuts.end());
 	random_shuffle(cuts2.begin(), cuts2.end());
 	int n = 2;
-	//if (walkArea <= 50*50) n = 6;
-	//else if (walkArea <= 100*100) n = 4;
+	if (walkArea <= 50*50) n = 7;
+	else if (walkArea <= 100*100) n = 4;
 	for (int i = 0; i < n && i < (int)cuts2.size(); ++ i) {
 		auto p = cuts2[i];
 		if (p.first == 0) {
@@ -374,8 +361,4 @@ int main() {
 	Image = new uint8_t[width*height*4];
 	if ((int)fread(Image, 1, width*height*4, stdin) != width*height*4) throw 1;
 	solve();
-	cerr << 1e-9*sumTime1 << endl;
-	cerr << 1e-9*sumTime2 << endl;
-	cerr << 1e-9*sumTime3 << endl;
-	cerr << 1e-9*(sumTime1+sumTime2+sumTime3) << endl;
 }
