@@ -3,9 +3,9 @@
     {
       "problem_id": 1,
       "problem_name": "Chess Table",
-      "last_submitted_at": "2022-09-04T18:24:51.638963Z",
-      "submission_count": 40,
-      "min_cost": 20140,
+      "last_submitted_at": "2022-09-04T21:52:00.498596Z",
+      "submission_count": 41,
+      "min_cost": 8821,
       "overall_best_cost": 5047
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1021722,
+  "total_cost": 1010403,
   "solved_problem_count": 40
 }
