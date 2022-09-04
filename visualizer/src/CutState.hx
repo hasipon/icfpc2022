@@ -195,7 +195,7 @@ class CutState
 		var index0 = id0.pop();
 		var parent0 = getById(id0);
 		var index1 = id1.pop();
-		var parent1 = getById(id0);
+		var parent1 = getById(id1);
 		var node0 = parent0[index0];
 		var node1 = parent1[index1];
 		if (node0 == null)

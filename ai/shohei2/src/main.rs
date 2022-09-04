@@ -32,7 +32,7 @@ fn main() -> std::io::Result<()>  {
     let similarity = eval::similarity(&state.image, &image);
 
     state.image.save("output.png").unwrap();
-    println!("similarity:{} cost:{} total:{}", similarity, state.cost, similarity + state.cost);
+    println!("{}: similarity:{} cost:{} total:{}", problem, similarity, state.cost, similarity + state.cost);
     let mut string = String::new();
     writer::write(&mut string, &state.commands);
 

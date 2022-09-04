@@ -5,17 +5,17 @@ use image::Rgba;
 use rand::thread_rng;
 use rand::Rng;
 
-pub fn calc_colored_state(state:&State, image:&RgbaImage) -> State {
+pub fn calc_colored_state(state:&State, image:&RgbaImage, fast:bool) -> State {
     let mut commands = state.commands.clone();
 
-    insert_color_commands(&mut commands, image);
+    insert_color_commands(&mut commands, image, fast);
     
     let mut result = State::new(RgbaImage::new(image.width(), image.height()));
     result.apply_commands(&commands);
     result
 }
 
-pub fn insert_color_commands(commands:&mut Vec<Command>, image:&RgbaImage) {
+pub fn insert_color_commands(commands:&mut Vec<Command>, image:&RgbaImage, fast:bool) {
     let len = commands.len();
     let mut rng = thread_rng();
     let mut state = State::new(RgbaImage::new(image.width(), image.height()));
@@ -29,21 +29,21 @@ pub fn insert_color_commands(commands:&mut Vec<Command>, image:&RgbaImage) {
         let i = len - j - 1;
         match &commands[i] {
             Command::PointCut(id, _) => {
-                fill_large_rects(&mut state.tree, &mut id.clone(), 4, &mut rng, image, i + 1, commands);
+                fill_large_rects(&mut state.tree, &mut id.clone(), 4, &mut rng, image, i + 1, commands, fast);
             }
             Command::LineCut(id, _, _) => {
-                fill_large_rects(&mut state.tree, &mut id.clone(), 2, &mut rng, image, i + 1, commands);
+                fill_large_rects(&mut state.tree, &mut id.clone(), 2, &mut rng, image, i + 1, commands, fast);
             }
             Command::Color(_, _) => {}
             Command::Merge(_, _) => {
                 root_size -= 1;
-                _fill_color(&mut state.tree, &mut [root_size].to_vec(), &mut rng, image, i + 1, commands);
+                _fill_color(&mut state.tree, &mut [root_size].to_vec(), &mut rng, image, i + 1, commands, fast);
             }
         }
     }
 
     let mut id = [0].to_vec();
-    _fill_color(&mut state.tree, &mut id, &mut rng, image, 0, commands);
+    _fill_color(&mut state.tree, &mut id, &mut rng, image, 0, commands, fast);
 }
 
 fn fill_large_rects<R:Rng + Sized>(
@@ -53,7 +53,8 @@ fn fill_large_rects<R:Rng + Sized>(
     rng:&mut R, 
     image:&RgbaImage,
     index:usize,
-    commands:&mut Vec<Command>
+    commands:&mut Vec<Command>,
+    fast:bool
 ) {
     let mut min_id = 0;
     let mut min_size = 400 * 400;
@@ -81,7 +82,7 @@ fn fill_large_rects<R:Rng + Sized>(
         let mut id = base_id.clone();
         id.push(i);
         if min_id == i { continue; }
-        _fill_color(tree, &mut id, rng, image, index, commands);
+        _fill_color(tree, &mut id, rng, image, index, commands, fast);
     }
 }
 
@@ -91,7 +92,8 @@ fn _fill_color<R:Rng + Sized>(
     rng:&mut R, 
     image:&RgbaImage,
     index:usize,
-    commands:&mut Vec<Command>
+    commands:&mut Vec<Command>,
+    fast:bool
 )  {
     let mut rect_ids = Vec::new();
     let mut rects = Vec::new();
@@ -99,11 +101,22 @@ fn _fill_color<R:Rng + Sized>(
     if rects.len() == 0 { return; }
     
     let mut color0 = Rgba::from([127.0, 127.0, 127.0, 150.0]);
-    let mut power = 135.0;
-    for _ in 0..18 {
-        let color1 = get_rects_color(&rects, image, color0, power, rng);
-        color0 = color1;
-        power *= 0.65;
+    if fast {
+        let mut power = 127.0;
+        for _ in 0..6 {
+            let color1 = get_rects_color(&rects, image, color0, power, rng);
+            color0 = color1;
+            power *= 0.5;
+        }
+    }
+    else
+    {
+        let mut power = 135.0;
+        for _ in 0..18 {
+            let color1 = get_rects_color(&rects, image, color0, power, rng);
+            color0 = color1;
+            power *= 0.65;
+        }
     }
     let result_color = to_u8_color(color0);
     tree.find_mut(id).fill_color(result_color);
