@@ -70,8 +70,47 @@ def eval_solution():
     return line
 
 
+def sort_problems(problems):
+    reverse = False
+    if request.args.get("desc"):
+        reverse = True
+
+    if request.args.get("sort-by"):
+        key = request.args.get("sort-by")
+        problems.sort(key=lambda x: x[key] if key in x else x["id"], reverse=reverse)
+    return problems
+
+
+@app.route('/solutions/<problem_id>')
+def get_solutions(problem_id: str):
+    if not request.args.get("invalid"):
+        solutions = engine.execute(
+            "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1 AND problem_id = %s ORDER BY cost",
+            problem_id).all()
+    else:
+        solutions = engine.execute(
+            "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 0 AND problem_id = %s ORDER BY updated_at",
+            problem_id).all()
+
+    with open('../result_by_api.json', 'r') as f:
+        result_by_api = json.load(f)
+
+    problem_name = ""
+    for result in result_by_api["results"]:
+        if result["problem_id"] == int(problem_id):
+            problem_name = result["problem_name"]
+            break
+
+    return render_template(
+        'solutions.jinja2',
+        problem_id=problem_id,
+        problem_name=problem_name,
+        solutions=solutions
+    )
+
+
 @app.route('/')
-def index():
+def get_index():
     problem_files = [os.path.relpath(x, problems_path)
                      for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png")]
     problem_files.sort(key=lambda x: int(x[:-4]))
@@ -83,11 +122,14 @@ def index():
         if os.path.exists(initial):
             p["initial"] = True
 
-    result_by_api = json.load(open('../result_by_api.json', 'r'))
+    with open('../result_by_api.json', 'r') as f:
+        result_by_api = json.load(f)
+
     for result in result_by_api["results"]:
         if result["problem_id"] in problems_dict:
             problem = problems_dict[result["problem_id"]]
             problem.update(result)
+            problem["diff"] = problem["min_cost"] - problem["overall_best_cost"]
 
     solutions_rows = engine.execute(
         "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
@@ -98,6 +140,8 @@ def index():
     for k in solutions.keys():
         sl = solutions[k]
         solutions[k] = sorted(sl, key=lambda x: x.cost)
+
+    sort_problems(problems)
 
     return render_template(
         'index.jinja2',
