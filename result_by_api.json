@@ -51,8 +51,8 @@
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T20:30:21.165765Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-04T20:41:14.753097Z",
+      "submission_count": 44,
       "min_cost": 20541,
       "overall_best_cost": 12607
     },
@@ -75,16 +75,16 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-04T19:47:55.431963Z",
-      "submission_count": 40,
-      "min_cost": 25419,
+      "last_submitted_at": "2022-09-04T20:41:02.360556Z",
+      "submission_count": 42,
+      "min_cost": 23235,
       "overall_best_cost": 12403
     },
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T17:46:16.857695Z",
-      "submission_count": 40,
+      "last_submitted_at": "2022-09-04T20:41:04.829352Z",
+      "submission_count": 42,
       "min_cost": 29305,
       "overall_best_cost": 19599
     },
@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T20:30:07.646822Z",
-      "submission_count": 38,
-      "min_cost": 35113,
+      "last_submitted_at": "2022-09-04T20:41:08.512382Z",
+      "submission_count": 41,
+      "min_cost": 34925,
       "overall_best_cost": 18932
     },
     {
@@ -123,9 +123,9 @@
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-04T17:46:19.372178Z",
-      "submission_count": 34,
-      "min_cost": 21701,
+      "last_submitted_at": "2022-09-04T20:37:48.660078Z",
+      "submission_count": 35,
+      "min_cost": 20468,
       "overall_best_cost": 16933
     },
     {
@@ -179,8 +179,8 @@
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-04T17:48:58.63277Z",
-      "submission_count": 40,
+      "last_submitted_at": "2022-09-04T20:41:09.738914Z",
+      "submission_count": 41,
       "min_cost": 29436,
       "overall_best_cost": 17998
     },
@@ -195,17 +195,17 @@
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-04T19:02:05.226106Z",
-      "submission_count": 35,
+      "last_submitted_at": "2022-09-04T20:41:10.966667Z",
+      "submission_count": 36,
       "min_cost": 23123,
       "overall_best_cost": 19207
     },
     {
       "problem_id": 26,
       "problem_name": "Puzzled Logo",
-      "last_submitted_at": "2022-09-04T20:24:58.254102Z",
-      "submission_count": 9,
-      "min_cost": 29749,
+      "last_submitted_at": "2022-09-04T20:41:12.257365Z",
+      "submission_count": 10,
+      "min_cost": 20523,
       "overall_best_cost": 11487
     },
     {
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-04T20:24:59.513767Z",
       "submission_count": 8,
       "min_cost": 29472,
-      "overall_best_cost": 15351
+      "overall_best_cost": 15330
     },
     {
       "problem_id": 29,
@@ -262,7 +262,7 @@
       "last_submitted_at": "2022-09-04T20:25:05.843098Z",
       "submission_count": 10,
       "min_cost": 46416,
-      "overall_best_cost": 27735
+      "overall_best_cost": 27727
     },
     {
       "problem_id": 34,
@@ -286,7 +286,7 @@
       "last_submitted_at": "2022-09-04T20:30:12.546023Z",
       "submission_count": 7,
       "min_cost": 36371,
-      "overall_best_cost": 32833
+      "overall_best_cost": 32832
     },
     {
       "problem_id": 37,
@@ -315,12 +315,12 @@
     {
       "problem_id": 40,
       "problem_name": "Logo Wars",
-      "last_submitted_at": "2022-09-04T20:25:09.614351Z",
-      "submission_count": 8,
-      "min_cost": 25484,
+      "last_submitted_at": "2022-09-04T20:41:13.525501Z",
+      "submission_count": 9,
+      "min_cost": 13990,
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1048322,
+  "total_cost": 1023997,
   "solved_problem_count": 40
 }
