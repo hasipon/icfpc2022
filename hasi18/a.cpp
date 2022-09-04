@@ -271,7 +271,7 @@ Hoge walk(int i0, int i1, int j0, int j1) {
 	auto res = Hoge(i0, i1, j0, j1);
 	double score = res.calcScore();
 	set<pair<int,int>> cuts;
-	for (int i = 40; i <= 100; ++ i) {
+	for (int i = (walkArea <= 50*50 ? 30 : 40); i <= 100; ++ i) {
 		auto p = calcCut(i0,i1,j0,j1,i*i);
 		if (p.first != -1) cuts.insert(p);
 	}
