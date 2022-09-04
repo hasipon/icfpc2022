@@ -41,27 +41,6 @@ impl State {
         }
     }
 
-    pub fn remove_command_at(&mut self, index:usize) {
-        self.commands.remove(index);
-        self.tree = Tree::Node(Rectangle{
-            x: 0,
-            y: 0,
-            w: self.image.width() as i32,
-            h: self.image.height() as i32,
-        }, vec![
-            Tree::Leaf(Rectangle{
-                x: 0,
-                y: 0,
-                w: self.image.width() as i32,
-                h: self.image.height() as i32,
-            }, Option::None)
-        ]);
-        self.cost = 0;
-        for command in self.commands.clone() {
-            self.process_command(&command);
-        }
-    }
-
     pub fn apply_commands(&mut self, commands:&Vec<Command>) {
         for command in commands {
             self.apply_command(command);
