@@ -63,13 +63,15 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
 
             match rng.gen_range(0, if step == 0 { 1 } else { 10 }) {
                 0..=5  => {
-                    let (diff, x1) = if rng.gen_bool(0.2) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
+                    let cx = rng.gen_range(0, w);
+                    let cy = rng.gen_range(0, h);
+                    let (diff, ax) = if rng.gen_bool(0.2) { (10000.0, 0) } else { find_x_boundary(cx, cy, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, x2) = if rng.gen_bool(0.2) { (10000.0, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, bx) = if rng.gen_bool(0.2) { (10000.0, w) } else { find_right_boundary(cx, cy, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y1) = if rng.gen_bool(0.2) { (10000.0, 0) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, ay) = if rng.gen_bool(0.2) { (10000.0, 0) } else { find_y_boundary(cx, cy, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y2) = if rng.gen_bool(0.2) { (10000.0, h) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, by) = if rng.gen_bool(0.2) { (10000.0, h) } else { find_bottom_boundary(cx, cy, &target, &mut rng) };
                     if diff < 40.0 { continue; }
 
                     let ax = std::cmp::min(x1, x2);
@@ -227,7 +229,7 @@ fn eval<R:Rng>(
     let mut fill_colors = Vec::new();
     let mut fill_size  = Vec::new();
     for _ in 0..rects.len() + 1 {
-        fill_colors.push([127.5, 127.5, 127.5, 127.5]);
+        fill_colors.push([127.5, 127.5, 127.5, 255.0]);
         fill_size.push(0.0);
     }
     for x in 0..gray_image.width() {
@@ -237,7 +239,7 @@ fn eval<R:Rng>(
     }
 
     let mut power = 130.0;
-    let (len, scale) = if fast { (6, 0.48) } else { (20, 0.65) };
+    let (len, scale) = if fast { (4, 0.33) } else { (20, 0.65) };
     
     for _ in 0..len {
         for x in 0..gray_image.width() {
@@ -496,4 +498,9 @@ fn eval<R:Rng>(
         similarity: similarity(&state.image, target),
         image: state.image,
     }
+}
+
+pub fn find_x_boundary<R:Rng>(cx:i32, cy:i32, target:&RgbaImage, rng:&R) {
+    let min_x = 0;
+
 }
