@@ -3,43 +3,43 @@
     {
       "problem_id": 1,
       "problem_name": "Chess Table",
-      "last_submitted_at": "2022-09-04T02:43:16.363749Z",
-      "submission_count": 21,
+      "last_submitted_at": "2022-09-04T04:01:17.812974Z",
+      "submission_count": 23,
       "min_cost": 20140
     },
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T02:49:25.36189Z",
-      "submission_count": 21,
-      "min_cost": 14429
+      "last_submitted_at": "2022-09-04T04:01:20.26265Z",
+      "submission_count": 23,
+      "min_cost": 13697
     },
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T02:49:33.947221Z",
-      "submission_count": 19,
+      "last_submitted_at": "2022-09-04T04:01:34.978744Z",
+      "submission_count": 21,
       "min_cost": 29875
     },
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T02:43:40.488777Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-04T04:01:37.462125Z",
+      "submission_count": 18,
       "min_cost": 22881
     },
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T02:49:35.192449Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-04T04:01:39.908147Z",
+      "submission_count": 18,
       "min_cost": 27159
     },
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-04T02:49:36.421886Z",
-      "submission_count": 18,
+      "last_submitted_at": "2022-09-04T04:01:41.122108Z",
+      "submission_count": 19,
       "min_cost": 12447
     },
     {
@@ -143,36 +143,36 @@
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T02:49:27.812632Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-04T04:01:22.714364Z",
+      "submission_count": 18,
       "min_cost": 29997
     },
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T02:49:29.039141Z",
-      "submission_count": 15,
+      "last_submitted_at": "2022-09-04T04:01:25.164188Z",
+      "submission_count": 17,
       "min_cost": 27198
     },
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-04T02:49:30.266245Z",
-      "submission_count": 17,
+      "last_submitted_at": "2022-09-04T04:01:27.631294Z",
+      "submission_count": 19,
       "min_cost": 30778
     },
     {
       "problem_id": 24,
       "problem_name": "Inception",
-      "last_submitted_at": "2022-09-04T02:49:31.493609Z",
-      "submission_count": 13,
+      "last_submitted_at": "2022-09-04T04:01:30.085491Z",
+      "submission_count": 15,
       "min_cost": 22797
     },
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-04T02:49:32.725407Z",
-      "submission_count": 14,
+      "last_submitted_at": "2022-09-04T04:01:32.531058Z",
+      "submission_count": 16,
       "min_cost": 29582
     },
     {
@@ -246,6 +246,6 @@
       "min_cost": 97090
     }
   ],
-  "total_cost": 1891644,
+  "total_cost": 1890912,
   "solved_problem_count": 35
 }
