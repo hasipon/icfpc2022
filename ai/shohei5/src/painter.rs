@@ -62,7 +62,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
-    //return eval(target, &mut initial_state.rects, &mut gray_image, true, &mut rng);
+    return eval(target, &mut initial_state.rects, &mut gray_image, true, &mut rng);
     let mut current = vec![initial_state];
 
     let beam_w = 20;
@@ -414,68 +414,43 @@ fn eval<R:Rng>(
                 (w - rect.right()) * (h - rect.bottom()),
                 rect.x * h - rect.bottom()
             ];
-            let mut min = size[0];
+            let mut max = size[0];
             let mut index = 0;
             for i in 1..size.len() {
-                if min > size[i] {
-                    min = size[i];
+                if max < size[i] {
+                    max = size[i];
                     index = i;
                 }
             }
-            match index {
+            let mut vec = Vec::new();
+            for i in 0..size.len() {
+                if index as usize != i { vec.push(i); }
+            }
+            match vec[rng.gen_range(0, 3)] {
                 0 => {
-                    if (w - rect.right()) < (h - rect.bottom()) {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                    id.push(2);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                    id.push(0);
                 },
                 1 => {
-                    if rect.x < (h - rect.bottom()) {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                    id.push(3);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                    id.push(1);
                 },
                 2 => {
-                    if rect.x < rect.y {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                    id.push(0);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                    id.push(2);
                 },
                 3 => {
-                    if (w - rect.right()) < rect.y {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                    id.push(1);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                    id.push(3);
                 },
-
                 _ => {}
             }
         }
