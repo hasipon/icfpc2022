@@ -3,8 +3,8 @@
     {
       "problem_id": 1,
       "problem_name": "Chess Table",
-      "last_submitted_at": "2022-09-04T18:19:51.780689Z",
-      "submission_count": 39,
+      "last_submitted_at": "2022-09-04T18:24:51.638963Z",
+      "submission_count": 40,
       "min_cost": 20140,
       "overall_best_cost": 5047
     },
@@ -43,8 +43,8 @@
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-04T17:49:02.3423Z",
-      "submission_count": 54,
+      "last_submitted_at": "2022-09-04T18:24:55.35247Z",
+      "submission_count": 55,
       "min_cost": 11619,
       "overall_best_cost": 4155
     },
@@ -131,9 +131,9 @@
     {
       "problem_id": 17,
       "problem_name": "\"The\" Starry Night",
-      "last_submitted_at": "2022-09-04T17:04:23.805896Z",
-      "submission_count": 28,
-      "min_cost": 39058,
+      "last_submitted_at": "2022-09-04T18:24:52.869643Z",
+      "submission_count": 29,
+      "min_cost": 36635,
       "overall_best_cost": 33397
     },
     {
@@ -155,9 +155,9 @@
     {
       "problem_id": 20,
       "problem_name": "\"The\" Son of Man",
-      "last_submitted_at": "2022-09-04T17:46:21.84875Z",
-      "submission_count": 37,
-      "min_cost": 18727,
+      "last_submitted_at": "2022-09-04T18:24:54.126265Z",
+      "submission_count": 38,
+      "min_cost": 17299,
       "overall_best_cost": 14975
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1108596,
+  "total_cost": 1104745,
   "solved_problem_count": 40
 }
