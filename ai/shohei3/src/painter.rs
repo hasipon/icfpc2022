@@ -37,29 +37,31 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         image:RgbaImage::new(1, 1)
     };
     let mut rng = thread_rng();
-    let mut initial_state = PainterState {
+    let initial_state = PainterState {
         rects: Vec::new(),
         score: i64::MAX
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 16;
+    let beam_w = 20;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..1400 {
+    for step in 0..2000 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
-        for i in 0..size {
-            next.push(current[i].clone());
+        if step % 5 != 4 {
+            for i in 0..size {
+                next.push(current[i].clone());
+            }
         }
         for i in 0..beam_w {
             let source = &current[i % size];
             let mut rects = source.rects.clone();
 
-            match rng.gen_range(0, if step == 0 { 1 } else { 6 }) {
+            match rng.gen_range(0, if step == 0 { 1 } else { 7 }) {
                 0 | 5 => {
                     let (diff, x1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
@@ -138,11 +140,46 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                     if rects.len() < 1 { continue; }
                     rects.remove(rng.gen_range(0, rects.len()));
                 },
-                5 => {
+                6 => {
                     if rects.len() < 1 { continue; }
-                    let i0 = rng.gen_range(0, rects.len()); 
-                    let i1 = rng.gen_range(0, rects.len());
-                    if i0 == i1 { continue; }
+                    let mut rect = rects[rng.gen_range(0, rects.len())];
+                    if rng.gen_bool(0.5) {
+                        if rng.gen_bool(0.5) {
+                            if rng.gen_bool(0.5) {
+                                if rect.y == rect.bottom() - 1 { continue; }
+                                rect.y += 1;
+                            } else {
+                                if rect.x == 0 { continue; }
+                                rect.y -= 1;
+                            }
+                        } else {
+                            if rng.gen_bool(0.5) {
+                                if rect.x == rect.right() - 1 { continue; }
+                                rect.x += 1;
+                            } else {
+                                if rect.x == 0 { continue; }
+                                rect.x -= 1;
+                            }
+                        }
+                    } else {
+                        if rng.gen_bool(0.5) {
+                            if rng.gen_bool(0.5) {
+                                if rect.bottom() == h { continue; }
+                                rect.h += 1;
+                            } else {
+                                if rect.bottom() - 1  == rect.y { continue; }
+                                rect.h -= 1;
+                            }
+                        } else {
+                            if rng.gen_bool(0.5) {
+                                if rect.right() == w { continue; }
+                                rect.w += 1;
+                            } else {
+                                if rect.right() - 1  == rect.x { continue; }
+                                rect.w -= 1;
+                            }
+                        }
+                    }
                     rects.remove(rng.gen_range(0, rects.len()));
                 },
                 _ => {} 
