@@ -83,8 +83,8 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T20:41:04.829352Z",
-      "submission_count": 42,
+      "last_submitted_at": "2022-09-04T20:57:01.999207Z",
+      "submission_count": 43,
       "min_cost": 29305,
       "overall_best_cost": 19599
     },
@@ -107,8 +107,8 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T20:41:08.512382Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-04T20:57:04.450914Z",
+      "submission_count": 43,
       "min_cost": 34925,
       "overall_best_cost": 18932
     },
@@ -283,8 +283,8 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-04T20:30:12.546023Z",
-      "submission_count": 7,
+      "last_submitted_at": "2022-09-04T20:57:06.912696Z",
+      "submission_count": 8,
       "min_cost": 36371,
       "overall_best_cost": 32832
     },
@@ -299,9 +299,9 @@
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-04T20:30:16.279037Z",
-      "submission_count": 7,
-      "min_cost": 27660,
+      "last_submitted_at": "2022-09-04T20:57:08.144496Z",
+      "submission_count": 8,
+      "min_cost": 27427,
       "overall_best_cost": 22568
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1023997,
+  "total_cost": 1023764,
   "solved_problem_count": 40
 }
