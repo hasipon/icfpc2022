@@ -111,16 +111,21 @@ def get_solutions(problem_id: str):
 
 @app.route('/')
 def get_index():
-    problem_files = [os.path.relpath(x, problems_path)
-                     for x in glob.glob(str(problems_path / "*.png")) if not x.endswith("initial.png")]
+    problem_files = list(filter(
+        lambda x: x[:-4].isdigit(),
+        [os.path.relpath(x, problems_path) for x in glob.glob(str(problems_path / "*.png"))]))
     problem_files.sort(key=lambda x: int(x[:-4]))
     problems = [{"id": int(x[:-4])} for x in problem_files]
     problems_dict = {int(x["id"]): x for x in problems}
 
     for p in problems:
-        initial = problems_path / (str(p["id"]) + ".initial.png")
-        if os.path.exists(initial):
+        if os.path.exists(problems_path / (str(p["id"]) + ".initial.png")):
             p["initial"] = True
+            p["before_png"] = (str(p["id"]) + ".initial.png")
+        if os.path.exists(problems_path / (str(p["id"]) + ".source.png")):
+            p["initial"] = True
+            p["source"] = True
+            p["before_png"] = (str(p["id"]) + ".source.png")
 
     with open('../result_by_api.json', 'r') as f:
         result_by_api = json.load(f)
