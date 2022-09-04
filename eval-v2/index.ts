@@ -6,9 +6,11 @@ import {SimilarityChecker} from "./SimilarityChecker";
 import * as os from "os";
 import {createImageData} from "canvas";
 import * as buffer from "buffer";
+import {Block, SimpleBlock} from "./Block";
+import {Point} from "./Point";
+import {RGBA} from "./Color";
 
-function readProblemImage(): Frame{
-  const problemId = process.env.PROBLEM_ID!.toString();
+function readProblemImage(problemId: string): Frame{
   const fileContent = fs.readFileSync(`../problems.json/${problemId}.json`, 'utf8');
 
   // for pam file
@@ -49,7 +51,30 @@ function main(){
   const interpreter = new Interpreter();
   const islFileName = process.env.ISL_FILE!.toString();
   const input = fs.readFileSync(islFileName, "utf8");
-  const result = interpreter.run(input);
+
+  var blocks: Map<string, Block> = new Map();
+  const problemId = process.env.PROBLEM_ID!.toString();
+
+  if(Number(problemId) >= 26) {
+    const input = fs.readFileSync(`../problems/${problemId}.initial.json`, 'utf8');
+    const parsedInput =JSON.parse(input);
+    blocks = new Map();
+
+    parsedInput["blocks"].forEach((b: any) => {
+      const id = b["blockId"];
+      const bottomLeft = new Point(b["bottomLeft"]);
+      const topRight = new Point(b["topRight"]);
+      const color = new RGBA(b["color"]);
+      blocks.set(b["blockId"], new SimpleBlock(
+        id,
+        bottomLeft,
+        topRight,
+        color,
+      ));
+    })
+  }
+
+  const result = interpreter.run(input, blocks);
 
   const painter = new Painter();
   const frames = painter.draw(result.canvas);
@@ -57,7 +82,7 @@ function main(){
   if(process.env?.OUT_IMAGE_PATH){
     createImage(frames, process.env?.OUT_IMAGE_PATH);
   }
-  const diff = SimilarityChecker.imageDiff(frames, readProblemImage());
+  const diff = SimilarityChecker.imageDiff(frames, readProblemImage(problemId));
   console.log(JSON.stringify({
     "cost": result.cost + diff,
     "isl_cost": result.cost,

@@ -1,7 +1,7 @@
 
 /* eslint-disable */
 
-import { BlockType, ComplexBlock, SimpleBlock } from './Block';
+import {Block, BlockType, ComplexBlock, SimpleBlock} from './Block';
 import { Canvas, Color } from './Canvas';
 import {
     ColorInstruction,
@@ -39,7 +39,9 @@ export class Interpreter {
         this.topLevelIdCounter = 0;
     }
 
-    run(code: string): InterpreterResult {
+    run(code: string, blocks: Map<string, Block>): InterpreterResult {
+        this.topLevelIdCounter = blocks.size-1;
+        console.log(blocks.size);
         let parser = new Parser();
         let result = parser.parse(code);
         if (result.typ === 'error') {
@@ -50,7 +52,8 @@ export class Interpreter {
         let canvas = new Canvas(
             program.metaData.width,
             program.metaData.height,
-            program.metaData.backgroundColor
+            program.metaData.backgroundColor,
+          blocks,
         );
         let totalCost = 0;
         for(let index = 0; index < program.instructions.length; index++) {
