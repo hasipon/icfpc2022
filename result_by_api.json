@@ -11,8 +11,8 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T18:08:50.653647Z",
-      "submission_count": 46,
+      "last_submitted_at": "2022-09-04T19:01:57.86571Z",
+      "submission_count": 47,
       "min_cost": 6403,
       "overall_best_cost": 2315
     },
@@ -99,9 +99,9 @@
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T17:46:18.112983Z",
-      "submission_count": 34,
-      "min_cost": 14765,
+      "last_submitted_at": "2022-09-04T19:01:54.194258Z",
+      "submission_count": 35,
+      "min_cost": 14002,
       "overall_best_cost": 8741
     },
     {
@@ -115,9 +115,9 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-04T17:04:17.647368Z",
-      "submission_count": 33,
-      "min_cost": 32780,
+      "last_submitted_at": "2022-09-04T19:01:55.42Z",
+      "submission_count": 34,
+      "min_cost": 25004,
       "overall_best_cost": 17143
     },
     {
@@ -139,9 +139,9 @@
     {
       "problem_id": 18,
       "problem_name": "\"The\" Kiss",
-      "last_submitted_at": "2022-09-04T17:48:51.23962Z",
-      "submission_count": 71,
-      "min_cost": 37755,
+      "last_submitted_at": "2022-09-04T19:01:56.649713Z",
+      "submission_count": 72,
+      "min_cost": 36478,
       "overall_best_cost": 33386
     },
     {
@@ -163,8 +163,8 @@
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T17:46:23.072507Z",
-      "submission_count": 37,
+      "last_submitted_at": "2022-09-04T19:02:02.763574Z",
+      "submission_count": 41,
       "min_cost": 17419,
       "overall_best_cost": 12647
     },
@@ -187,17 +187,17 @@
     {
       "problem_id": 24,
       "problem_name": "Inception",
-      "last_submitted_at": "2022-09-04T17:48:59.864725Z",
-      "submission_count": 35,
-      "min_cost": 16034,
+      "last_submitted_at": "2022-09-04T19:02:04.004244Z",
+      "submission_count": 36,
+      "min_cost": 15752,
       "overall_best_cost": 12357
     },
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-04T17:49:01.097205Z",
-      "submission_count": 34,
-      "min_cost": 25164,
+      "last_submitted_at": "2022-09-04T19:02:05.226106Z",
+      "submission_count": 35,
+      "min_cost": 23123,
       "overall_best_cost": 19207
     },
     {
@@ -283,9 +283,9 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-04T17:46:26.784956Z",
-      "submission_count": 3,
-      "min_cost": 38835,
+      "last_submitted_at": "2022-09-04T19:02:06.465531Z",
+      "submission_count": 4,
+      "min_cost": 37134,
       "overall_best_cost": 32833
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1100204,
+  "total_cost": 1086364,
   "solved_problem_count": 40
 }
