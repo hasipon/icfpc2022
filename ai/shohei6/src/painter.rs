@@ -72,6 +72,26 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
 
             match rng.gen_range(0, 1) {
                 0 => {
+                    let x0 = rng.gen_range(0, target.width () as i32);
+                    let x1 = rng.gen_range(0, target.width () as i32);
+                    let y0 = rng.gen_range(0, target.height() as i32);
+                    let y1 = rng.gen_range(0, target.height() as i32);
+                    let ax = i32::min(x0, x1);
+                    let bx = i32::max(x0, x1);
+                    let ay = i32::min(y0, y1);
+                    let by = i32::max(y0, y1);
+                    
+                    if ax == bx { continue; }
+                    if ay == by { continue; }
+                    if (by - ay) * (bx - ax) < 20 { continue; }
+                    rects.insert(rng.gen_range(0, rects.len() + 1), Rectangle { 
+                        x: ax,
+                        y: ay,
+                        w: bx - ax,
+                        h: by - ay,
+                    });
+                }
+                1 => {
                     if rects.len() < 1 { continue; }
                     let mut rect = rects[rng.gen_range(0, rects.len())];
                     if rng.gen_bool(0.5) {
@@ -389,7 +409,6 @@ fn eval<R:Rng>(
     for j in 0..len {
         let i =  len - j - 1;
         if fill_size[i + 1] == 0.0 {
-            println!("remove");
             if rng.gen_bool(0.5) { rects.remove(i); }
         }
     }
