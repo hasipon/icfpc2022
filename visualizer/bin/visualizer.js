@@ -127,7 +127,7 @@ CutState.prototype = {
 		var index0 = id0.pop();
 		var parent0 = this.getById(id0);
 		var index1 = id1.pop();
-		var parent1 = this.getById(id0);
+		var parent1 = this.getById(id1);
 		var node0 = parent0[index0];
 		var node1 = parent1[index1];
 		if(node0 == null) {
