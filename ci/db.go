@@ -164,6 +164,26 @@ ORDER BY cost LIMIT 1`,
 	return solution, err
 }
 
+func (db DB) FindBestSolutions() (map[int]*Solution, error) {
+	var maxProblemID int
+	err := db.QueryRowx(`SELECT MAX(problem_id) FROM solution WHERE valid = 1`).Scan(&maxProblemID)
+	if err != nil {
+		return nil, err
+	}
+
+	bests := map[int]*Solution{}
+	for i := 1; i <= maxProblemID; i++ {
+		s, err := db.FindBestSolution(i)
+		if err != nil {
+			return nil, err
+		}
+
+		bests[i] = s
+	}
+
+	return bests, nil
+}
+
 func (db DB) FindUnSubmittedSolutions() ([]*Solution, error) {
 	var solutions []*Solution
 	rows, err := db.Queryx(`SELECT solution.* FROM solution LEFT JOIN submission ON solution.hash = submission.hash WHERE submission.id IS NULL`)

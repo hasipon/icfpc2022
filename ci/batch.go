@@ -127,6 +127,18 @@ func InsertSubmissionInDirectory(submissionDir string) {
 	}
 }
 
+func saveBestSolutions(outputDir string) {
+	bests, err := defaultDB.FindBestSolutions()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	for probID, s := range bests {
+		ioutil.WriteFile(path.Join(outputDir, fmt.Sprintf("%d.isl", probID)), []byte(s.Isl), 0644)
+	}
+}
+
 func batchSubmit() {
 	solutions, err := defaultDB.FindUnSubmittedSolutions()
 	if err != nil {
