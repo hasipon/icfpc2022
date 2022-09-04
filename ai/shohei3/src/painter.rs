@@ -28,7 +28,7 @@ pub struct PainterResult {
     pub image:RgbaImage,
 }
 
-pub fn solve(target:&RgbaImage) -> PainterResult {
+pub fn solve(target:&RgbaImage, beam_w:usize, depth:usize) -> PainterResult {
     let mut best_rects = Vec::new();
     let mut best_result = PainterResult {
         commands: Vec::new(),
@@ -44,10 +44,9 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 10;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..8000 {
+    for step in 0..depth {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
