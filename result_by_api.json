@@ -19,8 +19,8 @@
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T15:57:52.137258Z",
-      "submission_count": 40,
+      "last_submitted_at": "2022-09-04T17:46:25.562117Z",
+      "submission_count": 41,
       "min_cost": 8588,
       "overall_best_cost": 3716
     },
@@ -67,8 +67,8 @@
     {
       "problem_id": 9,
       "problem_name": "SimpLisa",
-      "last_submitted_at": "2022-09-04T17:05:44.05648Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-04T17:46:32.937654Z",
+      "submission_count": 42,
       "min_cost": 20033,
       "overall_best_cost": 9007
     },
@@ -83,8 +83,8 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T17:04:01.584577Z",
-      "submission_count": 39,
+      "last_submitted_at": "2022-09-04T17:46:16.857695Z",
+      "submission_count": 40,
       "min_cost": 29305,
       "overall_best_cost": 19608
     },
@@ -99,8 +99,8 @@
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T17:04:12.619106Z",
-      "submission_count": 33,
+      "last_submitted_at": "2022-09-04T17:46:18.112983Z",
+      "submission_count": 34,
       "min_cost": 14765,
       "overall_best_cost": 8744
     },
@@ -123,8 +123,8 @@
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-04T17:04:21.336662Z",
-      "submission_count": 33,
+      "last_submitted_at": "2022-09-04T17:46:19.372178Z",
+      "submission_count": 34,
       "min_cost": 21701,
       "overall_best_cost": 16934
     },
@@ -147,24 +147,24 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-04T17:04:31.154357Z",
-      "submission_count": 30,
+      "last_submitted_at": "2022-09-04T17:46:20.628867Z",
+      "submission_count": 31,
       "min_cost": 27299,
       "overall_best_cost": 20796
     },
     {
       "problem_id": 20,
       "problem_name": "\"The\" Son of Man",
-      "last_submitted_at": "2022-09-04T17:04:36.608941Z",
-      "submission_count": 36,
+      "last_submitted_at": "2022-09-04T17:46:21.84875Z",
+      "submission_count": 37,
       "min_cost": 18727,
       "overall_best_cost": 14982
     },
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T17:04:41.574015Z",
-      "submission_count": 36,
+      "last_submitted_at": "2022-09-04T17:46:23.072507Z",
+      "submission_count": 37,
       "min_cost": 17419,
       "overall_best_cost": 12651
     },
@@ -179,8 +179,8 @@
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-04T17:04:51.434455Z",
-      "submission_count": 38,
+      "last_submitted_at": "2022-09-04T17:46:24.323292Z",
+      "submission_count": 39,
       "min_cost": 29436,
       "overall_best_cost": 18011
     },
@@ -283,40 +283,40 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-04T16:40:47.032764Z",
-      "submission_count": 2,
+      "last_submitted_at": "2022-09-04T17:46:26.784956Z",
+      "submission_count": 3,
       "min_cost": 38835,
-      "overall_best_cost": 32861
+      "overall_best_cost": 32840
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-04T16:40:48.271606Z",
-      "submission_count": 2,
+      "last_submitted_at": "2022-09-04T17:46:28.030693Z",
+      "submission_count": 3,
       "min_cost": 21202,
       "overall_best_cost": 16375
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-04T17:08:17.998246Z",
-      "submission_count": 2,
+      "last_submitted_at": "2022-09-04T17:46:29.270217Z",
+      "submission_count": 3,
       "min_cost": 31647,
-      "overall_best_cost": 22642
+      "overall_best_cost": 22617
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-04T17:00:47.584979Z",
-      "submission_count": 3,
+      "last_submitted_at": "2022-09-04T17:46:30.498265Z",
+      "submission_count": 4,
       "min_cost": 28990,
-      "overall_best_cost": 19634
+      "overall_best_cost": 19577
     },
     {
       "problem_id": 40,
       "problem_name": "Logo Wars",
-      "last_submitted_at": "2022-09-04T16:40:49.493605Z",
-      "submission_count": 3,
+      "last_submitted_at": "2022-09-04T17:46:31.720417Z",
+      "submission_count": 4,
       "min_cost": 25484,
       "overall_best_cost": 7240
     }
