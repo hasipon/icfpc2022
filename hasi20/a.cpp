@@ -41,6 +41,7 @@ struct Block {
 
 vector<Block> InitialBlocks;
 uint32_t TargetImage[400][400];
+string BlockIds[400][400];
 uint32_t CurImage[400][400];
 double Sim[400][400];
 int BlockSize, ImageSize;
@@ -68,6 +69,7 @@ int main() {
 	}
 	BlockSize = InitialBlocks[0].maxX - InitialBlocks[0].minX;
 	ImageSize = 400 / BlockSize;
+	double costSwap = 3*400*400/BlockSize/BlockSize;
 	int x;
 	cin >> x;
 	if (x != 160000) throw 1;
@@ -93,6 +95,7 @@ int main() {
 		int j = b.minX / BlockSize;
 		CurImage[i][j]  = b.color;
 		Sim[i][j] = calcSim(i, j, CurImage[i][j]);
+		BlockIds[i][j] = b.blockId;
 	}
 	int retry = 0, counter = 0;
 	for (;;) {
@@ -103,35 +106,22 @@ int main() {
 		auto prev = Sim[i0][j0] + Sim[i1][j1];
 		auto s0 = calcSim(i0, j0, CurImage[i1][j1]);
 		auto s1 = calcSim(i1, j1, CurImage[i0][j0]);
-		if (s0+s1 < prev) {
+		auto delta = (prev-(s0+s1))*0.005;
+		if (delta > costSwap) {
 			swap(CurImage[i0][j0], CurImage[i1][j1]);
 			Sim[i0][j0] = s0;
 			Sim[i1][j1] = s1;
 			retry = 0;
 			++ counter;
+			cout << "swap ["<<BlockIds[i0][j0]<<"] ["<<BlockIds[i1][j1]<<"]" <<endl;
+			swap(BlockIds[i0][j0], BlockIds[i1][j1]);
 		} else {
 			if (++ retry >= 100000) break;
-		}
-	}
-	auto blocks = InitialBlocks;
-	for (int p = 0; p < (int)blocks.size(); ++ p) {
-		auto& b = blocks[p];
-		int i = b.minY / BlockSize;
-		int j = b.minX / BlockSize;
-		if (CurImage[i][j] != b.color) {
-			for (int q = p+1; q < (int)blocks.size(); ++ q) {
-				if (CurImage[i][j] == blocks[q].color) {
-					cout << "swap ["<<b.blockId<<"] ["<<blocks[q].blockId<<"]" <<endl;
-					swap(b.color, blocks[q].color);
-					swap(b.blockId, blocks[q].blockId);
-					break;
-				}
-			}
 		}
 	}
 	double sumSim = 0;
 	for (int i = 0; i < ImageSize; ++ i) for (int j = 0; j < ImageSize; ++ j) {
 		sumSim += Sim[i][j];
 	}
-	cerr << sumSim*0.005 << endl;
+	cerr << sumSim*0.005 + counter * costSwap << endl;
 }
