@@ -220,9 +220,9 @@
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "0001-01-01T00:00:00Z",
-      "submission_count": 0,
-      "min_cost": 0
+      "last_submitted_at": "2022-09-04T01:15:39.110405Z",
+      "submission_count": 1,
+      "min_cost": 200697
     },
     {
       "problem_id": 33,
@@ -246,6 +246,6 @@
       "min_cost": 97090
     }
   ],
-  "total_cost": 1694512,
-  "solved_problem_count": 34
+  "total_cost": 1895209,
+  "solved_problem_count": 35
 }
