@@ -63,13 +63,13 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
 
             match rng.gen_range(0, if step == 0 { 1 } else { 10 }) {
                 0..=5  => {
-                    let (diff, x1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, x1) = if rng.gen_bool(0.2) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, x2) = if rng.gen_bool(0.1) { (10000.0, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, x2) = if rng.gen_bool(0.2) { (10000.0, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, y1) = if rng.gen_bool(0.2) { (10000.0, 0) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y2) = if rng.gen_bool(0.1) { (10000.0, h) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, y2) = if rng.gen_bool(0.2) { (10000.0, h) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
 
                     let ax = std::cmp::min(x1, x2);
@@ -78,6 +78,7 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                     let by = std::cmp::max(y1, y2);
                     if ax == bx { continue; }
                     if ay == by { continue; }
+                    if by - ay * bx - bx < 20 { continue; }
                     rects.insert(rng.gen_range(0, rects.len() + 1), Rectangle { 
                         x: ax,
                         y: ay,
