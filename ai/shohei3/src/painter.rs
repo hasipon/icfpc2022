@@ -29,6 +29,7 @@ pub struct PainterResult {
 }
 
 pub fn solve(target:&RgbaImage) -> PainterResult {
+    let mut best_rects = Vec::new();
     let mut best_result = PainterResult {
         commands: Vec::new(),
         cost: 0,
@@ -43,10 +44,10 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 13;
+    let beam_w = 16;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..600 {
+    for step in 0..1400 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
@@ -60,13 +61,13 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
 
             match rng.gen_range(0, if step == 0 { 1 } else { 6 }) {
                 0 | 5 => {
-                    let (diff, x1) = if rng.gen_bool(0.1) { (10000, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, x1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, x2) = if rng.gen_bool(0.1) { (10000, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, x2) = if rng.gen_bool(0.1) { (10000.0, w) } else { solver::find_x_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y1) = if rng.gen_bool(0.1) { (10000, 0) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, y1) = if rng.gen_bool(0.1) { (10000.0, 0) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
-                    let (diff, y2) = if rng.gen_bool(0.1) { (10000, h) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
+                    let (diff, y2) = if rng.gen_bool(0.1) { (10000.0, h) } else { solver::find_y_boundary(0, w, 0, h, &target, &mut rng) };
                     if diff < 40.0 { continue; }
 
                     let ax = std::cmp::min(x1, x2);
@@ -147,11 +148,12 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 _ => {} 
             }
 
-            let result = eval(target, &rects, &mut gray_image);
+            let result = eval(target, &rects, &mut gray_image, true);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
                 best_result = result;
+                best_rects = rects.clone();
             }
 
             next.push(PainterState { rects, score });
@@ -161,13 +163,14 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         current = next;
     }
 
-    best_result
+    eval(target, &best_rects, &mut gray_image, false)
 }
 
 fn eval(
     target:&RgbaImage, 
     rects:&Vec<Rectangle>, 
     gray_image:&mut GrayImage,
+    fast:bool
 ) -> PainterResult {
     gray_image.fill(0u8);
 
@@ -194,12 +197,14 @@ fn eval(
     }
 
     let mut power = 127.0;
-    for _ in 0..8 {
+    let (len, scale) = if fast { (3, 0.28) } else { (18, 0.65) };
+    
+    for _ in 0..len {
         for x in 0..gray_image.width() {
             for y in 0..gray_image.height() {
                 let index = gray_image.get_pixel(x, y)[0] as usize;
                 let size = fill_size[index];
-                let mut color = fill_colors[index];
+                let color = fill_colors[index];
                 let color2 = target.get_pixel(
                     x as u32,
                     399 - y as u32
@@ -223,7 +228,7 @@ fn eval(
                 fill_colors[index][3] += color3[3] / d;
             }
         }
-        power *= 0.50;
+        power *= scale;
     }
 
     let mut out_image= RgbaImage::new(target.width(), target.height());
