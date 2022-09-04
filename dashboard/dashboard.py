@@ -70,6 +70,17 @@ def eval_solution():
     return line
 
 
+def sort_problems(problems):
+    reverse = False
+    if request.args.get("desc"):
+        reverse = True
+
+    if request.args.get("sort-by"):
+        key = request.args.get("sort-by")
+        problems.sort(key=lambda x: x[key] if key in x else x["id"], reverse=reverse)
+    return problems
+
+
 @app.route('/')
 def index():
     problem_files = [os.path.relpath(x, problems_path)
@@ -88,9 +99,9 @@ def index():
         if result["problem_id"] in problems_dict:
             problem = problems_dict[result["problem_id"]]
             problem.update(result)
+            problem["diff"] = problem["min_cost"] - problem["overall_best_cost"]
 
-    solutions_rows = engine.execute(
-        "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
+    solutions_rows = engine.execute("SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 1").all()
     solutions = defaultdict(lambda: [])
     for row in solutions_rows:
         solutions[row.problem_id].append(row)
@@ -98,6 +109,8 @@ def index():
     for k in solutions.keys():
         sl = solutions[k]
         solutions[k] = sorted(sl, key=lambda x: x.cost)
+
+    sort_problems(problems)
 
     return render_template(
         'index.jinja2',
