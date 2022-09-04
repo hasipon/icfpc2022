@@ -1,13 +1,19 @@
 
 
+use std::borrow::Borrow;
+use std::ops::Index;
+
 use crate::data::*;
 use crate::eval::similarity;
+use crate::solver;
 use image::Luma;
 use image::Rgba;
 use image::RgbaImage;
 use image::GrayImage;
 use imageproc::drawing::draw_filled_rect_mut;
 use imageproc::rect::Rect;
+use rand::Rng;
+use rand::thread_rng;
 
 #[derive(Clone)]
 struct PainterState{
@@ -29,13 +35,129 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
         similarity: i64::MAX,
         image:RgbaImage::new(1, 1)
     };
+    let mut rng = thread_rng();
     let mut initial_state = PainterState {
         rects: Vec::new(),
         score: i64::MAX
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
-    initial_state.rects.push(Rectangle { x: 0, y: 200, w: 50, h: 200 });
-    eval(target, &initial_state.rects, &mut gray_image)
+
+    let mut current = vec![initial_state];
+    let beam_w = 200;
+    let w = target.width() as i32;
+    let h = target.height() as i32;
+    for step in 0..1000 {
+        //println!("step {}", step);
+        let mut next = Vec::new();
+        let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
+        if size == 0 { break; }
+        for i in 0..size {
+            next.push(current[i].clone());
+        }
+        for i in 0..beam_w {
+            let source = &current[i % size];
+            let mut rects = source.rects.clone();
+
+            match rng.gen_range(0, if step == 0 { 1 } else { 5 }) {
+                0 => {
+                    let (diff, x1) = solver::find_x_boundary(0, w, 0, h, &target, &mut rng);
+                    if diff < 40.0 { continue; }
+                    let (diff, x2) = solver::find_x_boundary(0, w, 0, h, &target, &mut rng);
+                    if diff < 40.0 { continue; }
+                    let (diff, y1) = solver::find_y_boundary(0, w, 0, h, &target, &mut rng);
+                    if diff < 40.0 { continue; }
+                    let (diff, y2) = solver::find_y_boundary(0, w, 0, h, &target, &mut rng);
+                    if diff < 40.0 { continue; }
+
+                    let ax = std::cmp::min(x1, x2);
+                    let bx = std::cmp::max(x1, x2);
+                    let ay = std::cmp::min(y1, y2);
+                    let by = std::cmp::max(y1, y2);
+                    if ax == bx { continue; }
+                    if ay == by { continue; }
+                    rects.push(Rectangle { 
+                        x: ax,
+                        y: ay,
+                        w: bx - ax,
+                        h: by - ay,
+                    });
+                },
+                1 => {
+                    if rects.len() < 2 { continue; }
+                    let i0 = rng.gen_range(0, rects.len()); 
+                    let i1 = rng.gen_range(0, rects.len());
+                    if i0 == i1 { continue; }
+                    let is_t0 = rng.gen_bool(0.5);
+                    let is_t1 = rng.gen_bool(0.5);
+                    let av0 = if is_t0 { rects[i0].x } else { rects[i0].right() };
+                    let av1 = if is_t1 { rects[i1].x } else { rects[i1].right() };
+                    let bv0 = if is_t1 { rects[i1].right() } else { rects[i1].x };
+                    let bv1 = if is_t0 { rects[i0].right() } else { rects[i0].x };
+                    if av0 == bv0 { continue; }
+                    if av1 == bv1 { continue; }
+                    let l0 = std::cmp::min(av0, bv0);
+                    let r0 = std::cmp::max(av0, bv0);
+                    let l1 = std::cmp::min(av1, bv1);
+                    let r1 = std::cmp::max(av1, bv1);
+                    rects[i0].x = l0;
+                    rects[i0].w = r0 - l0;
+                    rects[i1].x = l1;
+                    rects[i1].w = r1 - l1;
+                },
+                2 => {
+                    if rects.len() < 2 { continue; }
+                    let i0 = rng.gen_range(0, rects.len()); 
+                    let i1 = rng.gen_range(0, rects.len());
+                    if i0 == i1 { continue; }
+                    let is_t0 = rng.gen_bool(0.5);
+                    let is_t1 = rng.gen_bool(0.5);
+                    let av0 = if is_t0 { rects[i0].y } else { rects[i0].bottom() };
+                    let av1 = if is_t1 { rects[i1].y } else { rects[i1].bottom() };
+                    let bv0 = if is_t1 { rects[i1].bottom() } else { rects[i1].y };
+                    let bv1 = if is_t0 { rects[i0].bottom() } else { rects[i0].y };
+                    if av0 == bv0 { continue; }
+                    if av1 == bv1 { continue; }
+                    let l0 = std::cmp::min(av0, bv0);
+                    let r0 = std::cmp::max(av0, bv0);
+                    let l1 = std::cmp::min(av1, bv1);
+                    let r1 = std::cmp::max(av1, bv1);
+                    rects[i0].y = l0;
+                    rects[i0].h = r0 - l0;
+                    rects[i1].y = l1;
+                    rects[i1].h = r1 - l1;
+                },
+                3 => {
+                    if rects.len() < 2 { continue; }
+                    let i0 = rng.gen_range(0, rects.len()); 
+                    let i1 = rng.gen_range(0, rects.len());
+                    if i0 == i1 { continue; }
+                    rects.swap(i0, i1);
+                },
+                4 => {
+                    if rects.len() < 1 { continue; }
+                    let i0 = rng.gen_range(0, rects.len()); 
+                    let i1 = rng.gen_range(0, rects.len());
+                    if i0 == i1 { continue; }
+                    rects.remove(rng.gen_range(0, rects.len()));
+                },
+                _ => {} 
+            }
+
+            let result = eval(target, &rects, &mut gray_image);
+            let score = result.cost + result.similarity;
+
+            if score < best_result.cost + best_result.similarity {
+                best_result = result;
+            }
+
+            next.push(PainterState { rects, score });
+        }
+
+        next.sort_by(|a, b| a.score.cmp(&b.score));
+        current = next;
+    }
+
+    best_result
 }
 
 fn eval(
@@ -170,8 +292,126 @@ fn eval(
         } else if rect.right() == w && rect.bottom() == h {
             commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
             id.push(2);
+        } else if rect.x == 0 {
+            if rect.y > h - rect.bottom() {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                id.push(0);
+                commands.push(Command::LineCut(id.clone(), false, rect.y));
+                id.push(1);
+            } else {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                id.push(3);
+                commands.push(Command::LineCut(id.clone(), false, rect.bottom()));
+                id.push(0);
+            }
+        } else if rect.y == 0 {
+            if rect.x > w - rect.right() {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                id.push(0);
+                commands.push(Command::LineCut(id.clone(), true, rect.x));
+                id.push(1);
+            } else {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                id.push(1);
+                commands.push(Command::LineCut(id.clone(), true , rect.right()));
+                id.push(0);
+            }
+        } else if rect.right() == w {
+            if rect.y > h - rect.bottom() {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                id.push(1);
+                commands.push(Command::LineCut(id.clone(), false, rect.y));
+                id.push(1);
+            } else {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                id.push(2);
+                commands.push(Command::LineCut(id.clone(), false, rect.bottom()));
+                id.push(0);
+            }
+        } else if rect.bottom() == h {
+            if rect.x > w - rect.right() {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                id.push(3);
+                commands.push(Command::LineCut(id.clone(), true, rect.x));
+                id.push(1);
+            } else {
+                commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                id.push(2);
+                commands.push(Command::LineCut(id.clone(), true , rect.right()));
+                id.push(0);
+            }
+        } else {
+            let size = [
+                rect.x * rect.y,
+                (w - rect.right()) * rect.y,
+                (w - rect.right()) * (h - rect.bottom()),
+                rect.x * h - rect.bottom()
+            ];
+            let mut min = size[0];
+            let mut index = 0;
+            for i in 1..size.len() {
+                if min > size[i] {
+                    min = size[i];
+                    index = i;
+                }
+            }
+            match index {
+                0 => {
+                    if (w - rect.right()) < (h - rect.bottom()) {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                        id.push(3);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                        id.push(1);
+                    } else {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                        id.push(1);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                        id.push(3);
+                    }
+                },
+                1 => {
+                    if rect.x < (h - rect.bottom()) {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                        id.push(2);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                        id.push(0);
+                    } else {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                        id.push(0);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                        id.push(2);
+                    }
+                },
+                2 => {
+                    if rect.x < rect.y {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                        id.push(1);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                        id.push(3);
+                    } else {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                        id.push(3);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                        id.push(1);
+                    }
+                },
+                3 => {
+                    if (w - rect.right()) < rect.y {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                        id.push(0);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                        id.push(2);
+                    } else {
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                        id.push(2);
+                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                        id.push(0);
+                    }
+                },
+
+                _ => {}
+            }
         }
-        //todo 
 
         for command in &commands {
             state.apply_command(command);
@@ -186,6 +426,7 @@ fn eval(
                 color[3].round() as u8,
             ])
         ));
+        if i + 1 == rects.len() { continue; }
         commands.reverse();
         for command in &commands {
             state.revert_command(command);
