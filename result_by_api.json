@@ -299,9 +299,9 @@
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-04T15:24:20.587422Z",
-      "submission_count": 1,
-      "min_cost": 48723,
+      "last_submitted_at": "2022-09-04T17:08:17.998246Z",
+      "submission_count": 2,
+      "min_cost": 31647,
       "overall_best_cost": 22642
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 10342
     }
   ],
-  "total_cost": 1139106,
+  "total_cost": 1122030,
   "solved_problem_count": 40
 }
