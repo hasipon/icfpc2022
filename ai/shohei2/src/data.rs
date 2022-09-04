@@ -1,8 +1,115 @@
 
 use image::Rgba;
+use image::RgbaImage;
+use imageproc::drawing::draw_filled_rect_mut;
 use std::mem;
 use std::cmp;
+use imageproc::drawing::draw_hollow_rect_mut;
+use imageproc::rect::Rect;
 
+#[derive(Clone)]
+pub struct State {
+    pub tree    : Tree,
+    pub image   : RgbaImage,
+    pub cost    : i64,
+    pub size    : f64,
+    pub commands: Vec<Command>,
+}
+
+impl State {
+    pub fn new(
+        image:RgbaImage,
+    ) -> Self {
+        let mut nodes = Vec::new();
+        nodes.push(Tree::Leaf(Rectangle{
+            x: 0,
+            y: 0,
+            w: image.width() as i32,
+            h: image.height() as i32,
+        }, Option::None));
+
+        State {
+            size: (image.width() * image.height()) as f64,
+            tree:Tree::Node(Rectangle{
+                x: 0,
+                y: 0,
+                w: image.width() as i32,
+                h: image.height() as i32,
+            }, nodes),
+            image: image,
+            cost: 0,
+            commands: Vec::new()
+        }
+    }
+
+    pub fn apply_commands(&mut self, commands:&Vec<Command>) {
+        for command in commands {
+            self.apply_command(command);
+        }
+    }
+    
+    pub fn apply_command(&mut self, command:&Command) {
+        self.commands.push(command.clone());
+        match command {
+            Command::PointCut(id, point) => {
+                let target = self.tree.find_mut(&id);
+                self.cost += (10.0 * (self.size / target.size() as f64)).round() as i64;
+
+                target.point_cut(*point);    
+            }
+            Command::LineCut(id, is_x, pos) => {
+                let target = self.tree.find_mut(&id);
+                self.cost += (7.0 * (self.size / target.size() as f64)).round() as i64;
+
+                target.line_cut(*is_x, *pos);
+                
+            }
+            Command::Color(id, color) => {
+                let target = self.tree.find_mut(&id);
+                self.cost += (5.0 * (self.size / target.size() as f64)).round() as i64;
+
+                target.color(&mut self.image, *color);
+            }
+            Command::Merge(id0, id1) => {
+                let index = match &self.tree { 
+                    Tree::Node(_, nodes) => nodes.len(),
+                    _ => panic!("cannot merge"),
+                };
+                let tree = self.tree.find_mut(id0);
+                let old0 = mem::replace(tree, Tree::Merged(index));
+                let tree = self.tree.find_mut(id1);
+                let old1 = mem::replace(tree, Tree::Merged(index));
+                let size = cmp::max(old0.size(), old1.size()) as f64;
+                self.cost += (1.0 * (self.size / size).round()) as i64;
+                let result = match [old0, old1] {
+                    [Tree::Leaf(rect0, _), Tree::Leaf(rect1, _)] => {
+                        let x = cmp::min(rect0.x, rect1.x);
+                        let y = cmp::min(rect0.y, rect1.y);
+                        let r = cmp::max(rect0.right(), rect1.right());
+                        let b = cmp::max(rect0.bottom(), rect1.bottom());
+                        Tree::Leaf(Rectangle{
+                            x: x,
+                            y: y,
+                            w: r - x,
+                            h: b - y,
+                        }, Option::None)
+                    }
+                    _ => {  
+                        panic!("cannot merge: {:?} {:?}", id0, id1);
+                    }
+                };
+                match &mut self.tree { 
+                    Tree::Node(_, nodes) => nodes.push(result),
+                    _ => panic!("cannot merge"),
+                };
+            }
+        }
+    }
+    
+}
+
+
+#[derive(Clone)]
 pub enum Tree {
     Leaf(Rectangle, Option<Rgba<u8>>),
     Node(Rectangle, Vec<Tree>),
@@ -10,72 +117,59 @@ pub enum Tree {
 }
 
 impl Tree {
-    pub fn from_commands(commands:&Vec<Command>) -> Self {
-        let mut nodes = Vec::new();
-        nodes.push(Tree::Leaf(Rectangle{
-            x: 0,
-            y: 0,
-            w: 400,
-            h: 400,
-        }, Option::None));
-        let mut root = Tree::Node(Rectangle{
-            x: 0,
-            y: 0,
-            w: 400,
-            h: 400,
-        }, nodes);
-
-        for command in commands {
-            match command {
-                Command::PointCut(id, point) => {
-                    root.find_mut(&id).point_cut(*point);
-                }
-                Command::LineCut(id, is_x, pos) => {
-                    root.find_mut(&id).line_cut(*is_x, *pos);
-                }
-                Command::Color(id, color) => {
-                    root.find_mut(&id).color(*color);
-                }
-                Command::Merge(id0, id1) => {
-                    let index = match &root { 
-                        Tree::Node(_, nodes) => nodes.len(),
-                        _ => panic!("cannot merge"),
-                    };
-                    let tree = root.find_mut(id0);
-                    let old0 = mem::replace(tree, Tree::Merged(index));
-                    let tree = root.find_mut(id1);
-                    let old1 = mem::replace(tree, Tree::Merged(index));
-                    let result = match [old0, old1] {
-                        [Tree::Leaf(rect0, _), Tree::Leaf(rect1, _)] => {
-                            let x = cmp::min(rect0.x, rect1.x);
-                            let y = cmp::min(rect0.y, rect1.y);
-                            let r = cmp::max(rect0.right(), rect1.right());
-                            let b = cmp::max(rect0.bottom(), rect1.bottom());
-                            Tree::Leaf(Rectangle{
-                                x: x,
-                                y: y,
-                                w: r - x,
-                                h: b - y,
-                            }, Option::None)
-                        }
-                        _ => {  
-                            panic!("cannot merge: {:?} {:?}", id0, id1);
-                        }
-                    };
-                    let index = match &mut root { 
-                        Tree::Node(_, nodes) => nodes.push(result),
-                        _ => panic!("cannot merge"),
-                    };
-                }
-            }
+    
+    pub fn size(&self) -> i32 {
+        match self {
+            Tree::Leaf(rect, _) => (rect.w * rect.h),
+            Tree::Node(rect, _) => (rect.w * rect.h),
+            Tree::Merged(_) => 0,
         }
-        root
     }
-
-    pub fn color(&mut self, color:Rgba<u8>) {
-        
+    pub fn get_leaf_num(&self) -> i32 {
+        match self {
+            Tree::Node(_, nodes) => {
+                nodes.iter().fold(0, |value, node| value + node.get_leaf_num())
+            },
+            Tree::Leaf(_, _) => 1,
+            Tree::Merged(_) => 0,
+        }
     }
     
+    pub fn leaf_at(&self, mut index:i32) -> Id {
+        let mut id = Id::new();
+        self._leaf_at(&mut index, &mut id);
+        id
+    }
+
+    fn _leaf_at(&self, index:&mut i32, id:&mut Id) {
+        match self {
+            Tree::Node(_, nodes) => {
+                for (i,node) in nodes.iter().enumerate() {
+                    id.push(i);
+                    node._leaf_at(index, id);
+                    if *index < 0 { return; }
+                    id.pop();
+                }
+            },
+            Tree::Leaf(_, _) => {
+                *index -= 1;
+            },
+            Tree::Merged(_) => {}
+        }
+    }
+
+    pub fn color(&mut self, image:&mut RgbaImage, color:Rgba<u8>) {
+        match self {
+            Tree::Leaf(rect, _) => {
+                
+                draw_filled_rect_mut(
+                    image, 
+                    Rect::at(rect.x, image.height() as i32 - rect.bottom()).of_size(rect.w as u32, rect.h as u32), color);
+            }
+            _ => panic!("cannot color"),
+        }
+    }
+
     pub fn line_cut(&mut self, is_x:bool, pos:i32) {
         match self {
             Tree::Leaf(rect, _) => {
@@ -233,8 +327,8 @@ impl Tree {
 
 #[derive(Debug, Copy, Clone)]
 pub struct Point {
-    x: i32,
-    y: i32,
+    pub x: i32,
+    pub y: i32,
 }
 
 impl Point {
@@ -287,6 +381,7 @@ pub fn color_from_str(str:&str) -> Rgba<u8> {
     Rgba::from([args[0], args[1], args[2], args[3]])
 }
 
+#[derive(Debug, Clone)]
 pub enum Command {
     PointCut(Id, Point),
     LineCut(Id, bool, i32),

@@ -7,11 +7,16 @@ use std::io::prelude::*;
 use serde::{Serialize, Deserialize};
 use chrono::Utc;
 
+use image::RgbaImage;
+use eval::similarity;
+use data::*;
+
 mod data;
 mod draw;
 mod writer;
 mod reader;
-
+mod eval;
+mod solver;
 
 fn main() -> std::io::Result<()>  {
     let arg:Vec<String> = args().collect();
@@ -21,26 +26,18 @@ fn main() -> std::io::Result<()>  {
         problem = arg[1].parse().unwrap();
     }
     
-    let mut initial_file_path = format!("initial/{}.isl", problem).to_owned();
-    if arg.len() >= 3 {
-        initial_file_path = arg[2].to_owned();
-    }
-    
-    let mut contents = String::new();
-    if std::path::Path::new(&initial_file_path).exists() {
-        let mut f = File::open(initial_file_path).expect("file not found");
-        f.read_to_string(&mut contents);
-    }
-    
-    let mut commands = reader::read(&contents);
     let image = ImageReader::open(format!("../../problems/{}.png", problem)).unwrap().decode().unwrap().to_rgba8();
 
-    draw::fill_color(&mut commands, &image);
+    let state = solver::solve(&image);
+    let similarity = eval::similarity(&state.image, &image);
+
+    state.image.save("output.png").unwrap();
+    println!("similarity:{} cost:{} total:{}", similarity, state.cost, similarity + state.cost);
     let mut string = String::new();
-    writer::write(&mut string, &commands);
+    writer::write(&mut string, &state.commands);
 
     let text = Utc::now().format("%Y%m%d%H%M%S%f3").to_string();
-    let mut file = File::create(format!("../../solutions/{}-shohei1-{}.isl", problem, text))?;
+    let file = File::create(format!("../../solutions/{}-shohei2-{}.isl", problem, text))?;
     let mut writer = BufWriter::new(file);
     writer.write_all(string.as_bytes())?;
     writer.flush()?;
