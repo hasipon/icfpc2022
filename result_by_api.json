@@ -126,7 +126,7 @@
       "last_submitted_at": "2022-09-04T12:58:56.894911Z",
       "submission_count": 27,
       "min_cost": 25345,
-      "overall_best_cost": 16937
+      "overall_best_cost": 16934
     },
     {
       "problem_id": 17,
@@ -142,7 +142,7 @@
       "last_submitted_at": "2022-09-04T14:34:40.703847Z",
       "submission_count": 63,
       "min_cost": 39478,
-      "overall_best_cost": 33417
+      "overall_best_cost": 33393
     },
     {
       "problem_id": 19,
@@ -286,7 +286,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 71523
+      "overall_best_cost": 34407
     },
     {
       "problem_id": 37,
@@ -294,7 +294,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 60149
+      "overall_best_cost": 16626
     },
     {
       "problem_id": 38,
@@ -302,7 +302,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 48723
+      "overall_best_cost": 22916
     },
     {
       "problem_id": 39,
@@ -310,7 +310,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 46041
+      "overall_best_cost": 19853
     },
     {
       "problem_id": 40,
@@ -318,7 +318,7 @@
       "last_submitted_at": "0001-01-01T00:00:00Z",
       "submission_count": 0,
       "min_cost": 0,
-      "overall_best_cost": 55768
+      "overall_best_cost": 12107
     }
   ],
   "total_cost": 1076663,
