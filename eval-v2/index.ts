@@ -1,4 +1,4 @@
-import {Interpreter, InterpreterResult} from "./Interpreter";
+import {getColored, Interpreter, InterpreterResult} from "./Interpreter";
 import {Frame, Painter} from "./Painter";
 
 import * as fs from 'fs';
@@ -9,6 +9,8 @@ import * as buffer from "buffer";
 import {Block, SimpleBlock} from "./Block";
 import {Point} from "./Point";
 import {RGBA} from "./Color";
+import {InstructionCostCalculator} from "./InstructionCostCalculator";
+import {InstructionType} from "./Instruction";
 
 function readProblemImage(problemId: string): Frame{
   const fileContent = fs.readFileSync(`../problems.json/${problemId}.json`, 'utf8');
@@ -73,6 +75,11 @@ function main(){
       ));
     })
   }
+  if(Number(problemId) >= 36) {
+    InstructionCostCalculator.baseCostMap.set(InstructionType.VerticalCutInstructionType, 2);
+    InstructionCostCalculator.baseCostMap.set(InstructionType.HorizontalCutInstructionType, 2);
+    InstructionCostCalculator.baseCostMap.set(InstructionType.PointCutInstructionType, 3);
+  }
 
   const result = interpreter.run(input, blocks);
 
@@ -88,6 +95,32 @@ function main(){
     "isl_cost": result.cost,
     "sim_cost": diff,
   }));
+
+  if(process.env?.BLOCK_ID_INFO){
+    const ids = new Array(result.canvas.width * result.canvas.height);
+    const coloered = getColored();
+    result.canvas.blocks.forEach(block => {
+      const frameTopLeft = new Point([block.bottomLeft.px, result.canvas.height - block.topRight.py]);
+      const frameBottomRight = new Point([block.topRight.px, result.canvas.height - block.bottomLeft.py]);
+      var id = block.id;
+      while(!coloered.has(id)){
+        if(id == ""){
+          return ;
+        }
+        const ids = id.split(".");
+        ids.pop();
+        id = ids.join(".")
+      }
+      for(let y = frameTopLeft.py ; y < frameBottomRight.py ; y++) {
+        for(let x = frameTopLeft.px; x < frameBottomRight.px ; x++) {
+          ids[y * result.canvas.width + x] = id;
+        }
+      }
+    })
+    const idsStr = ids.join("\n");
+    fs.writeFileSync(process.env.BLOCK_ID_INFO.toString(), idsStr);
+  }
+
 }
 
 main();
