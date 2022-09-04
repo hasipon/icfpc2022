@@ -47,7 +47,7 @@ pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
     let beam_w = 10;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..800 {
+    for step in 0..8000 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
