@@ -3,249 +3,249 @@
     {
       "problem_id": 1,
       "problem_name": "Chess Table",
-      "last_submitted_at": "2022-09-04T02:43:16.363749Z",
-      "submission_count": 21,
+      "last_submitted_at": "2022-09-04T04:42:32.243958Z",
+      "submission_count": 24,
       "min_cost": 20140
     },
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T02:43:30.038838Z",
-      "submission_count": 20,
-      "min_cost": 15443
+      "last_submitted_at": "2022-09-04T05:13:18.413824Z",
+      "submission_count": 25,
+      "min_cost": 7030
     },
     {
       "problem_id": 3,
       "problem_name": "Tetris Game",
-      "last_submitted_at": "2022-09-04T02:43:39.253871Z",
-      "submission_count": 18,
+      "last_submitted_at": "2022-09-04T04:42:53.180332Z",
+      "submission_count": 22,
       "min_cost": 29875
     },
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T02:43:40.488777Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-04T04:42:54.406232Z",
+      "submission_count": 19,
       "min_cost": 22881
     },
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T02:43:41.704555Z",
-      "submission_count": 15,
-      "min_cost": 27457
+      "last_submitted_at": "2022-09-04T04:42:55.628571Z",
+      "submission_count": 19,
+      "min_cost": 27159
     },
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-04T02:43:42.952759Z",
-      "submission_count": 17,
+      "last_submitted_at": "2022-09-04T04:42:56.852573Z",
+      "submission_count": 20,
       "min_cost": 12447
     },
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T02:43:44.194725Z",
-      "submission_count": 17,
-      "min_cost": 30686
+      "last_submitted_at": "2022-09-04T04:42:58.072338Z",
+      "submission_count": 20,
+      "min_cost": 30568
     },
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-04T02:43:45.435688Z",
-      "submission_count": 8,
+      "last_submitted_at": "2022-09-04T04:42:59.318272Z",
+      "submission_count": 10,
       "min_cost": 21906
     },
     {
       "problem_id": 9,
       "problem_name": "SimpLisa",
-      "last_submitted_at": "2022-09-04T02:43:46.669984Z",
-      "submission_count": 17,
-      "min_cost": 23023
+      "last_submitted_at": "2022-09-04T04:43:00.547776Z",
+      "submission_count": 19,
+      "min_cost": 22269
     },
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-04T02:43:17.600606Z",
-      "submission_count": 19,
-      "min_cost": 32549
+      "last_submitted_at": "2022-09-04T04:42:33.471097Z",
+      "submission_count": 22,
+      "min_cost": 32270
     },
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T02:43:18.83537Z",
-      "submission_count": 19,
+      "last_submitted_at": "2022-09-04T04:42:34.693004Z",
+      "submission_count": 22,
       "min_cost": 42484
     },
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-04T02:43:20.072464Z",
-      "submission_count": 15,
-      "min_cost": 22644
+      "last_submitted_at": "2022-09-04T04:42:35.920224Z",
+      "submission_count": 17,
+      "min_cost": 18362
     },
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T02:43:21.323169Z",
-      "submission_count": 15,
+      "last_submitted_at": "2022-09-04T04:42:37.141985Z",
+      "submission_count": 17,
       "min_cost": 21371
     },
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T02:43:22.555891Z",
-      "submission_count": 15,
+      "last_submitted_at": "2022-09-04T04:42:38.364509Z",
+      "submission_count": 18,
       "min_cost": 35962
     },
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-04T02:43:23.806389Z",
-      "submission_count": 14,
+      "last_submitted_at": "2022-09-04T04:42:39.593962Z",
+      "submission_count": 16,
       "min_cost": 33688
     },
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-04T02:43:25.059476Z",
-      "submission_count": 14,
+      "last_submitted_at": "2022-09-04T04:42:40.817354Z",
+      "submission_count": 17,
       "min_cost": 25601
     },
     {
       "problem_id": 17,
       "problem_name": "\"The\" Starry Night",
-      "last_submitted_at": "2022-09-04T02:43:26.300994Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-04T04:42:42.062253Z",
+      "submission_count": 15,
       "min_cost": 41187
     },
     {
       "problem_id": 18,
       "problem_name": "\"The\" Kiss",
-      "last_submitted_at": "2022-09-04T02:43:27.542976Z",
-      "submission_count": 21,
-      "min_cost": 40849
+      "last_submitted_at": "2022-09-04T04:10:27.432632Z",
+      "submission_count": 23,
+      "min_cost": 40022
     },
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-04T02:43:28.780447Z",
-      "submission_count": 15,
-      "min_cost": 38912
+      "last_submitted_at": "2022-09-04T04:42:43.288157Z",
+      "submission_count": 18,
+      "min_cost": 36742
     },
     {
       "problem_id": 20,
       "problem_name": "\"The\" Son of Man",
-      "last_submitted_at": "2022-09-04T02:43:31.269813Z",
-      "submission_count": 19,
-      "min_cost": 24866
+      "last_submitted_at": "2022-09-04T04:42:45.741318Z",
+      "submission_count": 22,
+      "min_cost": 22103
     },
     {
       "problem_id": 21,
       "problem_name": "Special Request",
-      "last_submitted_at": "2022-09-04T02:43:32.508656Z",
-      "submission_count": 15,
-      "min_cost": 30144
+      "last_submitted_at": "2022-09-04T04:42:46.966702Z",
+      "submission_count": 20,
+      "min_cost": 29997
     },
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-04T02:43:34.294651Z",
-      "submission_count": 14,
+      "last_submitted_at": "2022-09-04T04:42:48.224726Z",
+      "submission_count": 19,
       "min_cost": 27198
     },
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-04T02:43:35.530333Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-04T04:42:49.486812Z",
+      "submission_count": 21,
       "min_cost": 30778
     },
     {
       "problem_id": 24,
       "problem_name": "Inception",
-      "last_submitted_at": "2022-09-04T02:43:36.762137Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-04T04:42:50.708016Z",
+      "submission_count": 17,
       "min_cost": 22797
     },
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-04T02:43:37.994756Z",
-      "submission_count": 13,
-      "min_cost": 29588
+      "last_submitted_at": "2022-09-04T04:42:51.924013Z",
+      "submission_count": 18,
+      "min_cost": 29582
     },
     {
       "problem_id": 26,
       "problem_name": "Puzzled Logo",
-      "last_submitted_at": "2022-09-04T00:42:35.839499Z",
-      "submission_count": 2,
+      "last_submitted_at": "2022-09-04T05:04:20.270139Z",
+      "submission_count": 3,
       "min_cost": 49412
     },
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-04T01:09:14.433309Z",
-      "submission_count": 2,
+      "last_submitted_at": "2022-09-04T05:04:21.507536Z",
+      "submission_count": 3,
       "min_cost": 173295
     },
     {
       "problem_id": 28,
       "problem_name": "Obfuscated Starry Night",
-      "last_submitted_at": "2022-09-03T12:55:26.607191Z",
-      "submission_count": 1,
-      "min_cost": 99198
+      "last_submitted_at": "2022-09-04T05:04:22.746226Z",
+      "submission_count": 2,
+      "min_cost": 64541
     },
     {
       "problem_id": 29,
       "problem_name": "Unrecognizable Kiss",
-      "last_submitted_at": "2022-09-03T12:55:38.545939Z",
-      "submission_count": 1,
-      "min_cost": 117129
+      "last_submitted_at": "2022-09-04T05:04:23.987708Z",
+      "submission_count": 2,
+      "min_cost": 107137
     },
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-03T12:55:47.665456Z",
-      "submission_count": 1,
+      "last_submitted_at": "2022-09-04T05:04:25.251028Z",
+      "submission_count": 2,
       "min_cost": 95765
     },
     {
       "problem_id": 31,
       "problem_name": "tepInncio",
-      "last_submitted_at": "2022-09-04T01:12:00.171254Z",
-      "submission_count": 1,
+      "last_submitted_at": "2022-09-04T05:04:26.499469Z",
+      "submission_count": 2,
       "min_cost": 97956
     },
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T01:15:39.110405Z",
-      "submission_count": 1,
+      "last_submitted_at": "2022-09-04T05:04:27.781407Z",
+      "submission_count": 2,
       "min_cost": 200697
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-04T01:09:15.671964Z",
-      "submission_count": 1,
+      "last_submitted_at": "2022-09-04T05:04:29.025119Z",
+      "submission_count": 2,
       "min_cost": 118808
     },
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-04T01:09:16.89682Z",
-      "submission_count": 1,
+      "last_submitted_at": "2022-09-04T05:04:30.264635Z",
+      "submission_count": 2,
       "min_cost": 139680
     },
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-04T01:13:24.966913Z",
-      "submission_count": 1,
+      "last_submitted_at": "2022-09-04T05:04:31.551834Z",
+      "submission_count": 2,
       "min_cost": 97090
     }
   ],
-  "total_cost": 1893506,
+  "total_cost": 1828800,
   "solved_problem_count": 35
 }
