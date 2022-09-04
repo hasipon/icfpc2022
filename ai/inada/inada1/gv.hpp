@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef NDEBUG
+#if ENABLE_GV
 #include <assert.h>
 #include <math.h>
 #include <stdarg.h>

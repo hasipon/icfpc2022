@@ -211,6 +211,9 @@ public:
     int moveCost = 0;
     int width;
     int height;
+
+    bool writeHistory;
+    std::vector<std::string> history;
 };
 
 Color Canvas::C(Point at) const {
@@ -268,6 +271,13 @@ void Canvas::ColorMove(std::string blockId, Color color) {
     auto &block = blocks[blockId];
     moveCost += std::lround(ColorCost * height * width / double(block->size.getScalarSize()));
 
+    if (writeHistory) {
+        char buf[256];
+        sprintf(buf, "color [%s] [%d,%d,%d,%d]", blockId.c_str(), color[0], color[1], color[2], color[3]);
+        history.emplace_back(buf);
+    }
+
+
     if (block->typ == SimpleBlockType) {
         SimpleBlock &actualBlock = *dynamic_cast<SimpleBlock *>(block.get());
         actualBlock.color = color;
@@ -290,6 +300,12 @@ void Canvas::PointCut(std::string blockId, Point point) {
         printf("Point (%d, %d) is out of the block %s (%d, %d) to (%d, %d)\n", point.p[0], point.p[1], blockId.c_str(),
                block->bottomLeft.p[0], block->bottomLeft.p[1], block->topRight.p[0], block->topRight.p[1]);
         exit(EXIT_FAILURE);
+    }
+
+    if (writeHistory) {
+        char buf[256];
+        sprintf(buf, "cut [%s] [%d,%d]", blockId.c_str(), point.p[0], point.p[1]);
+        history.emplace_back(buf);
     }
 
     if (block->typ == SimpleBlockType) {
@@ -506,6 +522,12 @@ void Canvas::VerticalCutCanvas(std::string blockId, int lineNumber) {
     auto &block = blocks[blockId];
     moveCost += std::lround(VerticalCutCost * height * width / double(block->size.getScalarSize()));
 
+    if (writeHistory) {
+        char buf[256];
+        sprintf(buf, "cut [%s] [x] [%d]", blockId.c_str(), lineNumber);
+        history.emplace_back(buf);
+    }
+
     if (!(block->bottomLeft.p[0] <= lineNumber && lineNumber <= block->topRight.p[0])) {
         printf("Line number is out of the [%s]! Block is from (%d, %d) to (%d, %d), point is at %d!", blockId.c_str(),
                block->bottomLeft.p[0], block->bottomLeft.p[1], block->topRight.p[0], block->topRight.p[1], lineNumber);
@@ -581,6 +603,12 @@ void Canvas::VerticalCutCanvas(std::string blockId, int lineNumber) {
 void Canvas::HorizontalCutCanvas(std::string blockId, int lineNumber) {
     auto &block = blocks[blockId];
     moveCost += std::lround(HorizontalCutCost * height * width / double(block->size.getScalarSize()));
+
+    if (writeHistory) {
+        char buf[256];
+        sprintf(buf, "cut [%s] [y] [%d]", blockId.c_str(), lineNumber);
+        history.emplace_back(buf);
+    }
 
     if (!(block->bottomLeft.p[1] <= lineNumber && lineNumber <= block->topRight.p[1])) {
         printf("Line number is out of the [%s]! Block is from (%d, %d) to (%d, %d), point is at %d!", blockId.c_str(),
@@ -659,6 +687,12 @@ void Canvas::SwapCanvas(std::string blockId1, std::string blockId2) {
     auto &block2 = blocks[blockId2];
     moveCost += std::lround(SwapCost * height * width / double(block1->size.getScalarSize()));
 
+    if (writeHistory) {
+        char buf[256];
+        sprintf(buf, "swap [%s] [%s]", blockId1.c_str(), blockId2.c_str());
+        history.emplace_back(buf);
+    }
+
     if (block1->size.p[0] == block2->size.p[0] && block1->size.p[1] == block2->size.p[1]) {
         Block *newBlock1 = nullptr, *newBlock2 = nullptr;
 
@@ -711,6 +745,12 @@ void Canvas::MergeCanvas(std::string blockId1, std::string blockId2) {
     auto &block1 = blocks[blockId1];
     auto &block2 = blocks[blockId2];
     moveCost += std::lround(SwapCost * height * width / std::max(double(block1->size.getScalarSize()), double(block2->size.getScalarSize())));
+
+    if (writeHistory) {
+        char buf[256];
+        sprintf(buf, "merge [%s] [%s]", blockId1.c_str(), blockId2.c_str());
+        history.emplace_back(buf);
+    }
 
     const bool bottomToTop = (block1->bottomLeft.p[1] == block2->topRight.p[1] ||
                               block1->topRight.p[1] == block2->bottomLeft.p[1]) &&
@@ -907,7 +947,9 @@ uint8_t* hasiImageRead(FILE *fp, int &width, int &height) {
     return image;
 }
 
-Color hasiImageAt(const uint8_t *image, int width, int height, Point at) {
+Color hasiImageAt(const uint8_t *image, Point at) {
+    const int width = 400;
+    const int height = 400;
     auto R = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 0];
     auto G = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 1];
     auto B = image[((height - 1 - at.p[1]) * width + at.p[0]) * 4 + 2];
