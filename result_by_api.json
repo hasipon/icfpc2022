@@ -10,9 +10,9 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T05:36:19.272839Z",
-      "submission_count": 27,
-      "min_cost": 6485
+      "last_submitted_at": "2022-09-04T05:48:19.624018Z",
+      "submission_count": 28,
+      "min_cost": 6408
     },
     {
       "problem_id": 3,
@@ -246,6 +246,6 @@
       "min_cost": 96587
     }
   ],
-  "total_cost": 1587807,
+  "total_cost": 1587730,
   "solved_problem_count": 35
 }
