@@ -28,7 +28,7 @@ pub struct PainterResult {
     pub image:RgbaImage,
 }
 
-pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
+pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut best_rects = Vec::new();
     let mut best_result = PainterResult {
         commands: Vec::new(),
@@ -37,25 +37,44 @@ pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
         image:RgbaImage::new(1, 1)
     };
     let mut rng = thread_rng();
-    let initial_state = PainterState {
-        rects: Vec::new(),
+    let mut initial_state = PainterState {
+        rects: vec![
+            Rectangle::new(0,0,93,43),
+            Rectangle::new(100,0,147,43),
+            Rectangle::new(254,0,123,43),
+            Rectangle::new(383,0,17,297),
+            Rectangle::new(0,49,42,96),
+            Rectangle::new(48,49,199,198),
+            Rectangle::new(254,50,123,94),
+            Rectangle::new(0,151,41,146),
+            Rectangle::new(254,151,57,95),
+            Rectangle::new(319,151,56,95),
+            Rectangle::new(151,253,95,45),
+            Rectangle::new(253,253,122,45),
+            Rectangle::new(0,304,42,96),
+            Rectangle::new(151,304,95,43),
+            Rectangle::new(251,304,124,71),
+            Rectangle::new(381,305,19,95),
+            Rectangle::new(48,353,97,47),
+            Rectangle::new(152,381,222,19),
+        ],
         score: i64::MAX
     };
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
+    //return eval(target, &mut initial_state.rects, &mut gray_image, true, &mut rng);
     let mut current = vec![initial_state];
-    let beam_w = 10;
+
+    let beam_w = 20;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..8000 {
+    for step in 0..180 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
-        if step % 5 != 4 {
-            for i in 0..size {
-                next.push(current[i].clone());
-            }
+        for i in 0..size {
+            next.push(current[i].clone());
         }
         for i in 0..beam_w {
             let source = &current[i % size];
@@ -186,7 +205,7 @@ pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
                 _ => {} 
             }
 
-            let result = eval(target, initial, &mut rects, &mut gray_image, true, &mut rng);
+            let result = eval(target, &mut rects, &mut gray_image, true, &mut rng);
             let score = result.cost + result.similarity;
 
             if score < best_result.cost + best_result.similarity {
@@ -201,12 +220,11 @@ pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
         current = next;
     }
 
-    eval(target, initial, &mut best_rects, &mut gray_image, false, &mut rng)
+    eval(target, &mut best_rects, &mut gray_image, false, &mut rng)
 }
 
 fn eval<R:Rng>(
-    target:&RgbaImage,
-    initial:&RgbaImage,
+    target:&RgbaImage, 
     rects:&mut Vec<Rectangle>, 
     gray_image:&mut GrayImage,
     fast:bool,
@@ -243,7 +261,6 @@ fn eval<R:Rng>(
         for x in 0..gray_image.width() {
             for y in 0..gray_image.height() {
                 let index = gray_image.get_pixel(x, y)[0] as usize;
-                if index == 0 { continue; }
                 let size = fill_size[index];
                 let color = fill_colors[index];
                 let color2 = target.get_pixel(
@@ -272,8 +289,21 @@ fn eval<R:Rng>(
         power *= scale;
     }
 
-    let mut state = State::new(initial.clone());
-    
+    let mut out_image= RgbaImage::new(target.width(), target.height());
+    out_image.fill(255);
+    let mut state = State::new(out_image);
+    if fill_size[0] > 0.0 {
+        let color = fill_colors[0];
+        state.apply_command(&Command::Color(
+            vec![state.get_last_node()], 
+            Rgba([
+                color[0].round() as u8,
+                color[1].round() as u8,
+                color[2].round() as u8,
+                color[3].round() as u8,
+            ])
+        ));
+    }
     for (i, rect) in rects.iter().enumerate() {
         if fill_size[i + 1] == 0.0 { continue; }
         let mut commands =  Vec::new();

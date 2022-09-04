@@ -436,6 +436,15 @@ impl Rectangle {
     pub fn bottom(&self) -> i32 {
         self.y + self.h
     }
+
+    pub fn new(
+        x: i32,
+        y: i32,
+        w: i32,
+        h: i32,
+    ) -> Self {
+        Rectangle { x, y:400 - y - h, w, h }
+    }
 }
 
 pub type Id = Vec<usize>;
