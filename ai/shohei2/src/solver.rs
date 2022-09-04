@@ -15,9 +15,9 @@ pub fn solve(target:&RgbaImage) -> State {
     };
     let mut rng = thread_rng();
     let mut current = vec![min_state.clone()];
-    let beam_w = 1000;
+    let beam_w = 2000;
 
-    for step in 0..30 {
+    for step in 0..35 {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
