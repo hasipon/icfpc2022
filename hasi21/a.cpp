@@ -5,6 +5,7 @@
 #include <set>
 #include <algorithm>
 using namespace std;
+long long sumTime1,  sumTime2,  sumTime3;
 long long getTime() {
 	timespec ts;
 	clock_gettime(CLOCK_REALTIME_COARSE, &ts);
@@ -34,98 +35,128 @@ double d(uint32_t x, uint32_t y) {
 	return r;
 }
 pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
-    vector<int> sum(4);
+    int sum[3] = {0};
+
     for (int i = i0; i < i1; ++ i) {
         for (int j = j0; j < j1; ++ j) {
-            for (int k = 0; k < 4; ++ k) {
+            for (int k = 0; k < 3; ++ k) {
                 sum[k] += get(i,j,k);
             }
         }
     }
 
-    uint8_t res[4];
+    double res[3];
+
     int area = (i1-i0)*(j1-j0);
-    for (int k = 0; k < 4; ++ k) {
+    for (int k = 0; k < 3; ++ k) {
         res[k] = (sum[k] + area/2) / area;
+    }
+
+	auto tttt0 = getTime();
+
+    // Weiszfeld's algorithm
+    // https://en.wikipedia.org/wiki/Geometric_median
+    for (auto it = 0; it < 20; it++) {
+        // result = numer / denom
+        double numer[3] = {0};
+        double denom = 0;
+
+        for (int i = i0; i < i1; ++i) {
+            for (int j = j0; j < j1; ++j) {
+                double norm = 0;
+
+                for (int k = 0; k < 3; ++k) {
+                    auto d = get(i, j, k) - res[k];
+                    norm += d * d;
+                }
+                norm = sqrt(fmax(norm, 1e-6));
+
+                denom += 1 / norm;
+                for (int k = 0; k < 3; ++k) {
+                    numer[k] += get(i, j, k) / norm;
+                }
+            }
+        }
+
+        double difference = 0;
+        for (int k = 0; k < 3; ++k) {
+            double previous = res[k];
+            double next = numer[k] / denom;
+            difference += fabs(previous - next);
+            res[k] = next;
+        }
+
+        if (difference < 0.1) {
+            break;
+        }
+    }
+
+	auto tttt1 = getTime();
+
+    uint8_t resInt[4];
+    resInt[3] = 255;
+    for (int k = 0; k < 3; ++ k) {
+        int rounded = round(res[k]);
+        if (rounded < 0) {
+            resInt[k] = 0;
+        } else if (255 < rounded) {
+            resInt[k] = 255;
+        } else {
+            resInt[k] = rounded;
+        }
     }
 
     double score = 0;
     for (int i = i0; i < i1; ++ i) {
         for (int j = j0; j < j1; ++ j) {
-            score += sqrt(d(get(i,j), *(uint32_t*)res));
+            score += sqrt(d(get(i,j), *(uint32_t*)resInt));
         }
     }
 
-    // Gradient Descent で　だいたい 収束させる
-    for (;;) {
-        vector<double> grad(4, 0);
-        for (int i = i0; i < i1; ++i) {
-            for (int j = j0; j < j1; ++j) {
-                auto denominator = sqrt(d(get(i, j), *(uint32_t *) res));
-                for (int k = 0; k < 4; ++k) {
-                    //std::cout << "res " << int(res[k]) << " pix " << int(get(i, j, k)) << " dis " << denominator << " grd " << (double(res[k]) - double(get(i, j, k))) / denominator << std::endl;
-                    if (denominator != 0) {
-                        grad[k] += (double(res[k]) - double(get(i, j, k))) / denominator;
-                    }
-                }
-            }
-        }
-
-        // O(k) だけ 山登りより早い
-        for (int k = 0; k < 4; ++k) {
-            //std::cout << "grad[" << k << "]:" << grad[k] << std::endl;
-            if (0 < grad[k] && 0 < res[k]) {
-                res[k]--;
-            } else if (grad[k] < 0 && res[k] < 255) {
-                res[k]++;
-            }
-            //std::cout << "res[" << k << "]:" << int(res[k]) << std::endl;
-
-            //std::cout << -lr * grad[k] << std::endl;
-            //res[k] -= lr * grad[k];
-        }
-
-        double score2 = 0;
-        for (int i = i0; i < i1; ++ i) for (int j = j0; j < j1; ++ j) score2 += sqrt(d(get(i,j), *(uint32_t*)res));
-        if (score2 < score) {
-            //std::cout << "score updated from " << score << "to " << score2 << std::endl;
-            score = score2;
-        } else {
-            //std::cout << "score is same " << score << "to " << score2 << std::endl;
-            score = score2;
-            break;
-        }
-    }
+	auto tttt2 = getTime();
 
     // 山登りで最後まで収束させる
     for (;;) {
-        for (int k = 0; k < 4; ++ k) {
-            if (res[k] > 0) {
-                -- res[k];
+        for (int k = 0; k < 3; ++ k) {
+            if (resInt[k] > 0) {
+                -- resInt[k];
                 double score2 = 0;
-                for (int i = i0; i < i1; ++ i) for (int j = j0; j < j1; ++ j) score2 += sqrt(d(get(i,j), *(uint32_t*)res));
+                for (int i = i0; i < i1; ++ i) {
+                    for (int j = j0; j < j1; ++ j) {
+                        score2 += sqrt(d(get(i,j), *(uint32_t*)resInt));
+                    }
+                }
                 if (score2 < score) {
                     score = score2;
                     goto next;
                 }
-                ++ res[k];
+                ++ resInt[k];
             }
-            if (res[k] < 255) {
-                ++ res[k];
+            if (resInt[k] < 255) {
+                ++ resInt[k];
                 double score2 = 0;
-                for (int i = i0; i < i1; ++ i) for (int j = j0; j < j1; ++ j) score2 += sqrt(d(get(i,j), *(uint32_t*)res));
+                for (int i = i0; i < i1; ++ i) {
+                    for (int j = j0; j < j1; ++ j) {
+                        score2 += sqrt(d(get(i,j), *(uint32_t*)resInt));
+                    }
+                }
                 if (score2 < score) {
                     score = score2;
                     goto next;
                 }
-                -- res[k];
+                -- resInt[k];
             }
         }
         break;
         next:;
     }
 
-    return {*(uint32_t*)res, score};
+	auto tttt3 = getTime();
+	sumTime1 += tttt1-tttt0;
+	sumTime2 += tttt2-tttt1;
+	sumTime3 += tttt3-tttt2;
+
+    return {*(uint32_t*)resInt, score};
 }
 void col(string blockId, uint32_t c) {
 	uint8_t* x = (uint8_t*)&c;
@@ -278,8 +309,8 @@ Hoge walk(int i0, int i1, int j0, int j1) {
 	vector<pair<int,int>> cuts2(cuts.begin(), cuts.end());
 	random_shuffle(cuts2.begin(), cuts2.end());
 	int n = 2;
-	if (walkArea <= 50*50) n = 6;
-	else if (walkArea <= 100*100) n = 4;
+	//if (walkArea <= 50*50) n = 6;
+	//else if (walkArea <= 100*100) n = 4;
 	for (int i = 0; i < n && i < (int)cuts2.size(); ++ i) {
 		auto p = cuts2[i];
 		if (p.first == 0) {
@@ -343,4 +374,8 @@ int main() {
 	Image = new uint8_t[width*height*4];
 	if ((int)fread(Image, 1, width*height*4, stdin) != width*height*4) throw 1;
 	solve();
+	cerr << 1e-9*sumTime1 << endl;
+	cerr << 1e-9*sumTime2 << endl;
+	cerr << 1e-9*sumTime3 << endl;
+	cerr << 1e-9*(sumTime1+sumTime2+sumTime3) << endl;
 }
