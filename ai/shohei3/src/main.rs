@@ -17,6 +17,7 @@ mod writer;
 mod reader;
 mod eval;
 mod solver;
+mod painter;
 
 fn main() -> std::io::Result<()>  {
     let arg:Vec<String> = args().collect();
@@ -29,10 +30,8 @@ fn main() -> std::io::Result<()>  {
     let image = ImageReader::open(format!("../../problems/{}.png", problem)).unwrap().decode().unwrap().to_rgba8();
 
     let state = painter::solve(&image);
-    let similarity = eval::similarity(&state.image, &image);
 
-    state.image.save("output.png").unwrap();
-    println!("{}: similarity:{} cost:{} total:{}", problem, similarity, state.cost, similarity + state.cost);
+    println!("{}: similarity:{} cost:{} total:{}", problem, state.similarity, state.cost, state.similarity + state.cost);
     let mut string = String::new();
     writer::write(&mut string, &state.commands);
 

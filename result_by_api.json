@@ -10,9 +10,9 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-04T07:15:56.014003Z",
-      "submission_count": 33,
-      "min_cost": 6408
+      "last_submitted_at": "2022-09-04T07:39:46.805789Z",
+      "submission_count": 34,
+      "min_cost": 6403
     },
     {
       "problem_id": 3,
@@ -192,15 +192,15 @@
     {
       "problem_id": 28,
       "problem_name": "Obfuscated Starry Night",
-      "last_submitted_at": "2022-09-04T07:20:24.482142Z",
-      "submission_count": 4,
+      "last_submitted_at": "2022-09-04T07:33:23.263591Z",
+      "submission_count": 5,
       "min_cost": 33327
     },
     {
       "problem_id": 29,
       "problem_name": "Unrecognizable Kiss",
-      "last_submitted_at": "2022-09-04T07:20:25.710451Z",
-      "submission_count": 4,
+      "last_submitted_at": "2022-09-04T07:33:24.486335Z",
+      "submission_count": 5,
       "min_cost": 42336
     },
     {
@@ -213,22 +213,22 @@
     {
       "problem_id": 31,
       "problem_name": "tepInncio",
-      "last_submitted_at": "2022-09-04T07:20:28.207094Z",
-      "submission_count": 4,
+      "last_submitted_at": "2022-09-04T07:33:25.70892Z",
+      "submission_count": 5,
       "min_cost": 35806
     },
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-04T07:20:29.468633Z",
-      "submission_count": 6,
+      "last_submitted_at": "2022-09-04T07:33:26.928981Z",
+      "submission_count": 7,
       "min_cost": 35835
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-04T07:20:30.70187Z",
-      "submission_count": 5,
+      "last_submitted_at": "2022-09-04T07:33:28.224039Z",
+      "submission_count": 6,
       "min_cost": 46918
     },
     {
@@ -241,11 +241,11 @@
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-04T07:20:33.170105Z",
-      "submission_count": 4,
+      "last_submitted_at": "2022-09-04T07:33:29.443088Z",
+      "submission_count": 5,
       "min_cost": 43218
     }
   ],
-  "total_cost": 1084468,
+  "total_cost": 1084463,
   "solved_problem_count": 35
 }
