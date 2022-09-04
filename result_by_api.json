@@ -27,17 +27,17 @@
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T19:25:08.646043Z",
-      "submission_count": 46,
-      "min_cost": 22856,
+      "last_submitted_at": "2022-09-04T20:11:56.412892Z",
+      "submission_count": 47,
+      "min_cost": 11307,
       "overall_best_cost": 5888
     },
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-04T19:25:11.091015Z",
-      "submission_count": 38,
-      "min_cost": 26891,
+      "last_submitted_at": "2022-09-04T20:11:57.696605Z",
+      "submission_count": 39,
+      "min_cost": 16465,
       "overall_best_cost": 9061
     },
     {
@@ -302,7 +302,7 @@
       "last_submitted_at": "2022-09-04T18:34:55.901866Z",
       "submission_count": 5,
       "min_cost": 27660,
-      "overall_best_cost": 22605
+      "overall_best_cost": 22568
     },
     {
       "problem_id": 39,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1080225,
+  "total_cost": 1058250,
   "solved_problem_count": 40
 }
