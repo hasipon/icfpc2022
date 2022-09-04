@@ -181,7 +181,6 @@ pub fn solve(target:&RgbaImage, initial:&RgbaImage) -> PainterResult {
                             }
                         }
                     }
-                    rects.remove(rng.gen_range(0, rects.len()));
                 },
                 _ => {} 
             }
