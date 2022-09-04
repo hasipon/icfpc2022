@@ -5,7 +5,6 @@
 #include <set>
 #include <algorithm>
 using namespace std;
-long long sumsst;
 long long getTime() {
 	timespec ts;
 	clock_gettime(CLOCK_REALTIME_COARSE, &ts);
@@ -150,10 +149,11 @@ double vecDist(const vector<double>& v0, const vector<double>& v1) {
 	return r;
 }
 pair<int,int> calcCut(int i0, int i1, int j0, int j1, int areaLimit) {
+	const int N = 10;
 	pair<int,int> r {-1,-1};
 	if ((i1-i0)*(j1-j0) < areaLimit) return r;
 	double score = 100;
-	for (int i = i0+10; i <= i1-10; ++ i) {
+	for (int i = i0+N; i <= i1-N; ++ i) {
 		int area0 = (i-i0)*(j1-j0);
 		int area1 = (i1-i)*(j1-j0);
 		if (area0 >= areaLimit || area1 >= areaLimit) {
@@ -164,7 +164,7 @@ pair<int,int> calcCut(int i0, int i1, int j0, int j1, int areaLimit) {
 			}
 		}
 	}
-	for (int j = j0+10; j <= j1-10; ++ j) {
+	for (int j = j0+N; j <= j1-N; ++ j) {
 		int area0 = (i1-i0)*(j-j0);
 		int area1 = (i1-i0)*(j1-j);
 		if (area0 >= areaLimit || area1 >= areaLimit) {
@@ -188,9 +188,6 @@ struct Hoge {
 	}
 	double calcScore() {
 		double r = 0;
-		if ((i1-i0)*(j1-j0) == 400*400) {
-			r += 5;
-		}
 		if (t == -1) {
 			return r + calcSim();
 		} else {
@@ -270,6 +267,7 @@ struct Hoge {
 	}
 };
 Hoge walk(int i0, int i1, int j0, int j1) {
+	int walkArea = (i1-i0)*(j1-j0);
 	auto res = Hoge(i0, i1, j0, j1);
 	double score = res.calcScore();
 	set<pair<int,int>> cuts;
@@ -279,10 +277,9 @@ Hoge walk(int i0, int i1, int j0, int j1) {
 	}
 	vector<pair<int,int>> cuts2(cuts.begin(), cuts.end());
 	random_shuffle(cuts2.begin(), cuts2.end());
-	int walkArea = (i1-i0)*(j1-j0);
 	int n = 2;
-	if (walkArea <= 50*50) n = 5;
-	else if (walkArea <= 80*80) n = 3;
+	if (walkArea <= 50*50) n = 6;
+	else if (walkArea <= 100*100) n = 4;
 	for (int i = 0; i < n && i < (int)cuts2.size(); ++ i) {
 		auto p = cuts2[i];
 		if (p.first == 0) {
@@ -320,7 +317,7 @@ void solve() {
 		}
 	}
 	Hoge hoge = walk(0, 400, 0, 400);
-	cerr << hoge.calcScore() << endl;
+	cerr << hoge.calcScore()+5 << endl;
 	hoge.output("0", true);
 }
 int main() {
@@ -346,5 +343,4 @@ int main() {
 	Image = new uint8_t[width*height*4];
 	if ((int)fread(Image, 1, width*height*4, stdin) != width*height*4) throw 1;
 	solve();
-	cerr << "sumsst="<<sumsst << endl;
 }
