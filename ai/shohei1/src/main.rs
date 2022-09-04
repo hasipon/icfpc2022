@@ -16,7 +16,7 @@ mod reader;
 fn main() -> std::io::Result<()>  {
     let arg:Vec<String> = args().collect();
 
-    let mut problem = 18;
+    let mut problem = 25;
     if arg.len() >= 2 {
         problem = arg[1].parse().unwrap();
     }
