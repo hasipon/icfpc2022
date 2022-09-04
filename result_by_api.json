@@ -99,9 +99,9 @@
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-04T15:19:41.4061Z",
-      "submission_count": 27,
-      "min_cost": 17194,
+      "last_submitted_at": "2022-09-04T16:01:41.974716Z",
+      "submission_count": 28,
+      "min_cost": 14864,
       "overall_best_cost": 8744
     },
     {
@@ -123,9 +123,9 @@
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-04T15:19:43.872846Z",
-      "submission_count": 29,
-      "min_cost": 22626,
+      "last_submitted_at": "2022-09-04T16:01:43.2341Z",
+      "submission_count": 30,
+      "min_cost": 21701,
       "overall_best_cost": 16934
     },
     {
@@ -147,9 +147,9 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-04T15:19:47.558451Z",
-      "submission_count": 27,
-      "min_cost": 36198,
+      "last_submitted_at": "2022-09-04T16:01:44.481732Z",
+      "submission_count": 28,
+      "min_cost": 27299,
       "overall_best_cost": 20812
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 10537
     }
   ],
-  "total_cost": 1297202,
+  "total_cost": 1285048,
   "solved_problem_count": 40
 }
