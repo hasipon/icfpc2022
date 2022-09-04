@@ -22,7 +22,7 @@ mod painter;
 fn main() -> std::io::Result<()>  {
     let arg:Vec<String> = args().collect();
 
-    let mut problem = 18;
+    let mut problem = 6;
     if arg.len() >= 2 {
         problem = arg[1].parse().unwrap();
     }
@@ -31,6 +31,7 @@ fn main() -> std::io::Result<()>  {
 
     let state = painter::solve(&image);
 
+    state.image.save("output.png").unwrap();
     println!("{}: similarity:{} cost:{} total:{}", problem, state.similarity, state.cost, state.similarity + state.cost);
     let mut string = String::new();
     writer::write(&mut string, &state.commands);

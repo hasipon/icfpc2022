@@ -4,6 +4,7 @@ use image::RgbaImage;
 use imageproc::drawing::draw_filled_rect_mut;
 use std::mem;
 use std::cmp;
+use std::vec;
 use imageproc::rect::Rect;
 
 #[derive(Clone)]
@@ -45,7 +46,36 @@ impl State {
             self.apply_command(command);
         }
     }
-    
+    pub fn revert_command(&mut self, command:&Command) {
+
+        match command {
+            Command::PointCut(id, point) => {}
+            Command::LineCut(id, is_x, pos) => {
+                let mut id0 = id.clone();
+                let mut id1 = id.clone();
+                id0.push(0);
+                id1.push(1);
+                let mut redirect_count = 0;
+                id0 = self.redirect_merge(id0, &mut redirect_count);
+                id1 = self.redirect_merge(id1, &mut redirect_count);
+                self.apply_command(&Command::Merge(id0, id1));
+            }
+            _ => panic!("cant revert"),
+        }
+    }
+    pub fn redirect_merge(&mut self, id:Id, redirect_count:&mut usize) -> Id {
+        match &self.tree.find(&id) {
+            Tree::Leaf(_, _) => {
+                println!("not redirect!");
+                id
+            }
+            _ => {
+                *redirect_count += 1;
+                vec![&self.get_last_node() - *redirect_count + 1]
+            }
+        }
+    }
+
     pub fn apply_command(&mut self, command:&Command) {
         self.commands.push(command.clone());
         self.process_command(command);
@@ -106,7 +136,13 @@ impl State {
             }
         }
     }
-    
+    pub fn get_last_node(&self) -> usize {
+        match &self.tree {
+            Tree::Node(_, children) => children.len() - 1,
+            _ => panic!("not root"),
+        }
+    }
+
 }
 
 
