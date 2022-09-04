@@ -27,8 +27,8 @@
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T20:11:56.412892Z",
-      "submission_count": 47,
+      "last_submitted_at": "2022-09-04T21:44:05.673935Z",
+      "submission_count": 48,
       "min_cost": 11307,
       "overall_best_cost": 5888
     },
@@ -43,33 +43,33 @@
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-04T20:30:19.929347Z",
-      "submission_count": 57,
+      "last_submitted_at": "2022-09-04T21:44:06.892312Z",
+      "submission_count": 58,
       "min_cost": 11619,
       "overall_best_cost": 4155
     },
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-04T20:41:14.753097Z",
-      "submission_count": 44,
-      "min_cost": 20541,
+      "last_submitted_at": "2022-09-04T21:44:10.591421Z",
+      "submission_count": 47,
+      "min_cost": 20037,
       "overall_best_cost": 12607
     },
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-04T17:05:33.071519Z",
-      "submission_count": 23,
+      "last_submitted_at": "2022-09-04T21:44:14.273373Z",
+      "submission_count": 26,
       "min_cost": 21658,
       "overall_best_cost": 12742
     },
     {
       "problem_id": 9,
       "problem_name": "SimpLisa",
-      "last_submitted_at": "2022-09-04T17:46:32.937654Z",
-      "submission_count": 42,
-      "min_cost": 20033,
+      "last_submitted_at": "2022-09-04T21:44:15.499222Z",
+      "submission_count": 43,
+      "min_cost": 18495,
       "overall_best_cost": 8926
     },
     {
@@ -83,16 +83,16 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-04T20:57:01.999207Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-04T21:44:02.011165Z",
+      "submission_count": 46,
       "min_cost": 29305,
       "overall_best_cost": 19599
     },
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-04T20:29:56.637215Z",
-      "submission_count": 37,
+      "last_submitted_at": "2022-09-04T21:44:03.231337Z",
+      "submission_count": 38,
       "min_cost": 14156,
       "overall_best_cost": 5404
     },
@@ -115,8 +115,8 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-04T19:24:56.331092Z",
-      "submission_count": 35,
+      "last_submitted_at": "2022-09-04T21:44:04.453552Z",
+      "submission_count": 36,
       "min_cost": 24631,
       "overall_best_cost": 17143
     },
@@ -142,7 +142,7 @@
       "last_submitted_at": "2022-09-04T19:24:58.779483Z",
       "submission_count": 73,
       "min_cost": 36478,
-      "overall_best_cost": 33386
+      "overall_best_cost": 33364
     },
     {
       "problem_id": 19,
@@ -174,7 +174,7 @@
       "last_submitted_at": "2022-09-04T20:30:11.329197Z",
       "submission_count": 39,
       "min_cost": 25954,
-      "overall_best_cost": 14699
+      "overall_best_cost": 14281
     },
     {
       "problem_id": 23,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 1023764,
+  "total_cost": 1021722,
   "solved_problem_count": 40
 }
