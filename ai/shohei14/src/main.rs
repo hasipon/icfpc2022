@@ -45,7 +45,7 @@ fn main() -> std::io::Result<()>  {
 
     println!("{}: similarity:{} cost:{} total:{}", problem, state.similarity, state.cost, state.similarity + state.cost);
     let text = Utc::now().format("%Y%m%d%H%M%S%f3").to_string();
-    let file = File::create(format!("../../solutions/{}-shohei12_{}_{}-{}.isl", problem, width, depth, text))?;
+    let file = File::create(format!("../../solutions/{}-shohei14_{}_{}-{}.isl", problem, width, depth, text))?;
     let mut writer = BufWriter::new(file);
     writer.write_all(string.as_bytes())?;
     writer.flush()?;

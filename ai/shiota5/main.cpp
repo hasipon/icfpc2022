@@ -148,7 +148,7 @@ Color solveColor(const vii &points, const Canvas &canvas){
 
     // Weiszfeld's algorithm
     // https://en.wikipedia.org/wiki/Geometric_median
-    for (auto it = 0; it < 20; it++) {
+    for (auto it = 0; it < 1000; it++) {
         // result = numer / denom
         double numer[3] = {0};
         double denom = 0;
