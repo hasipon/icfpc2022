@@ -75,9 +75,9 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-05T00:55:13.244796Z",
-      "submission_count": 44,
-      "min_cost": 23235,
+      "last_submitted_at": "2022-09-05T03:07:41.088475Z",
+      "submission_count": 45,
+      "min_cost": 22479,
       "overall_best_cost": 12403
     },
     {
@@ -91,9 +91,9 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-05T03:04:18.079905Z",
-      "submission_count": 42,
-      "min_cost": 11774,
+      "last_submitted_at": "2022-09-05T03:07:42.328845Z",
+      "submission_count": 43,
+      "min_cost": 9435,
       "overall_best_cost": 5387
     },
     {
@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T02:57:17.865206Z",
-      "submission_count": 46,
-      "min_cost": 32087,
+      "last_submitted_at": "2022-09-05T03:07:43.624397Z",
+      "submission_count": 47,
+      "min_cost": 29073,
       "overall_best_cost": 18932
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 967285,
+  "total_cost": 961176,
   "solved_problem_count": 40
 }
