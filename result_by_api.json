@@ -107,8 +107,8 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T07:18:15.305504Z",
-      "submission_count": 53,
+      "last_submitted_at": "2022-09-05T07:20:58.20599Z",
+      "submission_count": 54,
       "min_cost": 26149,
       "overall_best_cost": 18932
     },
@@ -235,9 +235,9 @@
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-05T07:18:22.718667Z",
-      "submission_count": 12,
-      "min_cost": 57618,
+      "last_submitted_at": "2022-09-05T07:20:59.481092Z",
+      "submission_count": 13,
+      "min_cost": 54514,
       "overall_best_cost": 38572
     },
     {
@@ -275,25 +275,25 @@
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-05T07:18:28.941299Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T07:21:00.723862Z",
+      "submission_count": 13,
       "min_cost": 36736,
       "overall_best_cost": 29132
     },
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T06:59:26.516874Z",
-      "submission_count": 23,
+      "last_submitted_at": "2022-09-05T07:21:01.952616Z",
+      "submission_count": 24,
       "min_cost": 36227,
       "overall_best_cost": 32832
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T06:59:27.760927Z",
-      "submission_count": 21,
-      "min_cost": 19969,
+      "last_submitted_at": "2022-09-05T07:21:03.226727Z",
+      "submission_count": 22,
+      "min_cost": 19961,
       "overall_best_cost": 16317
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 900447,
+  "total_cost": 897335,
   "solved_problem_count": 40
 }
