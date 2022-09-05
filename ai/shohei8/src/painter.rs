@@ -62,15 +62,15 @@ pub fn solve(target:&RgbaImage, beam_w:usize, depth:usize) -> PainterResult {
                 0..=5  => {
                     let cx = rng.gen_range(0, w);
                     let cy = rng.gen_range(0, h);
-                    let (diff, ax) = if rng.gen_bool(0.4) { (10000.0, 0) } else { find_x_boundary(cx, cy, &target, &mut rng) };
+                    let (diff, ax) = if rng.gen_bool(0.25) { (10000.0, 0) } else if rng.gen_bool(0.60) { find_x_boundary(cx, cy, &target, &mut rng) } else { rng.gen_range(1, w - 1); };
                     if diff < 40.0 { continue; }
-                    let (diff, bx) = if rng.gen_bool(0.4) { (10000.0, w) } else { find_right_boundary(cx, cy, &target, &mut rng) };
+                    let (diff, bx) = if rng.gen_bool(0.5) { (10000.0, w) } else if rng.gen_bool(0.60) { find_right_boundary(cx, cy, &target, &mut rng) } else { rng.gen_range(1, w - 1); };
                     if diff < 40.0 { continue; }
-                    let (diff, ay) = if rng.gen_bool(0.4) { (10000.0, 0) } else { find_y_boundary(cx, cy, &target, &mut rng) };
+                    let (diff, ay) = if rng.gen_bool(0.25) { (10000.0, 0) } else if rng.gen_bool(0.60) { find_y_boundary(cx, cy, &target, &mut rng) } else { rng.gen_range(1, h - 1); };
                     if diff < 40.0 { continue; }
-                    let (diff, by) = if rng.gen_bool(0.4) { (10000.0, h) } else { find_bottom_boundary(cx, cy, &target, &mut rng) };
+                    let (diff, by) = if rng.gen_bool(0.5) { (10000.0, h) } else if rng.gen_bool(0.60) { find_bottom_boundary(cx, cy, &target, &mut rng) } else { rng.gen_range(1, h - 1); };
                     if diff < 40.0 { continue; }
-
+                    
                     if ax == bx { continue; }
                     if ay == by { continue; }
 
