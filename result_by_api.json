@@ -75,8 +75,8 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-05T06:42:57.30644Z",
-      "submission_count": 56,
+      "last_submitted_at": "2022-09-05T07:03:59.546232Z",
+      "submission_count": 57,
       "min_cost": 18751,
       "overall_best_cost": 12403
     },
@@ -195,8 +195,8 @@
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-05T06:59:25.283956Z",
-      "submission_count": 47,
+      "last_submitted_at": "2022-09-05T07:04:00.783755Z",
+      "submission_count": 48,
       "min_cost": 23100,
       "overall_best_cost": 19206
     },
@@ -299,16 +299,16 @@
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T06:59:28.993537Z",
-      "submission_count": 20,
-      "min_cost": 26571,
+      "last_submitted_at": "2022-09-05T07:04:02.083701Z",
+      "submission_count": 21,
+      "min_cost": 26039,
       "overall_best_cost": 22568
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T06:59:30.229204Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T07:04:03.353879Z",
+      "submission_count": 13,
       "min_cost": 22068,
       "overall_best_cost": 19520
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 901174,
+  "total_cost": 900642,
   "solved_problem_count": 40
 }
