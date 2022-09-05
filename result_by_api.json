@@ -171,9 +171,9 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-05T04:42:35.197472Z",
-      "submission_count": 48,
-      "min_cost": 23084,
+      "last_submitted_at": "2022-09-05T05:21:43.212173Z",
+      "submission_count": 49,
+      "min_cost": 19931,
       "overall_best_cost": 14281
     },
     {
@@ -294,7 +294,7 @@
       "last_submitted_at": "2022-09-05T04:53:33.116713Z",
       "submission_count": 18,
       "min_cost": 19969,
-      "overall_best_cost": 16328
+      "overall_best_cost": 16317
     },
     {
       "problem_id": 38,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 932621,
+  "total_cost": 929468,
   "solved_problem_count": 40
 }
