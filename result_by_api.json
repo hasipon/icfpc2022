@@ -142,7 +142,7 @@
       "last_submitted_at": "2022-09-05T05:03:45.253163Z",
       "submission_count": 81,
       "min_cost": 35362,
-      "overall_best_cost": 33364
+      "overall_best_cost": 33348
     },
     {
       "problem_id": 19,
@@ -299,8 +299,8 @@
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T05:26:12.126908Z",
-      "submission_count": 17,
+      "last_submitted_at": "2022-09-05T06:02:50.128452Z",
+      "submission_count": 19,
       "min_cost": 26571,
       "overall_best_cost": 22568
     },
