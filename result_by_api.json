@@ -139,8 +139,8 @@
     {
       "problem_id": 18,
       "problem_name": "\"The\" Kiss",
-      "last_submitted_at": "2022-09-05T10:50:21.038116Z",
-      "submission_count": 83,
+      "last_submitted_at": "2022-09-05T11:35:00.135409Z",
+      "submission_count": 84,
       "min_cost": 35357,
       "overall_best_cost": 32897
     },
@@ -291,8 +291,8 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T11:08:14.133289Z",
-      "submission_count": 28,
+      "last_submitted_at": "2022-09-05T11:35:02.599053Z",
+      "submission_count": 30,
       "min_cost": 19562,
       "overall_best_cost": 16240
     },
@@ -307,9 +307,9 @@
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T11:14:50.626977Z",
-      "submission_count": 18,
-      "min_cost": 22068,
+      "last_submitted_at": "2022-09-05T11:35:05.127425Z",
+      "submission_count": 20,
+      "min_cost": 21495,
       "overall_best_cost": 19459
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 849015,
+  "total_cost": 848442,
   "solved_problem_count": 40
 }
