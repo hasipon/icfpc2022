@@ -150,9 +150,61 @@ void col(string blockId, uint32_t c) {
 	uint8_t* x = (uint8_t*)&c;
 	cout << "color ["<<blockId<<"] ["<<(int)x[0]<<","<<(int)x[1]<<","<<(int)x[2]<<","<<(int)x[3]<<"]"<<endl;
 }
+struct Data2 {
+	const int i0, i1;
+	const double cutCost;
+	map<int,pair<double, int>> memo;
+	map<pair<int,int>, pair<uint32_t, double>> cache;
+	Data2(int i0, int i1) : i0(i0), i1(i1), cutCost(round(7.0*400/i0)) {}
+	pair<uint32_t, double> fn(int j0, int j1) {
+		if (cache.count({j0,j1})) return cache[{j0,j1}];
+		return cache[{j0,j1}] = f(i0,i1,j0,j1);
+	}
+	pair<double, int> calc(int j0) {
+		if (memo.count(j0)) return memo[j0];
+		double colorCost = round(5.0*400*400/((400-i0)*(400-j0)));
+		pair<double, int> res = {colorCost + fn(j0,400).second*0.005, 400};
+		const int Delta1 = 5;
+		const int Delta2 = 1;
+		for (int j = j0+Delta1; j <= 400-Delta1; j += Delta2) {
+			double cost = colorCost + calc(j).first;
+			cost += fn(j0,j).second*0.005;
+			cost += cutCost;
+			cost += round(400.0/(i0*max(j, 400-j))); // mergeCost;
+			res = min(res, {cost, j});
+		}
+		return memo[j0] = res;
+	}
+};
 void solve() {
-	if (width != 400) throw 1;
-	if (height != 400) throw 1;
+	vector<int> ipos {135,139,145,155,162,168,175,181,188,194,201,205,210,217,223,230,236,243,250,255,259,269,279,289};
+	double sumCost = 0;
+	cout << "cut [0] [y] ["<<ipos[0]<<"]" << endl;
+	string blockId = "0.1";
+	int globalCounter = 0;
+	for (int i = 1; i < (int)ipos.size(); ++ i) {
+		Data2 d(ipos[i-1], ipos[i]);
+		auto c = d.calc(0).first;
+		cerr << c << endl;
+		for (int j = 0; j < 400; ) {
+			int j1 = d.calc(j).second;
+			auto cc = d.fn(j, j1).first;
+			if (j == 0) {
+				col(blockId, cc);
+			} else {
+				cout << "cut ["<<blockId<<"] [x] ["<<j<<"]" << endl;
+				col(blockId+".1", cc);
+				cout << "merge ["<<blockId<<".0] ["<<blockId<<".1]" << endl;
+				blockId = to_string(++globalCounter);
+			}
+			j = j1;
+		}
+		sumCost += c;
+		cout << "cut ["<<blockId<<"] [y] ["<<ipos[i]<<"]" << endl;
+		blockId += ".1";
+	}
+	col(blockId+".1", 0xffffffff);
+	// cerr << "sumCost = " << sumCost << endl;
 }
 int main() {
 	char buf[1000], name[1000];
