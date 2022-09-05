@@ -211,9 +211,9 @@
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-05T10:49:53.003886Z",
-      "submission_count": 14,
-      "min_cost": 33787,
+      "last_submitted_at": "2022-09-05T11:01:44.270408Z",
+      "submission_count": 16,
+      "min_cost": 32283,
       "overall_best_cost": 19841
     },
     {
@@ -235,8 +235,8 @@
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-05T07:20:59.481092Z",
-      "submission_count": 13,
+      "last_submitted_at": "2022-09-05T11:01:48.281696Z",
+      "submission_count": 14,
       "min_cost": 54514,
       "overall_best_cost": 37191
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 886785,
+  "total_cost": 885281,
   "solved_problem_count": 40
 }
