@@ -83,9 +83,9 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-05T06:59:09.892405Z",
-      "submission_count": 57,
-      "min_cost": 29167,
+      "last_submitted_at": "2022-09-05T07:01:53.972488Z",
+      "submission_count": 58,
+      "min_cost": 26063,
       "overall_best_cost": 19599
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 904278,
+  "total_cost": 901174,
   "solved_problem_count": 40
 }
