@@ -83,8 +83,8 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-05T05:59:59.537379Z",
-      "submission_count": 52,
+      "last_submitted_at": "2022-09-05T06:10:01.740578Z",
+      "submission_count": 53,
       "min_cost": 29305,
       "overall_best_cost": 19599
     },
@@ -115,8 +115,8 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T05:26:08.424428Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-05T06:10:02.958409Z",
+      "submission_count": 44,
       "min_cost": 24145,
       "overall_best_cost": 17143
     },
