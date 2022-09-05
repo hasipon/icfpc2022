@@ -102,7 +102,7 @@
       "last_submitted_at": "2022-09-05T06:59:12.362717Z",
       "submission_count": 54,
       "min_cost": 13319,
-      "overall_best_cost": 8741
+      "overall_best_cost": 8538
     },
     {
       "problem_id": 14,
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-05T07:18:20.242037Z",
       "submission_count": 14,
       "min_cost": 21608,
-      "overall_best_cost": 14893
+      "overall_best_cost": 14786
     },
     {
       "problem_id": 29,
