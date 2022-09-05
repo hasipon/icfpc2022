@@ -147,8 +147,8 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-05T08:33:29.739969Z",
-      "submission_count": 49,
+      "last_submitted_at": "2022-09-05T09:39:50.95112Z",
+      "submission_count": 50,
       "min_cost": 25588,
       "overall_best_cost": 20784
     },
@@ -179,8 +179,8 @@
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-05T09:05:21.163105Z",
-      "submission_count": 50,
+      "last_submitted_at": "2022-09-05T09:39:52.177708Z",
+      "submission_count": 51,
       "min_cost": 22121,
       "overall_best_cost": 17628
     },
@@ -195,8 +195,8 @@
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-05T07:04:00.783755Z",
-      "submission_count": 48,
+      "last_submitted_at": "2022-09-05T09:39:53.400116Z",
+      "submission_count": 49,
       "min_cost": 23100,
       "overall_best_cost": 19172
     },
@@ -291,24 +291,24 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T07:21:03.226727Z",
-      "submission_count": 22,
-      "min_cost": 19961,
+      "last_submitted_at": "2022-09-05T09:39:54.630589Z",
+      "submission_count": 23,
+      "min_cost": 19562,
       "overall_best_cost": 16308
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T09:05:24.867387Z",
-      "submission_count": 23,
+      "last_submitted_at": "2022-09-05T09:39:55.86694Z",
+      "submission_count": 24,
       "min_cost": 26039,
       "overall_best_cost": 22282
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T07:04:03.353879Z",
-      "submission_count": 13,
+      "last_submitted_at": "2022-09-05T09:39:58.319313Z",
+      "submission_count": 15,
       "min_cost": 22068,
       "overall_best_cost": 19467
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 891336,
+  "total_cost": 890937,
   "solved_problem_count": 40
 }
