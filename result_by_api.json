@@ -75,8 +75,8 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-05T04:04:36.200044Z",
-      "submission_count": 50,
+      "last_submitted_at": "2022-09-05T04:53:25.723462Z",
+      "submission_count": 51,
       "min_cost": 22250,
       "overall_best_cost": 12403
     },
@@ -99,8 +99,8 @@
     {
       "problem_id": 13,
       "problem_name": "Not So SimpLisa",
-      "last_submitted_at": "2022-09-05T04:05:11.602288Z",
-      "submission_count": 52,
+      "last_submitted_at": "2022-09-05T04:53:26.955703Z",
+      "submission_count": 53,
       "min_cost": 13319,
       "overall_best_cost": 8741
     },
@@ -115,8 +115,8 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T04:05:21.498742Z",
-      "submission_count": 41,
+      "last_submitted_at": "2022-09-05T04:53:28.186849Z",
+      "submission_count": 42,
       "min_cost": 24145,
       "overall_best_cost": 17143
     },
@@ -131,8 +131,8 @@
     {
       "problem_id": 17,
       "problem_name": "\"The\" Starry Night",
-      "last_submitted_at": "2022-09-05T04:05:30.187328Z",
-      "submission_count": 34,
+      "last_submitted_at": "2022-09-05T04:53:29.421182Z",
+      "submission_count": 35,
       "min_cost": 36571,
       "overall_best_cost": 33397
     },
@@ -155,8 +155,8 @@
     {
       "problem_id": 20,
       "problem_name": "\"The\" Son of Man",
-      "last_submitted_at": "2022-09-05T04:05:48.767425Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-05T04:53:30.649238Z",
+      "submission_count": 44,
       "min_cost": 17299,
       "overall_best_cost": 14888
     },
@@ -235,8 +235,8 @@
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-05T03:41:28.13628Z",
-      "submission_count": 9,
+      "last_submitted_at": "2022-09-05T04:52:11.937836Z",
+      "submission_count": 10,
       "min_cost": 57756,
       "overall_best_cost": 38572
     },
@@ -283,16 +283,16 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T04:06:32.101358Z",
-      "submission_count": 19,
+      "last_submitted_at": "2022-09-05T04:53:31.882639Z",
+      "submission_count": 20,
       "min_cost": 36227,
       "overall_best_cost": 32832
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T04:22:37.443111Z",
-      "submission_count": 17,
+      "last_submitted_at": "2022-09-05T04:53:33.116713Z",
+      "submission_count": 18,
       "min_cost": 19969,
       "overall_best_cost": 16328
     },
@@ -307,8 +307,8 @@
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T04:06:54.39995Z",
-      "submission_count": 10,
+      "last_submitted_at": "2022-09-05T04:53:34.369607Z",
+      "submission_count": 11,
       "min_cost": 22068,
       "overall_best_cost": 19527
     },
@@ -318,7 +318,7 @@
       "last_submitted_at": "2022-09-05T04:06:56.86147Z",
       "submission_count": 12,
       "min_cost": 11894,
-      "overall_best_cost": 7229
+      "overall_best_cost": 7227
     }
   ],
   "total_cost": 936741,
