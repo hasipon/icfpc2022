@@ -123,9 +123,9 @@
     {
       "problem_id": 16,
       "problem_name": "\"The\" Mona Lisa",
-      "last_submitted_at": "2022-09-05T06:59:14.882582Z",
-      "submission_count": 44,
-      "min_cost": 20422,
+      "last_submitted_at": "2022-09-05T09:47:58.71615Z",
+      "submission_count": 45,
+      "min_cost": 20078,
       "overall_best_cost": 16929
     },
     {
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-05T07:18:20.242037Z",
       "submission_count": 14,
       "min_cost": 21608,
-      "overall_best_cost": 14786
+      "overall_best_cost": 14782
     },
     {
       "problem_id": 29,
@@ -238,7 +238,7 @@
       "last_submitted_at": "2022-09-05T07:20:59.481092Z",
       "submission_count": 13,
       "min_cost": 54514,
-      "overall_best_cost": 38572
+      "overall_best_cost": 37791
     },
     {
       "problem_id": 31,
@@ -278,7 +278,7 @@
       "last_submitted_at": "2022-09-05T07:21:00.723862Z",
       "submission_count": 13,
       "min_cost": 36736,
-      "overall_best_cost": 29132
+      "overall_best_cost": 28577
     },
     {
       "problem_id": 36,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 889823,
+  "total_cost": 889479,
   "solved_problem_count": 40
 }
