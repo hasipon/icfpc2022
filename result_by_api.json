@@ -83,9 +83,9 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-05T10:16:32.504428Z",
-      "submission_count": 60,
-      "min_cost": 25463,
+      "last_submitted_at": "2022-09-05T10:25:34.201875Z",
+      "submission_count": 61,
+      "min_cost": 25330,
       "overall_best_cost": 19583
     },
     {
@@ -238,7 +238,7 @@
       "last_submitted_at": "2022-09-05T07:20:59.481092Z",
       "submission_count": 13,
       "min_cost": 54514,
-      "overall_best_cost": 37207
+      "overall_best_cost": 37191
     },
     {
       "problem_id": 31,
@@ -254,7 +254,7 @@
       "last_submitted_at": "2022-09-05T07:18:25.194795Z",
       "submission_count": 16,
       "min_cost": 26370,
-      "overall_best_cost": 18048
+      "overall_best_cost": 17975
     },
     {
       "problem_id": 33,
@@ -262,7 +262,7 @@
       "last_submitted_at": "2022-09-05T08:06:25.400131Z",
       "submission_count": 16,
       "min_cost": 37160,
-      "overall_best_cost": 26370
+      "overall_best_cost": 26366
     },
     {
       "problem_id": 34,
@@ -278,7 +278,7 @@
       "last_submitted_at": "2022-09-05T07:21:00.723862Z",
       "submission_count": 13,
       "min_cost": 36736,
-      "overall_best_cost": 28429
+      "overall_best_cost": 28428
     },
     {
       "problem_id": 36,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 888371,
+  "total_cost": 888238,
   "solved_problem_count": 40
 }
