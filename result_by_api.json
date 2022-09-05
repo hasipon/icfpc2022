@@ -51,9 +51,9 @@
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-05T07:18:33.960215Z",
-      "submission_count": 52,
-      "min_cost": 18850,
+      "last_submitted_at": "2022-09-05T09:57:00.284456Z",
+      "submission_count": 53,
+      "min_cost": 18342,
       "overall_best_cost": 12344
     },
     {
@@ -86,7 +86,7 @@
       "last_submitted_at": "2022-09-05T07:16:03.375649Z",
       "submission_count": 59,
       "min_cost": 26063,
-      "overall_best_cost": 19592
+      "overall_best_cost": 19583
     },
     {
       "problem_id": 12,
@@ -150,7 +150,7 @@
       "last_submitted_at": "2022-09-05T09:39:50.95112Z",
       "submission_count": 50,
       "min_cost": 25588,
-      "overall_best_cost": 20784
+      "overall_best_cost": 20783
     },
     {
       "problem_id": 20,
@@ -262,7 +262,7 @@
       "last_submitted_at": "2022-09-05T08:06:25.400131Z",
       "submission_count": 16,
       "min_cost": 37160,
-      "overall_best_cost": 26505
+      "overall_best_cost": 26370
     },
     {
       "problem_id": 34,
@@ -278,7 +278,7 @@
       "last_submitted_at": "2022-09-05T07:21:00.723862Z",
       "submission_count": 13,
       "min_cost": 36736,
-      "overall_best_cost": 28577
+      "overall_best_cost": 28429
     },
     {
       "problem_id": 36,
@@ -286,7 +286,7 @@
       "last_submitted_at": "2022-09-05T09:05:23.617691Z",
       "submission_count": 26,
       "min_cost": 35434,
-      "overall_best_cost": 32818
+      "overall_best_cost": 32811
     },
     {
       "problem_id": 37,
@@ -310,7 +310,7 @@
       "last_submitted_at": "2022-09-05T09:39:58.319313Z",
       "submission_count": 15,
       "min_cost": 22068,
-      "overall_best_cost": 19467
+      "overall_best_cost": 19466
     },
     {
       "problem_id": 40,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 889479,
+  "total_cost": 888971,
   "solved_problem_count": 40
 }
