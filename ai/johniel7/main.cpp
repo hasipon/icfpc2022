@@ -25,14 +25,40 @@ template<typename T> using vec = vector<T>;
 constexpr array<int, 8> di({0, 1, -1, 0, 1, -1, 1, -1});
 constexpr array<int, 8> dj({1, 0, 0, -1, 1, -1, -1, 1});
 
+uint32_t xorshift(void)
+{
+  static uint32_t x = 123456789;
+  static uint32_t y = 362436069;
+  static uint32_t z = 521288629;
+  static uint32_t w = 88675123;
+  uint32_t t;
+
+  t = x ^ (x << 11);
+  x = y; y = z; z = w;
+  return w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
+}
+
+string now(void)
+{
+  time_t t = time(nullptr);
+  tm* now = localtime(&t);
+
+  char buffer[128];
+  strftime(buffer, sizeof(buffer), "%m-%d-%Y %X", now);
+  return str(buffer);
+}
+
+using Hash = ull;
+Hash rhash(string s)
+{
+  const ull P = 709;
+  ull h = 0;
+  each (c, s) h = (h * P) + (tolower(c) - 'a' + 1);
+  return h;
+}
+
 constexpr char LINE_CUT_TYPE_I = 'Y';
 constexpr char LINE_CUT_TYPE_J = 'X';
-
-constexpr lli BASECOST_LINE_CUT = 7;
-constexpr lli BASECOST_POINT_CUT = 10;
-constexpr lli BASECOST_COLOR = 5;
-constexpr lli BASECOST_SWAP = 3;
-constexpr lli BASECOST_MERGE = 1;
 
 constexpr int TYPE_LINE_CUT = 0;
 constexpr int TYPE_POINT_CUT = 1;
@@ -48,6 +74,25 @@ struct Color {
   Color(lli r, lli g, lli b, lli a) : R(r), G(b), B(b), A(a) {}
   bool valid(void) const { return (0 <= R && R < 256) && (0 <= G && G < 256) && (0 <= B && B < 256) && (0 <= A && A < 256); }
 };
+
+bool operator == (const Color& x, const Color& y)
+{
+  return (x.R == y.R) && (x.G == y.G) && (x.B == y.B) && (x.A == y.A);
+}
+
+bool operator < (const Color& x, const Color& y)
+{
+  if (x.R != y.R) return x.R < y.R;
+  if (x.G != y.G) return x.G < y.G;
+  if (x.B != y.B) return x.B < y.B;
+  if (x.A != y.A) return x.A < y.A;
+  return false;
+}
+
+bool operator != (const Color& x, const Color& y)
+{
+  return !(x == y);
+}
 
 Color& operator += (Color& x, const Color& y) {
   x.R += y.R;
@@ -212,16 +257,16 @@ namespace y1r {
     //r += x3*x3;
     return r;
   }
-  
+
 // https://github.com/hasipon/icfpc2022/blob/ce61bc5057d8405986457866382d4fc8802a5c3c/ueno-v4/a.cpp#L37-L149
   pair<uint32_t, double> f(int i0, int i1, int j0, int j1) {
     lli sum[3] = {0};
     for (int i = i0; i < i1; ++ i) {
-        for (int j = j0; j < j1; ++ j) {
-            for (int k = 0; k < 3; ++ k) {
-                sum[k] += get(i,j,k);
-            }
+      for (int j = j0; j < j1; ++ j) {
+        for (int k = 0; k < 3; ++ k) {
+          sum[k] += get(i,j,k);
         }
+      }
     }
     double res[3];
 
@@ -337,7 +382,6 @@ Color average(int mni, int mnj, int mxi, int mxj)
   c.G = colorsumG.query(mni, mnj, mxi, mxj);
   c.B = colorsumB.query(mni, mnj, mxi, mxj);
   c.A = colorsumA.query(mni, mnj, mxi, mxj);
-  assert(area);
   c /= area;
   assert(c.valid());
   return c;
@@ -353,10 +397,16 @@ Color bestColor(int mni, int mnj, int mxi, int mxj)
   int b = ((uint8_t*)&x)[2];
   int a = ((uint8_t*)&x)[3];
   return Color(r, g, b, a);
-}  
+}
 
 double calcSimulality(int mni, int mnj, int mxi, int mxj, Color c)
 {
+  static map<vec<lli>, double> memo;
+  vec<lli> key({mni, mnj, mxi, mxj, c.R, c.G, c.B, c.A});
+  if (memo.count(key)) {
+    return memo[key];
+  }
+
   double z = 0;
   for (int i = mni; i < mxi; ++i) {
     for (int j = mnj; j < mxj; ++j) {
@@ -371,137 +421,169 @@ double calcSimulality(int mni, int mnj, int mxi, int mxj, Color c)
       z += sqrt(r + g + b + a);
     }
   }
-  return round(z * 0.005);
+  return memo[key] = round(z * 0.005);
 }
 
-Color findColor(int mni, int mnj, int mxi, int mxj)
-{
-  Color z = average(mni, mnj, mxi, mxj);
-  double sim;
-  int d = 200;
-  for (int _ = 0; _ < 18; ++_) {
-    int len = _ / 2;
-    vec<int> v;
-    v.push_back(z.R);
-    v.push_back(z.G);
-    v.push_back(z.B);
-    double mn = 1e128;
-    for (int i = 0; i < v.size(); ++i) {
-      for (int j = -1; j <= 1; ++j) {
-        unless (j) continue;
-        v[i] += j * (1 << len);
-        Color c(v[0], v[1], v[2], 255);
-        if (c.valid()) {
-          sim = calcSimulality(mni, mnj, mxi, mxj, c);
-          if (mn > sim) {
-            mn = sim;
-            z = c;
-          }
-        }
-        v[i] -= j * (1 << len);
-      }
-    }
-  }
-  return z;
-}
-
-struct Block {
+struct SimpleBlock {
   int mni, mnj;
   int mxi, mxj;
-  str id;
   Color c;
   double _simulality;
+  double _simulalityAv;
 
-  str hash(void) const {
-    char buff[500];
-    sprintf(buff, "%d,%d,%d,%d-%d,%d,%d,%d", mni, mnj, mxi, mxj, c.R, c.G, c.B, c.A);
-    // sprintf(buff, "%s-%d%d%d%d-%d%d%d%d", id.c_str(), mni, mnj, mxi, mxj, c.R, c.G, c.B, c.A);
-    return str(buff);
-  }
-
-  Block(int mni_, int mnj_, int mxi_, int mxj_, str id_, Color c_)
-    : mni(mni_), mnj(mnj_), mxi(mxi_), mxj(mxj_), id(id_), c(c_), _simulality(calcSimulality(mni, mnj, mxi, mxj, c)) {
+  SimpleBlock(int mni_, int mnj_, int mxi_, int mxj_, str id_, Color c_)
+    : mni(mni_), mnj(mnj_), mxi(mxi_), mxj(mxj_), id(id_), c(c_),
+      _simulality(calcSimulality(mni, mnj, mxi, mxj, c)),
+      _simulalityAv(calcSimulality(mni, mnj, mxi, mxj, average(mni, mnj, mxi, mxj))) {
     assert(0 <= mni && mni < mxi && mxi <= 400);
     assert(0 <= mnj && mnj < mxj && mxj <= 400);
+
+    char buff[500];
+    sprintf(buff, "%d,%d,%d,%d-%d,%d,%d,%d", mni, mnj, mxi, mxj, c.R, c.G, c.B, c.A);
+    h = rhash(str(buff));
   }
 
-  pair<str, vec<Block>> lineCutI(int k) const { return lineCut(k, LINE_CUT_TYPE_I); }
-  pair<str, vec<Block>> lineCutJ(int k) const { return lineCut(k, LINE_CUT_TYPE_J); }
-  
-  pair<str, vec<Block>> lineCut(int k, char type) const {
+  Hash hash(void) const { return h; }
+
+  pair<str, vec<SimpleBlock>> lineCutI(int k) const { return lineCut(k, LINE_CUT_TYPE_I); }
+  pair<str, vec<SimpleBlock>> lineCutJ(int k) const { return lineCut(k, LINE_CUT_TYPE_J); }
+
+  pair<str, vec<SimpleBlock>> lineCut(int k, char type) const {
     assert(type == LINE_CUT_TYPE_I || type == LINE_CUT_TYPE_J);
     if (LINE_CUT_TYPE_I == type) assert(mni < k && k < mxi);
     if (LINE_CUT_TYPE_J == type) assert(mnj < k && k < mxj);
 
     char buff[500];
     sprintf(buff, "cut [%s] [%c] [%d]", id.c_str(), type, k);
-    vec<Block> v;
+    vec<SimpleBlock> v;
     if (LINE_CUT_TYPE_I == type) {
-      v.push_back(Block(mni, mnj,   k, mxj, id + ".0", c));
-      v.push_back(Block(  k, mnj, mxi, mxj, id + ".1", c));
+      v.push_back(SimpleBlock(mni, mnj,   k, mxj, id + ".0", c));
+      v.push_back(SimpleBlock(  k, mnj, mxi, mxj, id + ".1", c));
     }
     if (LINE_CUT_TYPE_J == type) {
-      v.push_back(Block(mni, mnj, mxi,   k, id + ".0", c));
-      v.push_back(Block(mni,   k, mxi, mxj, id + ".1", c));
+      v.push_back(SimpleBlock(mni, mnj, mxi,   k, id + ".0", c));
+      v.push_back(SimpleBlock(mni,   k, mxi, mxj, id + ".1", c));
     }
-
-    // double w = simulality();
-    // each (k, v) w -= k.simulality();
-    // if (w < 0) {
-    //   v.push_back(*this);
-    //   cerr << v << endl;
-    //   each (k, v) cerr << k.simulality() << endl;
-    //   assert(!(w < 0));
-    // }
     return make_pair(str(buff), v);
   }
 
-  pair<str, vec<Block>> pointCut(int i, int j) const {
+  pair<str, vec<SimpleBlock>> pointCut(int i, int j) const {
     assert(mni < i && i < mxi);
     assert(mnj < j && j < mxj);
-
-    Block b0(mni, mnj,   i,   j, id + ".0", c);
-    Block b1(  i, mnj, mxi,   j, id + ".1", c);
-    Block b2(  i,   j, mxi, mxj, id + ".2", c);
-    Block b3(mni,   j,   i, mxj, id + ".3", c);
-    vec<Block> v({b0, b1, b2, b3});
+    SimpleBlock b0(mni, mnj,   i,   j, id + ".0", c);
+    SimpleBlock b1(  i, mnj, mxi,   j, id + ".1", c);
+    SimpleBlock b2(  i,   j, mxi, mxj, id + ".2", c);
+    SimpleBlock b3(mni,   j,   i, mxj, id + ".3", c);
+    vec<SimpleBlock> v({b0, b1, b2, b3});
     char buff[500];
     sprintf(buff, "cut [%s] [%d,%d]", id.c_str(), i, j);
     return make_pair(str(buff), v);
   }
 
-  pair<str, Block> color(Color d) const
-  {
+  pair<str, SimpleBlock> color(Color d) const {
     char buff[500];
     sprintf(buff, "color [%s] [%d,%d,%d,%d]", id.c_str(), d.R, d.G, d.B, d.A);
-    Block b = Block{mni, mnj, mxi, mxj, id, d};
+    SimpleBlock b = SimpleBlock{mni, mnj, mxi, mxj, id, d};
     return make_pair(str(buff), b);
   }
+  pair<str, SimpleBlock> colorAv(void) const { return color(average(mni, mnj, mxi, mxj)); }
+};
 
-  pair<str, Block> colorAv(void) const
-  {
-    Color d = average(mni, mnj, mxi, mxj);
-    return color(d);
+ostream& operator << (ostream& os, const SimpleBlock& b)
+{
+  os << "SimpleBlock{" << b.id << make_pair(b.mni, b.mnj) << make_pair(b.mxi, b.mxj) << b.c << ",sim:" << b.simulality() << "}";
+  return os;
+}
+
+struct Block {
+  int mni, mnj;
+  int mxi, mxj;
+  str id;
+  double _simulality;
+  double _simulalityAv;
+
+  vec<SimpleBlock> bs;
+  Block(SimpleBlock b) {
+    mni = mnj = +(1 << 29);
+    mxi = mxj = -(1 << 29);
+  }
+
+  Block append(SimpleBlock sb) const {
+    Block b = *this;
+    b.bs.push_back(sb);
+    b._simulality = sb._simulality;
+    b._simulalityAv = sb._simulalityAv;
+    return b;
   }
 
   double simulality(void) const { return _simulality; }
   double simulality(const Color d) const { return calcSimulality(mni, mnj, mxi, mxj, d); }
-  double simulalityAv(void) const { return simulality(average(mni, mnj, mxi, mxj)); }
+  double simulalityAv(void) const {
+    auto a = simulality();
+    auto b = simulality(average(mni, mnj, mxi, mxj));
+    return min(a, b);
+  }
+
   lli area(void) const { return (mxi - mni) * (mxj - mnj); }
+
+  bool sameShape(const SimpleBlock& other) const
+  {
+    return (mxi - mni) == (other.mxi - other.mni) && (mxj - mnj) == (other.mxj - other.mnj);
+  }
+
+  bool mergeable(const SimpleBlock& other) const
+  {
+    vec<pair<int, int>> v;
+    v.push_back({mni, mnj});
+    v.push_back({mxi, mnj});
+    v.push_back({mxi, mxj});
+    v.push_back({mni, mxj});
+    vec<pair<int, int>> u;
+    u.push_back({other.mni, other.mnj});
+    u.push_back({other.mxi, other.mnj});
+    u.push_back({other.mxi, other.mxj});
+    u.push_back({other.mni, other.mxj});
+    for (int i = 0; i < v.size(); ++i) {
+      for (int j = 0; j < u.size(); ++j) {
+        if (v[i] == u[j] && v[(i + 1) % v.size()] == u[(j + 1) % u.size()]) {
+          return true;
+        }
+      }
+    }
+    reverse(u.begin(), u.end());
+    for (int i = 0; i < v.size(); ++i) {
+      for (int j = 0; j < u.size(); ++j) {
+        if (v[i] == u[j] && v[(i + 1) % v.size()] == u[(j + 1) % u.size()]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  SimpleBlock merge(const SimpleBlock& other, str id) const
+  {
+    return SimpleBlock(min(mni, other.mni),
+                 min(mnj, other.mnj),
+                 max(mxi, other.mxi),
+                 max(mxj, other.mxj),
+                 id,
+                 c);
+  }
 };
 
-ostream& operator << (ostream& os, const Block& b)
-{
-  os << "Block{" << b.id << make_pair(b.mni, b.mnj) << make_pair(b.mxi, b.mxj) << b.c << ",sim:" << b.simulality() << "}";
-  return os;
-}
+SimpleBlock initialSimpleBlock(void) { return SimpleBlock(0, 0, 400, 400, "0", Color(255, 255, 255, 255)); }
 
-Block initialBlock(void) { return Block(0, 0, 400, 400, "0", Color(255, 255, 255, 255)); }
-
-lli calcCost(int move, const Block& b)
+lli calcCost(int move, const SimpleBlock& b)
 {
+  constexpr lli BASECOST_LINE_CUT = 7;
+  constexpr lli BASECOST_POINT_CUT = 10;
+  constexpr lli BASECOST_COLOR = 5;
+  constexpr lli BASECOST_SWAP = 3;
+  constexpr lli BASECOST_MERGE = 1;
+
   double area = b.area();
-  double C = height * width;
+  double C = (height * width);
   switch (move) {
     case TYPE_LINE_CUT:
       return BASECOST_LINE_CUT * C / area;
@@ -517,16 +599,25 @@ lli calcCost(int move, const Block& b)
   return 1LL << 60;
 }
 
+double heuristic(const SimpleBlock& b)
+{
+  return b.simulality() - b.simulalityAv() + calcCost(TYPE_COLOR, b);
+}
+
 struct State {
-  vec<Block> bs;
+  vec<SimpleBlock> bs;
   vec<str> cmd;
   double cost;
+  // double sim;
+  int blockIDCount;
   double sim;
-  State(){}
-  State(Block b) {
+  double simAv;
+
+  State() : blockIDCount(0) {}
+  State(SimpleBlock b) : blockIDCount(0) {
     bs.push_back(b);
     cost = 0;
-    sim = simulality();
+    sim = simAv = 0;
   }
   double simulality(void) const {
     double z = 0;
@@ -548,9 +639,9 @@ struct State {
 
   double ifColorAvLastN(int n) const {
     double c = cost;
-    double s = sim;
+    double s = simulality();
     for (int i = 0; i < n; ++i) {
-      const Block& b = bs[bs.size() - i - 1];
+      const SimpleBlock& b = bs[bs.size() - i - 1];
       double curr = b.simulality();
       double x = calcCost(TYPE_COLOR, b);
       double y = b.simulalityAv();
@@ -562,125 +653,221 @@ struct State {
     }
     if (s < 0) {
       cerr << s << endl;
-      cerr << cost << ' ' << sim << endl;
+      cerr << cost << ' ' << simulality() << ' ' << simulalityAv() << endl;
       for (int i = 0; i < n; ++i) {
-        const Block& b = bs[bs.size() - i - 1];
-        cerr << b << ", " << b.simulalityAv() << endl;
+        const SimpleBlock& b = bs[bs.size() - i - 1];
+        cerr << b << ", " << b.simulality() << ", " << b.simulalityAv() << endl;
       }
-      exit(1);
+      cerr << cmd << endl;
+      assert(false);
     }
     return c + s;
   }
 
-  str hash(void) const {
-    vec<str> v;
-    each (b, bs) {
-      v.push_back(b.hash());
-      v.push_back("&");
-    }
+  Hash hash(void) const {
+    Hash h = 0;
+    vec<Hash> v;
+    each (b, bs) v.push_back(b.hash());
     sort(v.begin(), v.end());
-    return accumulate(v.begin(), v.end(), str(""));
+    each (k, v) {
+      const ull P = 709;
+      h = h * P + k;
+    }
+    return h;
   }
-  double score(void) const { return cost + sim; }
+  double score(void) const {
+    // return cost + sim;
+    return cost + simulality();
+  }
 
   bool validate(void) const {
-    double s = sim;
+    // double s = sim;
+    double s = simulality();
     each (b, bs) {
       s -= b.simulality();
       if (0 <= s) return false;
     }
     return true;
   }
-};
-bool operator < (const State& a, const State& b) { return a.score() < b.score(); }
 
-State replace(const State& s, int nth, const vec<Block>& bs, const int type, const str cmd)
-{
-  State t = s;
-  t.cost += calcCost(TYPE_COLOR, t.bs[nth]);
-  t.sim -= t.bs[nth].simulality();
-  t.bs.erase(t.bs.begin() + nth);
-  t.cmd.push_back(cmd);
-  each (b, bs) {
+  size_t size(void) const { return bs.size(); }
+
+  State remove(size_t idx) const {
+    State t = *this;
+    t.sim -= t.bs[idx].simulality();
+    t.simAv -= t.bs[idx].simulalityAv();
+    t.bs.erase(t.bs.begin() + idx);
+    return t;
+  }
+
+  State append(const SimpleBlock& b) const {
+    State t = *this;
     t.sim += b.simulality();
+    t.simAv += b.simulalityAv();
     t.bs.push_back(b);
+    return t;
   }
-  // assert(t.sim == t.simulality());
-  return t;
+
+  double heuristic(void) const { return ifColorAv(); }
+  const SimpleBlock& operator [] (size_t idx) const { return bs.at(idx); }
+};
+
+bool operator < (const State& a, const State& b) { return a.heuristic() < b.heuristic(); }
+
+State replace(State s, int nth, const vec<SimpleBlock>& bs, const int type, const str cmd)
+{
+  s = s.remove(nth);
+  s.cmd.push_back(cmd);
+  each (b, bs) s = s.append(b);
+  return s;
 }
 
-State colorBlock(const State& s, const int nth, const Color c)
+State colorSimpleBlockF(State s, const int nth, const Color c)
 {
-  State t = s;
-  t.cost += calcCost(TYPE_COLOR, t.bs[nth]);
-  t.sim -= t.bs[nth].simulality();
-  auto p = t.bs[nth].color(c);
-  t.bs[nth] = p.second;
-  t.cmd.push_back(p.first);
-  t.sim += t.bs[nth].simulality();
-  // assert(t.sim == t.simulality());
-  return t;
+  auto p = s[nth].color(c);
+  s = s.remove(nth);
+  s = s.append(p.second);
+  s.cmd.push_back(p.first);
+  return s;
 }
 
-State colorBlockAv(const State& s, const int nth)
+State colorSimpleBlock(const State& s, const int nth, const Color& c)
 {
-  const Block& b = s.bs[nth];
+  auto p = s[nth].color(c);
+  if (s[nth].simulality() > calcCost(TYPE_COLOR, s[nth]) + p.second.simulalityAv()) {
+    State t = s;
+    t.cmd.push_back(p.first);
+    t = t.append(p.second);
+    t = t.remove(nth);
+    t.cost += calcCost(TYPE_COLOR, s[nth]);
+    return t;
+  } else {
+    return s;
+  }
+}
+
+State colorSimpleBlockAv(const State& s, const int nth)
+{
+  const SimpleBlock& b = s.bs[nth];
   Color c = average(b.mni, b.mnj, b.mxi, b.mxj);
-  return colorBlock(s, nth, c);
+  return colorSimpleBlock(s, nth, c);
 }
 
-State colorBlockBest(const State& s, const int nth)
+State colorSimpleBlockBest(const State& s, const int nth)
 {
-  const Block& b = s.bs[nth];
+  const SimpleBlock& b = s.bs[nth];
   Color c = bestColor(b.mni, b.mnj, b.mxi, b.mxj);
-  return colorBlock(s, nth, c);
+  return colorSimpleBlock(s, nth, c);
 }
 
-State colorBlockAvAll(const State& s)
+State colorSimpleBlockAvAll(const State& s)
 {
   State t = s;
   for (int i = 0; i < t.bs.size(); ++i) {
-    t = colorBlockAv(t, i);
+    t = colorSimpleBlockAv(t, i);
   }
   return t;
 }
 
-State colorBlockBestAll(const State& s)
+State colorSimpleBlockBestAll(const State& s)
 {
   State t = s;
   for (int i = 0; i < t.bs.size(); ++i) {
-    t = colorBlockBest(t, i);
+    t = colorSimpleBlockBest(t, i);
   }
   return t;
 }
 
-State lineCutBlock(const State& s, const int nth, const int k, const char type)
+State lineCutSimpleBlock(const State& s, const int nth, const int k, const char type)
 {
-  auto p = s.bs[nth].lineCut(k, type);
-  return replace(s, nth, p.second, TYPE_LINE_CUT, p.first);
+  auto p = s[nth].lineCut(k, type);
+  State t = replace(s, nth, p.second, TYPE_LINE_CUT, p.first);
+  t.cost += calcCost(TYPE_LINE_CUT, s[nth]);
+  return t;
 }
 
-State pointCutBlock(const State& s, const int nth, const int i, const int j)
+State pointCutSimpleBlock(const State& s, const int nth, const int i, const int j)
 {
-  auto p = s.bs[nth].pointCut(i, j);
-  return replace(s, nth, p.second, TYPE_POINT_CUT, p.first);
+  auto p = s[nth].pointCut(i, j);
+  State t = replace(s, nth, p.second, TYPE_POINT_CUT, p.first);
+  t.cost += calcCost(TYPE_POINT_CUT, s[nth]);
+  return t;
 }
+
+double dryrunSwapSimpleBlocks(State s, const int x, const int y)
+{
+  SimpleBlock a(s[x].mni, s[x].mnj, s[x].mxi, s[x].mxj, s[y].id, s[y].c);
+  SimpleBlock b(s[y].mni, s[y].mnj, s[y].mxi, s[y].mxj, s[x].id, s[x].c);
+
+  return
+    calcCost(TYPE_SWAP, a)
+    + a.simulalityAv()
+    + b.simulalityAv()
+    - s[x].simulalityAv()
+    - s[y].simulalityAv();
+}
+
+State swapSimpleBlocks(State s, const int x, const int y)
+{
+  SimpleBlock a(s[x].mni, s[x].mnj, s[x].mxi, s[x].mxj, s[y].id, s[y].c);
+  SimpleBlock b(s[y].mni, s[y].mnj, s[y].mxi, s[y].mxj, s[x].id, s[x].c);
+
+  char buff[500];
+  sprintf(buff, "swap [%s] [%s]", s[x].id.c_str(), s[y].id.c_str());
+
+  s = s.remove(max(x, y));
+  s = s.remove(min(x, y));
+  s = s.append(a);
+  s = s.append(b);
+
+  s.cmd.push_back(str(buff));
+  s.cost += calcCost(TYPE_SWAP, a);
+  return s;
+}
+
+double dryrunMergeSimpleBlocks(const State& s, const int i, const int j)
+{
+  const SimpleBlock& a = s[i];
+  const SimpleBlock& b = s[j];
+  SimpleBlock merged = a.merge(b, "dryrunMergeSimpleBlocks");
+  return calcCost(TYPE_MERGE, (a.area() < b.area() ? b : a)) + merged.simulalityAv() - a.simulalityAv() - b.simulalityAv();
+}
+
+State mergeSimpleBlocks(State s, const int i, const int j)
+{
+  SimpleBlock a = s[i];
+  SimpleBlock b = s[j];
+  str id = to_string(++s.blockIDCount);
+  SimpleBlock merged = a.merge(b, id);
+  // indexの大きい順
+  s = s.remove(max(i, j));
+  s = s.remove(min(i, j));
+  s = s.append(merged);
+
+  char buff[500];
+  sprintf(buff, "merge [%s] [%s]", a.id.c_str(), b.id.c_str());
+  s.cmd.push_back(str(buff));
+  s.cost += calcCost(TYPE_MERGE, (a.area() < b.area() ? b : a));
+  return s;
+}
+
+const int THRESHOLD = 50;
 
 namespace johniel5 {
-  map<str, pair<int, char>> memoI;
-  map<str, pair<int, char>> memoJ;
-  vec<State> cutOneBlock(const State& s)
+  map<Hash, pair<int, char>> memoI;
+  map<Hash, pair<int, char>> memoJ;
+  vec<State> phase99(const State& s)
   {
     vec<State> v;
     for (int k = 0; k < s.bs.size(); ++k) {
-      double sim0 = 1e50;
-      const Block& b = s.bs[k];
+      const SimpleBlock& b = s.bs[k];
       pair<int, char> bestI = {-1, 'a'};
       pair<int, char> bestJ = {-1, 'a'};
-      
-      if (memoI.count(b.hash())) {
-        bestI = memoI[b.hash()];
+      const Hash hash = b.hash();
+      if (memoI.count(hash)) {
+        bestI = memoI[hash];
       } else {
+        double sim0 = 1e50;
         for (int i = b.mni + 1; i < b.mxi; ++i) {
           auto p = b.lineCut(i, LINE_CUT_TYPE_I);
           double sim = 0;
@@ -692,12 +879,13 @@ namespace johniel5 {
             sim0 = sim;
           }
         }
-        memoI[b.hash()] = bestI;
+        memoI[hash] = bestI;
       }
 
-      if (memoJ.count(b.hash())) {
-        bestJ = memoJ[b.hash()];
+      if (memoJ.count(hash)) {
+        bestJ = memoJ[hash];
       } else {
+        double sim0 = 1e50;
         for (int j = b.mnj + 1; j < b.mxj; ++j) {
           auto p = b.lineCut(j, LINE_CUT_TYPE_J);
           double sim = 0;
@@ -709,84 +897,219 @@ namespace johniel5 {
             sim0 = sim;
           }
         }
-        memoJ[b.hash()] = bestJ;
+        memoJ[hash] = bestJ;
       }
       if (bestI.first != -1) {
-        State t = lineCutBlock(s, k, bestI.first, bestI.second);
+        State t = lineCutSimpleBlock(s, k, bestI.first, bestI.second);
         v.push_back(t);
       }
       if (bestJ.first != -1) {
-        State t = lineCutBlock(s, k, bestJ.first, bestJ.second);
+        State t = lineCutSimpleBlock(s, k, bestJ.first, bestJ.second);
         v.push_back(t);
       }
       if (bestI.first != -1 && bestJ.first != -1) {
-        State t = pointCutBlock(s, k, bestI.first, bestJ.first);
+        State t = pointCutSimpleBlock(s, k, bestI.first, bestJ.first);
         v.push_back(t);
       }
     }
+
+    return v;
+  }
+
+  vec<State> phase1(const State& s)
+  {
+    map<vec<int>, vec<int>> shapeidx;
+    for (int i = 0; i < s.size(); ++i) {
+      shapeidx[vec<int>({s[i].mni, s[i].mnj, s[i].mxi, s[i].mxj})].push_back(i);
+    }
+
+    vec<State> v;
+    random_device seed_gen;
+    mt19937 engine(seed_gen());
+
+    State t = s;
+    vec<int> idx(xorshift() % s.size());
+    iota(idx.begin(), idx.end(), 0);
+    shuffle(idx.begin(), idx.end(), engine);
+    for (int k = 0; k + 1 < idx.size(); ++k) {
+      int a = idx[k];
+      int b = idx[k + 1];
+      if (t[a].sameShape(t[b])) {
+        double score = dryrunSwapSimpleBlocks(t, a, b);
+        if (score < t.simulalityAv()) {
+          t = swapSimpleBlocks(t, a, b);
+        }
+      }
+    }
+    v.push_back(t);
+    return v;
+  }
+  vec<State> phase2(const State& s)
+  {
+    map<Color, vec<int>> coloridx;
+    for (int i = 0; i < s.size(); ++i) {
+      coloridx[s[i].c].push_back(i);
+    }
+
+    vec<State> v;
+    random_device seed_gen;
+    mt19937 engine(seed_gen());
+    vec<int> idx(s.size());
+    iota(idx.begin(), idx.end(), 0);
+    shuffle(idx.begin(), idx.end(), engine);
+
+    State t = s;
+    for (int a = 0; a < t.size(); ++a) {
+      pair<int, int> best = {-1, -1};
+      double sim = 1e50;
+      for (int b = a + 1; b < t.size(); ++b) {
+        if (t[a].mergeable(t[b])) {
+          double score = dryrunMergeSimpleBlocks(t, a, b);
+          if (score < sim) {
+            sim = score;
+            best = make_pair(a, b);
+          }
+        }
+      }
+      if (best.first != -1) {
+        t = mergeSimpleBlocks(t, best.first, best.second);
+        --a;
+      }
+    }
+    v.push_back(t);
     return v;
   }
 }
 
-void solve(void)
+void solve(State ini)
 {
-  buildColorPrefixSum2D();
   if (width != 400) throw 1;
   if (height != 400) throw 1;
 
-  State best(initialBlock());
+  State best = ini;
+  const int MULTI_SRC = 5;
+
   priority_queue<State> q;
-  q.push(best);
-  const lli WIDTH = 1000;
-  const int STEP = 30;
-  for (int _ = 0; _ < STEP && q.size(); ++_) {
-    clog << _ << "th-gen,queue.size:" << q.size() << "," << "best.score=" << best.sim <<"＋" << best.cost << ",H:" << best.ifColorAv() << ",cmd.size:" << best.cmd.size() << ",cache-size:" << make_pair(johniel5::memoI.size(),johniel5::memoJ.size()) << endl;
-    priority_queue<State> nq;
-    set<str> vis;
-    while (q.size()) {
-      if (q.top().ifColorAv() < best.ifColorAv()) best = q.top();
-      auto t = johniel5::cutOneBlock(q.top());
-      q.pop();
+  {
+    const int STEP = 2000;
+    for (int _ = 0; _ < STEP; ++_) {
+      clog << "phase1/" << _ << "th-try(" << now() << "),queue.size:" << q.size() << "," << "best.score=" << best.simulality() <<"＋" << best.cost << ",H:" << best.ifColorAv() << ",best.size:" << best.size() << ",cmd.size:" << best.cmd.size() << endl;
+      auto t = johniel5::phase1(ini);
       each (k, t) {
-        str h = k.hash();
-        if (vis.count(h)) continue;
-        vis.insert(h);
-        nq.push(k);
+        if (k.heuristic() < best.heuristic()) best = k;
+        Hash h = k.hash();
+        q.push(k);
       }
-      while (nq.size() && WIDTH < nq.size()) nq.pop();
     }
-    q = nq;
   }
-  best = colorBlockBestAll(best);
+  {
+    const int STEP = 2000;
+    for (int _ = 0; _ < STEP; ++_) {
+      clog << "phase2/" << _ << "th-try(" << now() << "),queue.size:" << q.size() << "," << "best.score=" << best.simulality() <<"＋" << best.cost << ",H:" << best.ifColorAv() << ",best.size:" << best.size() << ",cmd.size:" << best.cmd.size() << endl;
+      auto t = johniel5::phase2(ini);
+      each (k, t) {
+        if (k.heuristic() < best.heuristic()) best = k;
+        Hash h = k.hash();
+        if (k.size() < 100) q.push(k);
+        while (q.size() && MULTI_SRC < q.size()) q.pop();
+      }
+    }
+  }
+  {
+    set<Hash> vis;
+    while (MULTI_SRC < q.size()) q.pop();
+    const lli WIDTH = 600;
+    const int STEP = 30;
+    for (int _ = 0; _ < STEP && q.size(); ++_) {
+      clog << "phase99/" << _ << "th-gen(" << now() << "),queue.size:" << q.size() << "," << "best.score=" << best.simulality() <<"＋" << best.cost << ",H:" << best.ifColorAv() << ",cmd.size:" << best.cmd.size() << ",cache-size:" << make_pair(johniel5::memoI.size(),johniel5::memoJ.size()) << ",visited:" << vis.size() << endl;
+      priority_queue<State> nq;
+      while (q.size()) {
+        if (q.top().heuristic() < best.heuristic()) best = q.top();
+        auto t = johniel5::phase99(q.top());
+        each (k, t) {
+          Hash h = k.hash();
+          if (vis.count(h)) continue;
+          vis.insert(h);
+          nq.push(k);
+        }
+        while (nq.size() && WIDTH < nq.size()) nq.pop();
+        q.pop();
+      }
+      q = nq;
+    }
+  }
+  best = colorSimpleBlockBestAll(best);
   best.output();
   clog << best.score() << "," << best.cmd.size() << endl;
   return ;
 }
 
-int main(int argc, char *argv[])
+State initialjson(void)
 {
-  char buf[1000], name[1000];
-  if (!fgets(buf, sizeof(buf), stdin)) throw 1;
-  for (;;) {
-    if (!fgets(buf, sizeof(buf), stdin)) throw 1;
-    if (string(buf) == "ENDHDR\n") break;
-    if (string(buf) == "TUPLTYPE RGB_ALPHA\n") continue;
-    int val;
-    sscanf(buf, "%s %d", name, &val);
-    auto n = string(name);
-    if (n == "WIDTH") {
-      width = val;
-    } else if (n == "HEIGHT") {
-      height = val;
-    } else if (n == "DEPTH") {
-      if (val != 4) throw 1;
-    } else if (n == "MAXVAL") {
-      if (val != 255) throw 1;
+// N(初期ブロック数), 問題25以下は常に0
+// BLOCK_ID_i
+// MIN_X_i MIN_Y_i
+// MAX_X_i MAX_Y_i
+// R_i G_i B_i A_i
+// ...(0<=i<N)
+// M(PNGのピクセル数)
+// R_i G_i B_i A_i
+// ...(0<=i<M)
+  State s;
+
+  int n;
+  cin >> n;
+  clog << n << " initial blocks" << endl;
+  vec<pair<str, vec<int>>> bs;
+  for (int _ = 0; _ < n; ++_) {
+    str id;
+    int mni, mnj, mxi, mxj, r, g, b, a;
+    cin >> id >> mni >> mnj >> mxi >> mxj >> r >> g >> b >> a;
+    bs.push_back(make_pair(id, vec<int>({mni, mnj, mxi, mxj, r, g, b, a})));
+  }
+
+  int m;
+  cin >> m;
+  clog << m << " pixels" << endl;
+  Image = new uint8_t[width*height*4];
+  for (int i = 0; i < height; ++i) {
+    for (int j = 0; j < width; ++j) {
+      uint8_t r, g, b, a;
+      cin >> r >> g >> b >> a;
+      Image[((height - 1 - i) * width + j) * 4 + 0] = r;
+      Image[((height - 1 - i) * width + j) * 4 + 1] = g;
+      Image[((height - 1 - i) * width + j) * 4 + 2] = b;
+      Image[((height - 1 - i) * width + j) * 4 + 3] = a;
     }
   }
-  Image = new uint8_t[width*height*4];
-  if ((int)fread(Image, 1, width*height*4, stdin) != width*height*4) throw 1;
-  solve();
+  buildColorPrefixSum2D();
 
+  each (k, bs) {
+    str id  = k.first;
+    int mni = k.second[0];
+    int mnj = k.second[1];
+    int mxi = k.second[2];
+    int mxj = k.second[3];
+    int r = k.second[4];
+    int g = k.second[5];
+    int b = k.second[6];
+    int a = k.second[7];
+    s = s.append(SimpleBlock(mni, mnj, mxi, mxj, id, Color(r, g, b, a)));
+  }
+  if (s.empty()) s = s.append(initialSimpleBlock());
+  s.blockIDCount = n - 1;
+  clog << "initial simulality:" << s.simulality() << ' ' << s.blockIDCount << endl;
+  return s;
+}
+
+int main(int argc, char *argv[])
+{
+  width = height = 400;
+  State s = initialjson();
+  str B = now();
+  solve(s);
+  str E = now();
+  clog << "start:" << B << endl;
+  clog << "end:" << E << endl;
   return 0;
 }
