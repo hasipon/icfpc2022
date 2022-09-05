@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<numeric>
 #include <set>
+#include <map>
 #include<vector>
 
 using namespace std;
@@ -120,39 +121,31 @@ int main() {
     ifstream ifs(filename);
     auto vb = inputInit(ifs);
     globalcnt = max(int(vb.size() -1), 0);
-    while(vb.size() != 1){
-        sort(vb.begin(), vb.end(), [](const Block & l, const Block& r) -> bool
-             {
-                 return l.size() > r.size();
-             });
-        vector<Block> next;
-        set<string> merged;
-        for(int i = 0; i < vb.size(); i++){
-            if(merged.count(vb[i].blockId) != 0){
-                continue ;
-            }
-            for(int j = i+1; j<vb.size(); j++){
-                if(merged.count(vb[j].blockId) != 0){
-                    continue ;
-                }
-                if(vb[i].canMerge(vb[j])){
-                    cout << "merge [" << vb[i].blockId << "] [" << vb[j].blockId<< "]" <<endl;
-                    next.push_back(vb[i].merge(vb[j]));
-                    merged.insert(vb[i].blockId);
-                    merged.insert(vb[j].blockId);
-                    goto NEXT;
-                }
-            }
-        }
-        if(merged.size() == 0){
-            break;
-        }
-    NEXT:;
-        for(auto b : vb){
-            if(merged.count(b.blockId))continue;
-            next.push_back(b);
-        }
-        vb = next;
+    {
+	    map<int, map<int, Block>> aaa;
+	    for (auto b : vb) {
+	    	aaa[b.bottomLeft.first][b.bottomLeft.second] = b;
+	    }
+	    vector<Block> bbb;
+	    for (auto& aa : aaa) {
+	    	vector<Block> aa2;
+	    	for (auto& b : aa.second) {
+	    		aa2.push_back(b.second);
+	    	}
+	    	auto b = aa2[0];
+	    	for (int i = 1; i < (int)aa2.size(); ++ i) {
+                cout << "merge [" << b.blockId << "] [" << aa2[i].blockId<< "]" <<endl;
+                b = b.merge(aa2[i]);
+	    	}
+	    	bbb.push_back(b);
+	    }
+	    {
+	    	auto b = bbb[0];
+	    	for (int i = 1; i < (int)bbb.size(); ++ i) {
+                cout << "merge [" << b.blockId << "] [" << bbb[i].blockId<< "]" <<endl;
+                b = b.merge(bbb[i]);
+	    	}
+	    }
     }
 
     string MERGE_ISL = string(getenv("MERGE_ISL"));
