@@ -115,9 +115,9 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T07:55:25.989548Z",
-      "submission_count": 47,
-      "min_cost": 23524,
+      "last_submitted_at": "2022-09-05T09:42:33.588487Z",
+      "submission_count": 48,
+      "min_cost": 22410,
       "overall_best_cost": 16858
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 890937,
+  "total_cost": 889823,
   "solved_problem_count": 40
 }
