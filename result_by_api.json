@@ -11,9 +11,9 @@
     {
       "problem_id": 2,
       "problem_name": "RoboPainter",
-      "last_submitted_at": "2022-09-05T00:55:21.904137Z",
-      "submission_count": 48,
-      "min_cost": 6403,
+      "last_submitted_at": "2022-09-05T01:12:57.103157Z",
+      "submission_count": 49,
+      "min_cost": 5338,
       "overall_best_cost": 2315
     },
     {
@@ -27,17 +27,17 @@
     {
       "problem_id": 4,
       "problem_name": "ICFP Programming Contest Logo",
-      "last_submitted_at": "2022-09-04T23:18:26.844057Z",
-      "submission_count": 50,
-      "min_cost": 9319,
+      "last_submitted_at": "2022-09-05T01:12:58.359928Z",
+      "submission_count": 51,
+      "min_cost": 9046,
       "overall_best_cost": 5888
     },
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-05T00:55:31.8617Z",
-      "submission_count": 41,
-      "min_cost": 16465,
+      "last_submitted_at": "2022-09-05T01:12:59.620563Z",
+      "submission_count": 42,
+      "min_cost": 15763,
       "overall_best_cost": 9057
     },
     {
@@ -59,9 +59,9 @@
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-04T23:52:08.387753Z",
-      "submission_count": 27,
-      "min_cost": 21658,
+      "last_submitted_at": "2022-09-05T01:13:00.836523Z",
+      "submission_count": 28,
+      "min_cost": 20869,
       "overall_best_cost": 12742
     },
     {
@@ -91,9 +91,9 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-05T00:55:15.703835Z",
-      "submission_count": 39,
-      "min_cost": 14156,
+      "last_submitted_at": "2022-09-05T01:12:55.853932Z",
+      "submission_count": 40,
+      "min_cost": 13190,
       "overall_best_cost": 5387
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 980239,
+  "total_cost": 976444,
   "solved_problem_count": 40
 }
