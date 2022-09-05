@@ -155,14 +155,14 @@ struct Data2 {
 	const double cutCost;
 	map<int,pair<double, int>> memo;
 	map<pair<int,int>, pair<uint32_t, double>> cache;
-	Data2(int i0, int i1) : i0(i0), i1(i1), cutCost(round(7.0*400/i0)) {}
+	Data2(int i0, int i1) : i0(i0), i1(i1), cutCost(round(7.0*400/i1)) {}
 	pair<uint32_t, double> fn(int j0, int j1) {
 		if (cache.count({j0,j1})) return cache[{j0,j1}];
 		return cache[{j0,j1}] = f(i0,i1,j0,j1);
 	}
 	pair<double, int> calc(int j1) {
 		if (memo.count(j1)) return memo[j1];
-		double colorCost = round(5.0*400*400/((400-i0)*j1));
+		double colorCost = round(5.0*400*400/(i1*j1));
 		pair<double, int> res = {colorCost + fn(0,j1).second*0.005, 0};
 		const int Delta1 = 8;
 		const int Delta2 = 2;
@@ -170,7 +170,7 @@ struct Data2 {
 			double cost = colorCost + calc(j).first;
 			cost += fn(j,j1).second*0.005;
 			cost += cutCost;
-			cost += round(400.0/(i0*max(j, 400-j))); // mergeCost;
+			cost += round(400.0*400/(i1*max(j, 400-j))); // mergeCost;
 			res = min(res, {cost, j});
 		}
 		return memo[j1] = res;
@@ -179,13 +179,13 @@ struct Data2 {
 void solve() {
 	string blockId = "0";
 	int globalCounter = 0;
-	const int iDelta = 20;
-	for (int i1 = 400; i1 > 0; i1 -= iDelta) {
-		if (i1 < 400) {
-			cout << "cut ["<<blockId<<"] [y] ["<<i1<<"]" << endl;
+	vector<int> ipos {400,377,370,324,295,243,215,192,181,171,120,70,19,0};
+	for (int p = 1; p < (int)ipos.size(); ++ p) {
+		if (p > 1) {
+			cout << "cut ["<<blockId<<"] [y] ["<<ipos[p-1]<<"]" << endl;
 			blockId += ".0";
 		}
-		Data2 d(i1-iDelta, i1);
+		Data2 d(ipos[p], ipos[p-1]);
 		auto c = d.calc(400).first;
 		cerr << c << endl;
 		for (int j1 = 400; j1 > 0; ) {
