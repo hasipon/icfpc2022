@@ -62,7 +62,7 @@
       "last_submitted_at": "2022-09-05T07:18:35.176916Z",
       "submission_count": 30,
       "min_cost": 16415,
-      "overall_best_cost": 12520
+      "overall_best_cost": 12517
     },
     {
       "problem_id": 9,
@@ -115,9 +115,9 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T11:38:16.104118Z",
-      "submission_count": 49,
-      "min_cost": 22410,
+      "last_submitted_at": "2022-09-05T11:49:09.016481Z",
+      "submission_count": 50,
+      "min_cost": 22268,
       "overall_best_cost": 16781
     },
     {
@@ -182,7 +182,7 @@
       "last_submitted_at": "2022-09-05T11:14:48.180378Z",
       "submission_count": 52,
       "min_cost": 22121,
-      "overall_best_cost": 17506
+      "overall_best_cost": 17500
     },
     {
       "problem_id": 24,
@@ -214,7 +214,7 @@
       "last_submitted_at": "2022-09-05T11:45:17.005137Z",
       "submission_count": 24,
       "min_cost": 25208,
-      "overall_best_cost": 19736
+      "overall_best_cost": 19731
     },
     {
       "problem_id": 28,
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-05T11:45:19.520564Z",
       "submission_count": 22,
       "min_cost": 18678,
-      "overall_best_cost": 14738
+      "overall_best_cost": 14733
     },
     {
       "problem_id": 29,
@@ -230,7 +230,7 @@
       "last_submitted_at": "2022-09-05T11:45:22.022857Z",
       "submission_count": 19,
       "min_cost": 37842,
-      "overall_best_cost": 35328
+      "overall_best_cost": 35323
     },
     {
       "problem_id": 30,
@@ -254,7 +254,7 @@
       "last_submitted_at": "2022-09-05T11:45:33.638136Z",
       "submission_count": 24,
       "min_cost": 22868,
-      "overall_best_cost": 17703
+      "overall_best_cost": 17680
     },
     {
       "problem_id": 33,
@@ -270,7 +270,7 @@
       "last_submitted_at": "2022-09-05T11:45:41.229365Z",
       "submission_count": 25,
       "min_cost": 28476,
-      "overall_best_cost": 21536
+      "overall_best_cost": 21531
     },
     {
       "problem_id": 35,
@@ -321,6 +321,6 @@
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 848427,
+  "total_cost": 848285,
   "solved_problem_count": 40
 }
