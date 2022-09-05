@@ -4,8 +4,8 @@ cd $(dirname $0)
 
 g++ -O2 -std=gnu++17 main.cpp
 
-export LOOP=5
-LOOP=5
+export LOOP=7
+LOOP=7
 
 PROBLEM_ID=26
 PROBLEM_ID=26 MERGE_ISL=../../solutions.best/5.isl ./a.out > ../../solutions/$PROBLEM_ID-shiota7$LOOP-`date +%s`.isl
