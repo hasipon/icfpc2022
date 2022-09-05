@@ -14,7 +14,7 @@
       "last_submitted_at": "2022-09-05T01:12:57.103157Z",
       "submission_count": 49,
       "min_cost": 5338,
-      "overall_best_cost": 2315
+      "overall_best_cost": 2210
     },
     {
       "problem_id": 3,
@@ -51,9 +51,9 @@
     {
       "problem_id": 7,
       "problem_name": "Slovenia Flag",
-      "last_submitted_at": "2022-09-05T04:07:00.555298Z",
-      "submission_count": 50,
-      "min_cost": 20037,
+      "last_submitted_at": "2022-09-05T05:57:47.204299Z",
+      "submission_count": 51,
+      "min_cost": 18850,
       "overall_best_cost": 12607
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 925014,
+  "total_cost": 923827,
   "solved_problem_count": 40
 }
