@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T08:33:28.509232Z",
-      "submission_count": 55,
-      "min_cost": 26149,
+      "last_submitted_at": "2022-09-05T08:38:36.650474Z",
+      "submission_count": 56,
+      "min_cost": 25854,
       "overall_best_cost": 18790
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 894981,
+  "total_cost": 894686,
   "solved_problem_count": 40
 }
