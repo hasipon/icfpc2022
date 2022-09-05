@@ -111,20 +111,20 @@ impl State {
         match command {
             Command::PointCut(id, point) => {
                 let target = self.tree.find_mut(&id);
-                self.cost += (10.0 * (self.size / target.size() as f64)).round() as i64;
+                self.cost += (5.0 * (self.size / target.size() as f64)).round() as i64;
 
                 target.point_cut(*point);    
             }
             Command::LineCut(id, is_x, pos) => {
                 let target = self.tree.find_mut(&id);
-                self.cost += (7.0 * (self.size / target.size() as f64)).round() as i64;
+                self.cost += (2.0 * (self.size / target.size() as f64)).round() as i64;
 
                 target.line_cut(*is_x, *pos);
                 
             }
             Command::Color(id, color) => {
                 let target = self.tree.find_mut(&id);
-                self.cost += (5.0 * (self.size / target.size() as f64)).round() as i64;
+                self.cost += (3.0 * (self.size / target.size() as f64)).round() as i64;
 
                 target.color(&mut self.image, *color);
             }

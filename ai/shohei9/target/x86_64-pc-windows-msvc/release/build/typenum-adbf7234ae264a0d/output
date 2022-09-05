@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=C:\Users\909mm\Desktop\Work\git\icfpc2022\ai\shohei3\target\x86_64-pc-windows-msvc\release\build\typenum-adbf7234ae264a0d\out\consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=C:\Users\909mm\Desktop\Work\git\icfpc2022\ai\shohei3\target\x86_64-pc-windows-msvc\release\build\typenum-adbf7234ae264a0d\out\op.rs
