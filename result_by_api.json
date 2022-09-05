@@ -59,9 +59,9 @@
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-05T01:13:00.836523Z",
-      "submission_count": 28,
-      "min_cost": 20869,
+      "last_submitted_at": "2022-09-05T05:40:52.396053Z",
+      "submission_count": 29,
+      "min_cost": 16415,
       "overall_best_cost": 12742
     },
     {
@@ -310,7 +310,7 @@
       "last_submitted_at": "2022-09-05T04:53:34.369607Z",
       "submission_count": 11,
       "min_cost": 22068,
-      "overall_best_cost": 19527
+      "overall_best_cost": 19520
     },
     {
       "problem_id": 40,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 929468,
+  "total_cost": 925014,
   "solved_problem_count": 40
 }
