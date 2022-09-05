@@ -43,8 +43,8 @@
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-05T06:59:33.98905Z",
-      "submission_count": 62,
+      "last_submitted_at": "2022-09-05T09:05:26.10024Z",
+      "submission_count": 63,
       "min_cost": 8315,
       "overall_best_cost": 4034
     },
@@ -86,7 +86,7 @@
       "last_submitted_at": "2022-09-05T07:16:03.375649Z",
       "submission_count": 59,
       "min_cost": 26063,
-      "overall_best_cost": 19599
+      "overall_best_cost": 19592
     },
     {
       "problem_id": 12,
@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T08:33:28.509232Z",
-      "submission_count": 55,
-      "min_cost": 26149,
+      "last_submitted_at": "2022-09-05T08:38:36.650474Z",
+      "submission_count": 56,
+      "min_cost": 25854,
       "overall_best_cost": 18790
     },
     {
@@ -150,7 +150,7 @@
       "last_submitted_at": "2022-09-05T08:33:29.739969Z",
       "submission_count": 49,
       "min_cost": 25588,
-      "overall_best_cost": 20787
+      "overall_best_cost": 20784
     },
     {
       "problem_id": 20,
@@ -174,15 +174,15 @@
       "last_submitted_at": "2022-09-05T07:18:16.532794Z",
       "submission_count": 51,
       "min_cost": 19930,
-      "overall_best_cost": 14281
+      "overall_best_cost": 14143
     },
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-05T05:13:40.614297Z",
-      "submission_count": 49,
+      "last_submitted_at": "2022-09-05T09:05:21.163105Z",
+      "submission_count": 50,
       "min_cost": 22121,
-      "overall_best_cost": 17997
+      "overall_best_cost": 17858
     },
     {
       "problem_id": 24,
@@ -283,10 +283,10 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T07:21:01.952616Z",
-      "submission_count": 24,
-      "min_cost": 36227,
-      "overall_best_cost": 32832
+      "last_submitted_at": "2022-09-05T09:05:23.617691Z",
+      "submission_count": 26,
+      "min_cost": 35434,
+      "overall_best_cost": 32818
     },
     {
       "problem_id": 37,
@@ -299,8 +299,8 @@
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T07:18:30.159032Z",
-      "submission_count": 22,
+      "last_submitted_at": "2022-09-05T09:05:24.867387Z",
+      "submission_count": 23,
       "min_cost": 26039,
       "overall_best_cost": 22285
     },
@@ -310,7 +310,7 @@
       "last_submitted_at": "2022-09-05T07:04:03.353879Z",
       "submission_count": 13,
       "min_cost": 22068,
-      "overall_best_cost": 19520
+      "overall_best_cost": 19467
     },
     {
       "problem_id": 40,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 894981,
+  "total_cost": 893893,
   "solved_problem_count": 40
 }
