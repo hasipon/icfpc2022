@@ -22,7 +22,7 @@
       "last_submitted_at": "2022-09-05T00:55:30.599044Z",
       "submission_count": 43,
       "min_cost": 8588,
-      "overall_best_cost": 3708
+      "overall_best_cost": 3693
     },
     {
       "problem_id": 4,
@@ -46,7 +46,7 @@
       "last_submitted_at": "2022-09-05T06:59:33.98905Z",
       "submission_count": 62,
       "min_cost": 8315,
-      "overall_best_cost": 4155
+      "overall_best_cost": 4034
     },
     {
       "problem_id": 7,
@@ -54,7 +54,7 @@
       "last_submitted_at": "2022-09-05T07:18:33.960215Z",
       "submission_count": 52,
       "min_cost": 18850,
-      "overall_best_cost": 12607
+      "overall_best_cost": 12344
     },
     {
       "problem_id": 8,
@@ -70,7 +70,7 @@
       "last_submitted_at": "2022-09-05T06:59:35.22135Z",
       "submission_count": 52,
       "min_cost": 12734,
-      "overall_best_cost": 8813
+      "overall_best_cost": 8423
     },
     {
       "problem_id": 10,
@@ -78,7 +78,7 @@
       "last_submitted_at": "2022-09-05T07:18:14.082535Z",
       "submission_count": 58,
       "min_cost": 18750,
-      "overall_best_cost": 12403
+      "overall_best_cost": 11928
     },
     {
       "problem_id": 11,
@@ -91,9 +91,9 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-05T06:59:11.135555Z",
-      "submission_count": 57,
-      "min_cost": 9292,
+      "last_submitted_at": "2022-09-05T07:41:07.999071Z",
+      "submission_count": 58,
+      "min_cost": 9261,
       "overall_best_cost": 5387
     },
     {
@@ -102,23 +102,23 @@
       "last_submitted_at": "2022-09-05T06:59:12.362717Z",
       "submission_count": 54,
       "min_cost": 13319,
-      "overall_best_cost": 8741
+      "overall_best_cost": 8538
     },
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T07:18:15.305504Z",
-      "submission_count": 53,
+      "last_submitted_at": "2022-09-05T07:20:58.20599Z",
+      "submission_count": 54,
       "min_cost": 26149,
-      "overall_best_cost": 18932
+      "overall_best_cost": 18790
     },
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T06:59:13.650604Z",
-      "submission_count": 46,
-      "min_cost": 24144,
-      "overall_best_cost": 17143
+      "last_submitted_at": "2022-09-05T07:55:25.989548Z",
+      "submission_count": 47,
+      "min_cost": 23524,
+      "overall_best_cost": 16858
     },
     {
       "problem_id": 16,
@@ -142,14 +142,14 @@
       "last_submitted_at": "2022-09-05T06:59:17.373665Z",
       "submission_count": 82,
       "min_cost": 35357,
-      "overall_best_cost": 33348
+      "overall_best_cost": 33062
     },
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-05T06:59:18.619772Z",
-      "submission_count": 47,
-      "min_cost": 26671,
+      "last_submitted_at": "2022-09-05T08:18:14.930397Z",
+      "submission_count": 48,
+      "min_cost": 25588,
       "overall_best_cost": 20787
     },
     {
@@ -198,7 +198,7 @@
       "last_submitted_at": "2022-09-05T07:04:00.783755Z",
       "submission_count": 48,
       "min_cost": 23100,
-      "overall_best_cost": 19206
+      "overall_best_cost": 19172
     },
     {
       "problem_id": 26,
@@ -211,8 +211,8 @@
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-05T07:18:19.008349Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T07:50:15.103036Z",
+      "submission_count": 13,
       "min_cost": 33787,
       "overall_best_cost": 19841
     },
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-05T07:18:20.242037Z",
       "submission_count": 14,
       "min_cost": 21608,
-      "overall_best_cost": 14893
+      "overall_best_cost": 14786
     },
     {
       "problem_id": 29,
@@ -235,9 +235,9 @@
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-05T07:18:22.718667Z",
-      "submission_count": 12,
-      "min_cost": 57618,
+      "last_submitted_at": "2022-09-05T07:20:59.481092Z",
+      "submission_count": 13,
+      "min_cost": 54514,
       "overall_best_cost": 38572
     },
     {
@@ -259,9 +259,9 @@
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-05T07:18:26.467121Z",
-      "submission_count": 15,
-      "min_cost": 37780,
+      "last_submitted_at": "2022-09-05T08:06:25.400131Z",
+      "submission_count": 16,
+      "min_cost": 37160,
       "overall_best_cost": 26505
     },
     {
@@ -275,26 +275,26 @@
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-05T07:18:28.941299Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T07:21:00.723862Z",
+      "submission_count": 13,
       "min_cost": 36736,
       "overall_best_cost": 29132
     },
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T06:59:26.516874Z",
-      "submission_count": 23,
+      "last_submitted_at": "2022-09-05T07:21:01.952616Z",
+      "submission_count": 24,
       "min_cost": 36227,
       "overall_best_cost": 32832
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T06:59:27.760927Z",
-      "submission_count": 21,
-      "min_cost": 19969,
-      "overall_best_cost": 16317
+      "last_submitted_at": "2022-09-05T07:21:03.226727Z",
+      "submission_count": 22,
+      "min_cost": 19961,
+      "overall_best_cost": 16308
     },
     {
       "problem_id": 38,
@@ -302,7 +302,7 @@
       "last_submitted_at": "2022-09-05T07:18:30.159032Z",
       "submission_count": 22,
       "min_cost": 26039,
-      "overall_best_cost": 22568
+      "overall_best_cost": 22285
     },
     {
       "problem_id": 39,
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 900447,
+  "total_cost": 894981,
   "solved_problem_count": 40
 }
