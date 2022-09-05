@@ -139,9 +139,9 @@
     {
       "problem_id": 18,
       "problem_name": "\"The\" Kiss",
-      "last_submitted_at": "2022-09-05T04:05:36.386403Z",
-      "submission_count": 79,
-      "min_cost": 36119,
+      "last_submitted_at": "2022-09-05T04:22:33.75373Z",
+      "submission_count": 80,
+      "min_cost": 35362,
       "overall_best_cost": 33364
     },
     {
@@ -171,16 +171,16 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-05T04:06:01.086661Z",
-      "submission_count": 46,
-      "min_cost": 23230,
+      "last_submitted_at": "2022-09-05T04:42:35.197472Z",
+      "submission_count": 48,
+      "min_cost": 23084,
       "overall_best_cost": 14281
     },
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-05T04:06:07.24386Z",
-      "submission_count": 47,
+      "last_submitted_at": "2022-09-05T04:22:36.217201Z",
+      "submission_count": 48,
       "min_cost": 26241,
       "overall_best_cost": 17997
     },
@@ -291,8 +291,8 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T04:06:42.02365Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-05T04:22:37.443111Z",
+      "submission_count": 17,
       "min_cost": 19969,
       "overall_best_cost": 16328
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 937644,
+  "total_cost": 936741,
   "solved_problem_count": 40
 }
