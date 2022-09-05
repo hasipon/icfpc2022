@@ -75,8 +75,8 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-05T05:26:05.96086Z",
-      "submission_count": 54,
+      "last_submitted_at": "2022-09-05T05:28:06.318688Z",
+      "submission_count": 55,
       "min_cost": 22250,
       "overall_best_cost": 12403
     },
@@ -283,8 +283,8 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T05:26:09.654229Z",
-      "submission_count": 21,
+      "last_submitted_at": "2022-09-05T05:28:07.547681Z",
+      "submission_count": 22,
       "min_cost": 36227,
       "overall_best_cost": 32832
     },
