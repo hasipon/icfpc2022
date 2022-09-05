@@ -32,12 +32,6 @@ export class InterpreterResult {
     }
 }
 
-const colored = new Map<string, boolean>();
-
-export function getColored(): Map<string, boolean> {
-    return colored;
-}
-
 export class Interpreter {
     topLevelIdCounter: number;
 
@@ -103,7 +97,7 @@ export class Interpreter {
     colorCanvas(line: number, context: Canvas, colorInstruction: ColorInstruction): InterpreterResult {
         // TypeCheck Starts
         const {blockId, color} = colorInstruction;
-        colored.set(blockId, true);
+        color.blockId = blockId;
         const block = context.blocks.get(blockId);
         if (!block) {
             throw Error(`At ${line}, encountered: Block Id of [${blockId}] is not found!`);
