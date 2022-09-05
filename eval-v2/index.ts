@@ -1,4 +1,4 @@
-import {getColored, Interpreter, InterpreterResult} from "./Interpreter";
+import {Interpreter, InterpreterResult} from "./Interpreter";
 import {Frame, Painter} from "./Painter";
 
 import * as fs from 'fs';
@@ -97,28 +97,7 @@ function main(){
   }));
 
   if(process.env?.BLOCK_ID_INFO){
-    const ids = new Array(result.canvas.width * result.canvas.height);
-    const coloered = getColored();
-    result.canvas.blocks.forEach(block => {
-      const frameTopLeft = new Point([block.bottomLeft.px, result.canvas.height - block.topRight.py]);
-      const frameBottomRight = new Point([block.topRight.px, result.canvas.height - block.bottomLeft.py]);
-      var id = block.id;
-      while(!coloered.has(id)){
-        if(id == ""){
-          return ;
-        }
-        const ids = id.split(".");
-        ids.pop();
-        id = ids.join(".")
-      }
-      for(let y = frameTopLeft.py ; y < frameBottomRight.py ; y++) {
-        for(let x = frameTopLeft.px; x < frameBottomRight.px ; x++) {
-          ids[y * result.canvas.width + x] = id;
-        }
-      }
-    })
-    const idsStr = ids.join("\n");
-    fs.writeFileSync(process.env.BLOCK_ID_INFO.toString(), idsStr);
+    fs.writeFileSync(process.env.BLOCK_ID_INFO.toString(), frames.map(f => f.blockId).join("\n"));
   }
 
 }

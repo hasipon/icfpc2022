@@ -1,19 +1,18 @@
-﻿// inada1.cpp : アプリケーションのエントリ ポイントを定義します。
-//
-
-#define LOCAL_DEBUG 1
+﻿#define LOCAL_DEBUG 0
 #define ENABLE_GV 0
 
 #include "inada1.h"
 #define GV_JS
 #include "gv.hpp"
 #include "simulator.hpp"
+#include <limits.h>
 #include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <filesystem>
 #include <fstream>
 #include <cassert>
+#include <algorithm>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -298,7 +297,7 @@ void islResolve() {
         auto c = Canvas(width, height);
         c.writeHistory = true;
 
-        printf("%s\n", testCase.name.c_str());
+        // printf("%s\n", testCase.name.c_str());
 
         for (auto& p : orderedPos) {
             int i = p.second.first;
@@ -329,58 +328,15 @@ void islResolve() {
                 // printf("c.C[%d,%d,%d,%d]", c.C(at)[0], c.C(at)[1], c.C(at)[2], c.C(at)[3]);
                 // printf("i.C[%d,%d,%d,%d]", islCanvas.C(at)[0], islCanvas.C(at)[1], islCanvas.C(at)[2], islCanvas.C(at)[3]);
                 string baseId = c.blocks.begin()->second.get()->id;
+                auto hCutLine = testCase.hCutChild == 1 ? at.p[1] : at.p[1] + 1;
+                auto vCutLine = testCase.vCutChild == 1 ? at.p[0] : at.p[0] + 1;
+                auto pCutPoint = at;
+                if (testCase.pCutChild == 0) pCutPoint = at.add(Point(1, 1));
+                if (testCase.pCutChild == 1) pCutPoint = at.add(Point(0, 1));
+                if (testCase.pCutChild == 3) pCutPoint = at.add(Point(1, 0));
 
-                if (at.p[0] == 0 || at.p[0] == 400 - 1) {
-                    if (testCase.hCutChild == 1) c.HorizontalCutCanvas(baseId, at.p[1]);
-                    if (testCase.hCutChild == 0) c.HorizontalCutCanvas(baseId, at.p[1] + 1);
-
-                    gvNewTime();
-                    gvOutput("HorizontalCut");
-                    gvOutput("moveCost:%d", c.moveCost);
-                    gvCanvas(c);
-
-                    c.ColorMove(baseId + "." + to_string(testCase.hCutChild), targetColor);
-                    gvNewTime();
-                    gvOutput("colorMove");
-                    gvOutput("moveCost:%d", c.moveCost);
-                    gvCanvas(c);
-
-                    c.MergeCanvas(baseId + ".0", baseId + ".1");
-                    gvNewTime();
-                    gvOutput("mergeCanvas");
-                    gvOutput("moveCost:%d", c.moveCost);
-                    gvCanvas(c);
-
-                    assert(c.C(at) == islCanvas.C(at));
-                }
-                else if (at.p[1] == 0 || at.p[1] == 400 - 1) {
-                    if (testCase.vCutChild == 1) c.VerticalCutCanvas(baseId, at.p[0]);
-                    if (testCase.vCutChild == 0) c.VerticalCutCanvas(baseId, at.p[0] + 1);
-
-                    gvNewTime();
-                    gvOutput("VerticalCut");
-                    gvOutput("moveCost:%d", c.moveCost);
-                    gvCanvas(c);
-
-                    c.ColorMove(baseId + "." + to_string(testCase.vCutChild), targetColor);
-                    gvNewTime();
-                    gvOutput("colorMove");
-                    gvOutput("moveCost:%d", c.moveCost);
-                    gvCanvas(c);
-
-                    c.MergeCanvas(baseId + ".0", baseId + ".1");
-                    gvNewTime();
-                    gvOutput("mergeCanvas");
-                    gvOutput("moveCost:%d", c.moveCost);
-                    gvCanvas(c);
-
-                    assert(c.C(at) == islCanvas.C(at));
-                }
-                else if (at.isStrictlyInside(Point(0, 0), Point(400, 400))) {
-                    if (testCase.pCutChild == 2) c.PointCut(baseId, at);
-                    if (testCase.pCutChild == 0) c.PointCut(baseId, at.add(Point(1, 1)));
-                    if (testCase.pCutChild == 1) c.PointCut(baseId, at.add(Point(0, 1)));
-                    if (testCase.pCutChild == 3) c.PointCut(baseId, at.add(Point(1, 0)));
+                if (pCutPoint.isStrictlyInside(Point(0, 0), Point(400, 400))) {
+                    c.PointCut(baseId, pCutPoint);
 
                     gvNewTime();
                     gvOutput("pointCut");
@@ -418,8 +374,57 @@ void islResolve() {
 
                     assert(c.C(at) == islCanvas.C(at));
                 }
+                else if (0 < hCutLine && hCutLine < 400) {
+                    c.HorizontalCutCanvas(baseId, hCutLine);
+
+                    gvNewTime();
+                    gvOutput("HorizontalCut");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.ColorMove(baseId + "." + to_string(testCase.hCutChild), targetColor);
+                    gvNewTime();
+                    gvOutput("colorMove");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.MergeCanvas(baseId + ".0", baseId + ".1");
+                    gvNewTime();
+                    gvOutput("mergeCanvas");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    assert(c.C(at) == islCanvas.C(at));
+                }
+                else if (0 < vCutLine && vCutLine < 400) {
+                    c.VerticalCutCanvas(baseId, vCutLine);
+
+                    gvNewTime();
+                    gvOutput("VerticalCut");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.ColorMove(baseId + "." + to_string(testCase.vCutChild), targetColor);
+                    gvNewTime();
+                    gvOutput("colorMove");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.MergeCanvas(baseId + ".0", baseId + ".1");
+                    gvNewTime();
+                    gvOutput("mergeCanvas");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    assert(c.C(at) == islCanvas.C(at));
+                }
                 else {
-                    assert(false);
+                    c.ColorMove(baseId, targetColor);
+                    // printf("default color move %d,%d\n", at.p[0], at.p[1]);
+                    gvNewTime();
+                    gvOutput("colorMove");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
                 }
 
                 if (c.C(at) != islCanvas.C(at)) {
@@ -445,7 +450,7 @@ void islResolve() {
     if (bestCost < islCanvas.moveCost) {
         auto simCost = calcSimilarity(islCanvas);
         auto fileName = to_string(problemId) + "-inada1-" + to_string(bestCost + simCost) + ".isl";
-        printf("%d -> %d output:%s", islCanvas.moveCost + simCost, bestCost + simCost, fileName.c_str());
+        printf("%d -> %d output:%s\n", islCanvas.moveCost + simCost, bestCost + simCost, fileName.c_str());
         ofstream ofs(fileName);
         for (auto& line : bestHistory) {
             ofs << line << endl;
@@ -455,13 +460,19 @@ void islResolve() {
 
 
 void readInputs() {
-    problemId = 4;
+    problemId = 3;
     problemPamPath = "../../problems.pam/" + to_string(problemId) + ".pam";
     inputIslPath = "../../solutions.best/" + to_string(problemId) + ".isl";
 
     if (getenv("PROBLEM_ID")) {
-        assert(getenv("PROBLEM_PAM"), "PROBLEM_PAM is not set");
-        assert(getenv("INPUT_ISL"), "INPUT_ISL is not set");
+        if (!getenv("PROBLEM_PAM")) {
+            printf("PROBLEM_PAM is not set\n");
+            exit(1);
+        }
+        if (!getenv("INPUT_ISL")) {
+            printf("INPUT_ISL is not set\n");
+            exit(1);
+        }
         problemId = atoi(getenv("PROBLEM_ID"));
         problemPamPath = getenv("PROBLEM_PAM");
         inputIslPath = getenv("INPUT_ISL");
