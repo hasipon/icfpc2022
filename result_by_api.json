@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T10:44:37.995271Z",
-      "submission_count": 57,
-      "min_cost": 25629,
+      "last_submitted_at": "2022-09-05T11:17:44.25479Z",
+      "submission_count": 58,
+      "min_cost": 25304,
       "overall_best_cost": 18790
     },
     {
@@ -211,9 +211,9 @@
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-05T11:01:44.270408Z",
-      "submission_count": 16,
-      "min_cost": 32283,
+      "last_submitted_at": "2022-09-05T11:15:57.360211Z",
+      "submission_count": 17,
+      "min_cost": 25718,
       "overall_best_cost": 19759
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 877625,
+  "total_cost": 870735,
   "solved_problem_count": 40
 }
