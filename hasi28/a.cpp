@@ -179,7 +179,7 @@ struct Data2 {
 void solve() {
 	string blockId = "0";
 	int globalCounter = 0;
-	const int iDelta = 8;
+	const int iDelta = 16;
 	for (int i0 = 0; i0 < 400; i0 += iDelta) {
 		if (i0 > 0) {
 			cout << "cut ["<<blockId<<"] [y] ["<<i0<<"]" << endl;
