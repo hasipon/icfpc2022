@@ -179,7 +179,7 @@ struct Data2 {
 void solve() {
 	string blockId = "0";
 	int globalCounter = 0;
-	vector<int> ipos {400,395,380,360,345,312,298,259,237,220,171,120,104,60,28,0};
+	vector<int> ipos {400,363,352,332,323,307,298,277,250,243,222,195,188,168,84,57,0};
 	for (int p = 1; p < (int)ipos.size(); ++ p) {
 		if (p > 1) {
 			cout << "cut ["<<blockId<<"] [y] ["<<ipos[p-1]<<"]" << endl;
