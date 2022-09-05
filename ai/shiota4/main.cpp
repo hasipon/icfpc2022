@@ -159,6 +159,7 @@ int main() {
     ifs = ifstream (MERGE_ISL);
     string cmd;
     string line;
+    bool first = true;
     while(getline(ifs, line)){
         stringstream ss(line);
         if(!(ss >> cmd)){
@@ -167,6 +168,15 @@ int main() {
         if(cmd[0] == '#'){
             cout << line <<endl;
             continue;
+        }
+        if(first){
+            first = false;
+            if(cmd != "color"){
+                cout << "color" << ' ';
+                string bid = "[0]";
+                cout << convBid(bid);
+                cout << " " << "[255,255,255,255]" << endl;
+            }
         }
         if(cmd == "cut" || cmd=="color"){
             cout << cmd <<' ';
