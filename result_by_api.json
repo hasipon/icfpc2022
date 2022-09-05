@@ -35,9 +35,9 @@
     {
       "problem_id": 5,
       "problem_name": "ICFP 2022 Logo",
-      "last_submitted_at": "2022-09-05T01:12:59.620563Z",
-      "submission_count": 42,
-      "min_cost": 15763,
+      "last_submitted_at": "2022-09-05T02:04:14.623979Z",
+      "submission_count": 43,
+      "min_cost": 14330,
       "overall_best_cost": 9057
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 976444,
+  "total_cost": 975011,
   "solved_problem_count": 40
 }
