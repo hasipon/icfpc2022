@@ -171,9 +171,9 @@
     {
       "problem_id": 22,
       "problem_name": "Godfather",
-      "last_submitted_at": "2022-09-05T04:22:34.983382Z",
-      "submission_count": 47,
-      "min_cost": 23230,
+      "last_submitted_at": "2022-09-05T04:42:35.197472Z",
+      "submission_count": 48,
+      "min_cost": 23084,
       "overall_best_cost": 14281
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 936887,
+  "total_cost": 936741,
   "solved_problem_count": 40
 }
