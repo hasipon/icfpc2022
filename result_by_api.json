@@ -46,7 +46,7 @@
       "last_submitted_at": "2022-09-05T09:05:26.10024Z",
       "submission_count": 63,
       "min_cost": 8315,
-      "overall_best_cost": 4029
+      "overall_best_cost": 4018
     },
     {
       "problem_id": 7,
@@ -83,9 +83,9 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-05T07:16:03.375649Z",
-      "submission_count": 59,
-      "min_cost": 26063,
+      "last_submitted_at": "2022-09-05T10:16:32.504428Z",
+      "submission_count": 60,
+      "min_cost": 25463,
       "overall_best_cost": 19583
     },
     {
@@ -147,8 +147,8 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-05T09:39:50.95112Z",
-      "submission_count": 50,
+      "last_submitted_at": "2022-09-05T10:16:33.749428Z",
+      "submission_count": 51,
       "min_cost": 25588,
       "overall_best_cost": 20783
     },
@@ -195,10 +195,10 @@
     {
       "problem_id": 25,
       "problem_name": "\"The Girl\"",
-      "last_submitted_at": "2022-09-05T09:39:53.400116Z",
-      "submission_count": 49,
+      "last_submitted_at": "2022-09-05T10:16:34.992446Z",
+      "submission_count": 50,
       "min_cost": 23100,
-      "overall_best_cost": 19172
+      "overall_best_cost": 19088
     },
     {
       "problem_id": 26,
@@ -283,32 +283,32 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T09:05:23.617691Z",
-      "submission_count": 26,
+      "last_submitted_at": "2022-09-05T10:16:37.467663Z",
+      "submission_count": 28,
       "min_cost": 35434,
       "overall_best_cost": 32811
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T09:39:54.630589Z",
-      "submission_count": 23,
+      "last_submitted_at": "2022-09-05T10:16:38.712949Z",
+      "submission_count": 24,
       "min_cost": 19562,
       "overall_best_cost": 16308
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T09:39:55.86694Z",
-      "submission_count": 24,
+      "last_submitted_at": "2022-09-05T10:16:39.935875Z",
+      "submission_count": 25,
       "min_cost": 26039,
       "overall_best_cost": 22282
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T09:39:58.319313Z",
-      "submission_count": 15,
+      "last_submitted_at": "2022-09-05T10:16:41.162664Z",
+      "submission_count": 16,
       "min_cost": 22068,
       "overall_best_cost": 19466
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 888971,
+  "total_cost": 888371,
   "solved_problem_count": 40
 }
