@@ -235,9 +235,9 @@
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-05T04:52:11.937836Z",
-      "submission_count": 10,
-      "min_cost": 57756,
+      "last_submitted_at": "2022-09-05T07:07:02.404675Z",
+      "submission_count": 11,
+      "min_cost": 57618,
       "overall_best_cost": 38572
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 900642,
+  "total_cost": 900504,
   "solved_problem_count": 40
 }
