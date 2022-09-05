@@ -217,10 +217,10 @@ class Main
 			);
 			nodes[Std.parseInt(block.blockId)] = new InitialNode(
 				new Rectangle(
-					block.bottomLeft[1],
 					block.bottomLeft[0],
-					block.topRight[1] - block.bottomLeft[1],
-					block.topRight[0] - block.bottomLeft[0]
+					block.bottomLeft[1],
+					block.topRight[0] - block.bottomLeft[0],
+					block.topRight[1] - block.bottomLeft[1]
 				),
 				new ArgbColor(
 					block.color[3] / 255,

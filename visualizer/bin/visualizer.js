@@ -453,7 +453,7 @@ Main.onJsonLoaded = function(data) {
 		var block = _g1[_g];
 		++_g;
 		haxe_Log.trace(block.color[3],{ fileName : "src/Main.hx", lineNumber : 212, className : "Main", methodName : "onJsonLoaded", customParams : [block.color[0],block.color[1],block.color[2]]});
-		nodes[Std.parseInt(block.blockId)] = new InitialNode(new PIXI.Rectangle(block.bottomLeft[1],block.bottomLeft[0],block.topRight[1] - block.bottomLeft[1],block.topRight[0] - block.bottomLeft[0]),new tweenxcore_color_ArgbColor(block.color[3] / 255,block.color[0] / 255,block.color[1] / 255,block.color[2] / 255));
+		nodes[Std.parseInt(block.blockId)] = new InitialNode(new PIXI.Rectangle(block.bottomLeft[0],block.bottomLeft[1],block.topRight[0] - block.bottomLeft[0],block.topRight[1] - block.bottomLeft[1]),new tweenxcore_color_ArgbColor(block.color[3] / 255,block.color[0] / 255,block.color[1] / 255,block.color[2] / 255));
 	}
 	Main.initialState = new InitialState(data1.width,data1.height,nodes);
 	Main.onInputChanged();
