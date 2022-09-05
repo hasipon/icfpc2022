@@ -46,7 +46,7 @@
       "last_submitted_at": "2022-09-05T06:59:33.98905Z",
       "submission_count": 62,
       "min_cost": 8315,
-      "overall_best_cost": 4155
+      "overall_best_cost": 4034
     },
     {
       "problem_id": 7,
@@ -54,7 +54,7 @@
       "last_submitted_at": "2022-09-05T07:18:33.960215Z",
       "submission_count": 52,
       "min_cost": 18850,
-      "overall_best_cost": 12607
+      "overall_best_cost": 12596
     },
     {
       "problem_id": 8,
@@ -211,8 +211,8 @@
     {
       "problem_id": 27,
       "problem_name": "Confused Robo Painter",
-      "last_submitted_at": "2022-09-05T07:18:19.008349Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T07:50:15.103036Z",
+      "submission_count": 13,
       "min_cost": 33787,
       "overall_best_cost": 19841
     },
