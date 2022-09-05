@@ -264,21 +264,15 @@ void solve() {
             } else {
                 lastColorsNext[j1] = cc;
                 if (!skip) {
-                    bool emitnow = false;
                     if (p > 1 && !emit_y) {
                         cout << "cut ["<<blockId<<"] ["<<j1<<","<<ipos[p-1]<<"]" << endl;
                         emit_y = true;
-                        emitnow = true;
                     } else {
                         cout << "cut [" << blockId << "] [x] [" << j1 << "]" << endl;
                     }
                     col(blockId + ".0", cc);
 
-                    if (emitnow) {
-                        cout << "merge [" << blockId << ".0] [" << blockId << ".3]" << endl;
-                    } else {
-                        cout << "merge [" << blockId << ".0] [" << blockId << ".1]" << endl;
-                    }
+                    cout << "merge [" << blockId << ".0] [" << blockId << ".1]" << endl;
 
                     blockId = to_string(++globalCounter);
                 } else {
