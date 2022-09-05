@@ -168,6 +168,7 @@ int main() {
     {
         int ii = 0;
         while(!vvb[2].empty()){
+            if(vvb[2][0].topRight.second == 400)break;
             // cut &折り返し
             {
                 cout << "cut [" << vvb[0][ii].blockId << "] [y] [" << vvb[2][0].topRight.second <<"]"<< endl;
