@@ -59,9 +59,9 @@
     {
       "problem_id": 8,
       "problem_name": "Thank You",
-      "last_submitted_at": "2022-09-05T01:13:00.836523Z",
-      "submission_count": 28,
-      "min_cost": 20869,
+      "last_submitted_at": "2022-09-05T05:40:52.396053Z",
+      "submission_count": 29,
+      "min_cost": 16415,
       "overall_best_cost": 12742
     },
     {
@@ -75,16 +75,16 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-05T05:03:44.015332Z",
-      "submission_count": 53,
+      "last_submitted_at": "2022-09-05T05:28:06.318688Z",
+      "submission_count": 55,
       "min_cost": 22250,
       "overall_best_cost": 12403
     },
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-05T04:04:39.928436Z",
-      "submission_count": 50,
+      "last_submitted_at": "2022-09-05T05:26:07.197001Z",
+      "submission_count": 51,
       "min_cost": 29305,
       "overall_best_cost": 19599
     },
@@ -115,8 +115,8 @@
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T04:53:28.186849Z",
-      "submission_count": 42,
+      "last_submitted_at": "2022-09-05T05:26:08.424428Z",
+      "submission_count": 43,
       "min_cost": 24145,
       "overall_best_cost": 17143
     },
@@ -283,24 +283,24 @@
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T04:53:31.882639Z",
-      "submission_count": 20,
+      "last_submitted_at": "2022-09-05T05:28:07.547681Z",
+      "submission_count": 22,
       "min_cost": 36227,
       "overall_best_cost": 32832
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T04:53:33.116713Z",
-      "submission_count": 18,
+      "last_submitted_at": "2022-09-05T05:26:10.900677Z",
+      "submission_count": 19,
       "min_cost": 19969,
       "overall_best_cost": 16317
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T04:06:50.686748Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-05T05:26:12.126908Z",
+      "submission_count": 17,
       "min_cost": 26571,
       "overall_best_cost": 22568
     },
@@ -310,17 +310,17 @@
       "last_submitted_at": "2022-09-05T04:53:34.369607Z",
       "submission_count": 11,
       "min_cost": 22068,
-      "overall_best_cost": 19527
+      "overall_best_cost": 19520
     },
     {
       "problem_id": 40,
       "problem_name": "Logo Wars",
-      "last_submitted_at": "2022-09-05T04:06:56.86147Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T05:26:13.368109Z",
+      "submission_count": 13,
       "min_cost": 11894,
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 929468,
+  "total_cost": 925014,
   "solved_problem_count": 40
 }
