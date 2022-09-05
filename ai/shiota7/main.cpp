@@ -170,7 +170,7 @@ int main() {
         while(!vvb[2].empty()){
             // cut &折り返し
             {
-                cout << "cut [" << vvb[0][ii].blockId << "] [x] [" << vvb[2][0].topRight.second <<"]"<< endl;
+                cout << "cut [" << vvb[0][ii].blockId << "] [y] [" << vvb[2][0].topRight.second <<"]"<< endl;
                 Block base = vvb[0][ii];
                 vvb[0][ii].blockId = base.blockId + ".0";
                 vvb[0][ii].topRight.second = vvb[2][0].topRight.second;
