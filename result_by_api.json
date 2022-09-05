@@ -30,7 +30,7 @@
       "last_submitted_at": "2022-09-05T07:18:31.44384Z",
       "submission_count": 54,
       "min_cost": 9012,
-      "overall_best_cost": 5656
+      "overall_best_cost": 5341
     },
     {
       "problem_id": 5,
@@ -91,9 +91,9 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-05T10:50:19.795331Z",
-      "submission_count": 60,
-      "min_cost": 9261,
+      "last_submitted_at": "2022-09-05T11:58:24.248348Z",
+      "submission_count": 61,
+      "min_cost": 7481,
       "overall_best_cost": 5304
     },
     {
@@ -107,8 +107,8 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T11:38:14.865911Z",
-      "submission_count": 60,
+      "last_submitted_at": "2022-09-05T11:59:33.107225Z",
+      "submission_count": 61,
       "min_cost": 25304,
       "overall_best_cost": 18790
     },
@@ -203,8 +203,8 @@
     {
       "problem_id": 26,
       "problem_name": "Puzzled Logo",
-      "last_submitted_at": "2022-09-05T11:45:13.211074Z",
-      "submission_count": 22,
+      "last_submitted_at": "2022-09-05T11:59:52.593057Z",
+      "submission_count": 23,
       "min_cost": 16407,
       "overall_best_cost": 10978
     },
@@ -259,8 +259,8 @@
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-05T11:56:29.195543Z",
-      "submission_count": 28,
+      "last_submitted_at": "2022-09-05T11:59:53.836035Z",
+      "submission_count": 29,
       "min_cost": 32514,
       "overall_best_cost": 26051
     },
@@ -291,9 +291,9 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T11:56:30.432394Z",
-      "submission_count": 33,
-      "min_cost": 19559,
+      "last_submitted_at": "2022-09-05T11:59:55.069328Z",
+      "submission_count": 34,
+      "min_cost": 19555,
       "overall_best_cost": 16004
     },
     {
@@ -310,17 +310,17 @@
       "last_submitted_at": "2022-09-05T11:56:34.183127Z",
       "submission_count": 21,
       "min_cost": 21495,
-      "overall_best_cost": 19388
+      "overall_best_cost": 19329
     },
     {
       "problem_id": 40,
       "problem_name": "Logo Wars",
-      "last_submitted_at": "2022-09-05T10:50:27.158351Z",
-      "submission_count": 15,
+      "last_submitted_at": "2022-09-05T11:59:56.306337Z",
+      "submission_count": 16,
       "min_cost": 11894,
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 848116,
+  "total_cost": 846332,
   "solved_problem_count": 40
 }
