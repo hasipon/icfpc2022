@@ -259,9 +259,9 @@
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-05T07:18:26.467121Z",
-      "submission_count": 15,
-      "min_cost": 37780,
+      "last_submitted_at": "2022-09-05T08:06:25.400131Z",
+      "submission_count": 16,
+      "min_cost": 37160,
       "overall_best_cost": 26505
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 896684,
+  "total_cost": 896064,
   "solved_problem_count": 40
 }
