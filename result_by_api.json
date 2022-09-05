@@ -43,9 +43,9 @@
     {
       "problem_id": 6,
       "problem_name": "Haskell Coder's View",
-      "last_submitted_at": "2022-09-05T00:55:33.117437Z",
-      "submission_count": 59,
-      "min_cost": 11619,
+      "last_submitted_at": "2022-09-05T02:50:16.321479Z",
+      "submission_count": 60,
+      "min_cost": 8560,
       "overall_best_cost": 4155
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 974598,
+  "total_cost": 971539,
   "solved_problem_count": 40
 }
