@@ -70,7 +70,7 @@
       "last_submitted_at": "2022-09-05T06:59:35.22135Z",
       "submission_count": 52,
       "min_cost": 12734,
-      "overall_best_cost": 8423
+      "overall_best_cost": 8400
     },
     {
       "problem_id": 10,
@@ -147,8 +147,8 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-05T10:16:33.749428Z",
-      "submission_count": 51,
+      "last_submitted_at": "2022-09-05T11:56:27.91326Z",
+      "submission_count": 52,
       "min_cost": 25588,
       "overall_best_cost": 20783
     },
@@ -190,7 +190,7 @@
       "last_submitted_at": "2022-09-05T06:59:24.021995Z",
       "submission_count": 42,
       "min_cost": 15372,
-      "overall_best_cost": 11921
+      "overall_best_cost": 11796
     },
     {
       "problem_id": 25,
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-05T11:45:19.520564Z",
       "submission_count": 22,
       "min_cost": 18678,
-      "overall_best_cost": 14733
+      "overall_best_cost": 14725
     },
     {
       "problem_id": 29,
@@ -259,9 +259,9 @@
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-05T11:45:37.424425Z",
-      "submission_count": 27,
-      "min_cost": 32544,
+      "last_submitted_at": "2022-09-05T11:56:29.195543Z",
+      "submission_count": 28,
+      "min_cost": 32514,
       "overall_best_cost": 26051
     },
     {
@@ -291,24 +291,24 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T11:38:29.849668Z",
-      "submission_count": 32,
+      "last_submitted_at": "2022-09-05T11:56:30.432394Z",
+      "submission_count": 33,
       "min_cost": 19559,
       "overall_best_cost": 16004
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T11:05:09.327684Z",
-      "submission_count": 26,
+      "last_submitted_at": "2022-09-05T11:56:32.922344Z",
+      "submission_count": 28,
       "min_cost": 26039,
       "overall_best_cost": 22201
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T11:35:05.127425Z",
-      "submission_count": 20,
+      "last_submitted_at": "2022-09-05T11:56:34.183127Z",
+      "submission_count": 21,
       "min_cost": 21495,
       "overall_best_cost": 19388
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 848146,
+  "total_cost": 848116,
   "solved_problem_count": 40
 }
