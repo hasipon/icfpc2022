@@ -89,7 +89,7 @@ def get_solutions(problem_id: str):
             problem_id).all()
     else:
         solutions = engine.execute(
-            "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 0 AND problem_id = %s ORDER BY updated_at",
+            "SELECT id, problem_id, valid, cost, isl_cost, sim_cost FROM solution WHERE valid = 9 AND problem_id = %s ORDER BY updated_at",
             problem_id).all()
 
     with open('../result_by_api.json', 'r') as f:
