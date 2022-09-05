@@ -203,8 +203,8 @@
     {
       "problem_id": 26,
       "problem_name": "Puzzled Logo",
-      "last_submitted_at": "2022-09-05T07:18:17.778365Z",
-      "submission_count": 14,
+      "last_submitted_at": "2022-09-05T11:04:56.775031Z",
+      "submission_count": 15,
       "min_cost": 16780,
       "overall_best_cost": 11418
     },
@@ -214,101 +214,101 @@
       "last_submitted_at": "2022-09-05T11:01:44.270408Z",
       "submission_count": 16,
       "min_cost": 32283,
-      "overall_best_cost": 19841
+      "overall_best_cost": 19829
     },
     {
       "problem_id": 28,
       "problem_name": "Obfuscated Starry Night",
-      "last_submitted_at": "2022-09-05T07:18:20.242037Z",
-      "submission_count": 14,
-      "min_cost": 21608,
+      "last_submitted_at": "2022-09-05T11:08:09.112609Z",
+      "submission_count": 16,
+      "min_cost": 19051,
       "overall_best_cost": 14782
     },
     {
       "problem_id": 29,
       "problem_name": "Unrecognizable Kiss",
-      "last_submitted_at": "2022-09-05T07:18:21.459623Z",
-      "submission_count": 12,
+      "last_submitted_at": "2022-09-05T11:04:59.268842Z",
+      "submission_count": 13,
       "min_cost": 38215,
       "overall_best_cost": 35704
     },
     {
       "problem_id": 30,
       "problem_name": "Blocked Curves",
-      "last_submitted_at": "2022-09-05T11:01:48.281696Z",
-      "submission_count": 14,
-      "min_cost": 54514,
-      "overall_best_cost": 37191
+      "last_submitted_at": "2022-09-05T11:08:10.378017Z",
+      "submission_count": 16,
+      "min_cost": 52277,
+      "overall_best_cost": 37093
     },
     {
       "problem_id": 31,
       "problem_name": "tepInncio",
-      "last_submitted_at": "2022-09-05T07:18:23.967501Z",
-      "submission_count": 12,
-      "min_cost": 29008,
+      "last_submitted_at": "2022-09-05T11:05:01.820587Z",
+      "submission_count": 13,
+      "min_cost": 28760,
       "overall_best_cost": 21354
     },
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-05T07:18:25.194795Z",
-      "submission_count": 16,
-      "min_cost": 26370,
+      "last_submitted_at": "2022-09-05T11:05:03.093505Z",
+      "submission_count": 17,
+      "min_cost": 26122,
       "overall_best_cost": 17975
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-05T08:06:25.400131Z",
-      "submission_count": 16,
-      "min_cost": 37160,
+      "last_submitted_at": "2022-09-05T11:08:11.663866Z",
+      "submission_count": 18,
+      "min_cost": 35798,
       "overall_best_cost": 26366
     },
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-05T07:18:27.689245Z",
-      "submission_count": 14,
-      "min_cost": 32486,
+      "last_submitted_at": "2022-09-05T11:08:12.89671Z",
+      "submission_count": 16,
+      "min_cost": 31730,
       "overall_best_cost": 21721
     },
     {
       "problem_id": 35,
       "problem_name": "lThrGei",
-      "last_submitted_at": "2022-09-05T07:21:00.723862Z",
-      "submission_count": 13,
-      "min_cost": 36736,
+      "last_submitted_at": "2022-09-05T11:05:06.876903Z",
+      "submission_count": 14,
+      "min_cost": 36488,
       "overall_best_cost": 28428
     },
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T10:50:23.491144Z",
-      "submission_count": 29,
+      "last_submitted_at": "2022-09-05T11:05:08.09957Z",
+      "submission_count": 30,
       "min_cost": 35434,
       "overall_best_cost": 32754
     },
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T10:50:25.942482Z",
-      "submission_count": 27,
+      "last_submitted_at": "2022-09-05T11:08:14.133289Z",
+      "submission_count": 28,
       "min_cost": 19562,
       "overall_best_cost": 16240
     },
     {
       "problem_id": 38,
       "problem_name": "2 Seasons",
-      "last_submitted_at": "2022-09-05T10:16:39.935875Z",
-      "submission_count": 25,
+      "last_submitted_at": "2022-09-05T11:05:09.327684Z",
+      "submission_count": 26,
       "min_cost": 26039,
       "overall_best_cost": 22282
     },
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T10:16:41.162664Z",
-      "submission_count": 16,
+      "last_submitted_at": "2022-09-05T11:05:10.59623Z",
+      "submission_count": 17,
       "min_cost": 22068,
       "overall_best_cost": 19466
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 6776
     }
   ],
-  "total_cost": 885281,
+  "total_cost": 877625,
   "solved_problem_count": 40
 }
