@@ -147,16 +147,16 @@
     {
       "problem_id": 19,
       "problem_name": "\"The\" Girl with a Pearl Earring",
-      "last_submitted_at": "2022-09-05T04:05:45.024695Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-05T05:07:23.629931Z",
+      "submission_count": 44,
       "min_cost": 26745,
       "overall_best_cost": 20787
     },
     {
       "problem_id": 20,
       "problem_name": "\"The\" Son of Man",
-      "last_submitted_at": "2022-09-05T04:53:30.649238Z",
-      "submission_count": 44,
+      "last_submitted_at": "2022-09-05T05:07:24.894475Z",
+      "submission_count": 45,
       "min_cost": 17299,
       "overall_best_cost": 14888
     },
