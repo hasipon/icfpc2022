@@ -91,9 +91,9 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-05T02:57:16.589992Z",
-      "submission_count": 41,
-      "min_cost": 12848,
+      "last_submitted_at": "2022-09-05T03:04:18.079905Z",
+      "submission_count": 42,
+      "min_cost": 11774,
       "overall_best_cost": 5387
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 968359,
+  "total_cost": 967285,
   "solved_problem_count": 40
 }
