@@ -219,17 +219,17 @@
     {
       "problem_id": 28,
       "problem_name": "Obfuscated Starry Night",
-      "last_submitted_at": "2022-09-05T03:41:25.638529Z",
-      "submission_count": 11,
-      "min_cost": 25108,
+      "last_submitted_at": "2022-09-05T06:48:56.45425Z",
+      "submission_count": 13,
+      "min_cost": 21609,
       "overall_best_cost": 14893
     },
     {
       "problem_id": 29,
       "problem_name": "Unrecognizable Kiss",
-      "last_submitted_at": "2022-09-05T03:41:26.870238Z",
-      "submission_count": 10,
-      "min_cost": 39336,
+      "last_submitted_at": "2022-09-05T06:45:56.298904Z",
+      "submission_count": 11,
+      "min_cost": 38220,
       "overall_best_cost": 35704
     },
     {
@@ -243,33 +243,33 @@
     {
       "problem_id": 31,
       "problem_name": "tepInncio",
-      "last_submitted_at": "2022-09-05T03:41:29.370671Z",
-      "submission_count": 10,
-      "min_cost": 29388,
+      "last_submitted_at": "2022-09-05T06:45:57.583898Z",
+      "submission_count": 11,
+      "min_cost": 29024,
       "overall_best_cost": 21354
     },
     {
       "problem_id": 32,
       "problem_name": "LiaSmpis",
-      "last_submitted_at": "2022-09-05T03:41:30.623223Z",
-      "submission_count": 14,
-      "min_cost": 32131,
+      "last_submitted_at": "2022-09-05T06:45:58.817524Z",
+      "submission_count": 15,
+      "min_cost": 26372,
       "overall_best_cost": 18048
     },
     {
       "problem_id": 33,
       "problem_name": "TSchreaem",
-      "last_submitted_at": "2022-09-05T03:41:31.91391Z",
-      "submission_count": 13,
-      "min_cost": 38272,
+      "last_submitted_at": "2022-09-05T06:46:00.099534Z",
+      "submission_count": 14,
+      "min_cost": 37781,
       "overall_best_cost": 26505
     },
     {
       "problem_id": 34,
       "problem_name": "SvloFelagnai",
-      "last_submitted_at": "2022-09-05T03:41:33.15829Z",
-      "submission_count": 12,
-      "min_cost": 33673,
+      "last_submitted_at": "2022-09-05T06:46:01.348838Z",
+      "submission_count": 13,
+      "min_cost": 32486,
       "overall_best_cost": 21721
     },
     {
@@ -291,8 +291,8 @@
     {
       "problem_id": 37,
       "problem_name": "Emre's Lisa",
-      "last_submitted_at": "2022-09-05T05:26:10.900677Z",
-      "submission_count": 19,
+      "last_submitted_at": "2022-09-05T06:46:02.613003Z",
+      "submission_count": 20,
       "min_cost": 19969,
       "overall_best_cost": 16317
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 917371,
+  "total_cost": 904955,
   "solved_problem_count": 40
 }
