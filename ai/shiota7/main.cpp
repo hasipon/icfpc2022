@@ -188,8 +188,13 @@ int main() {
             }
             ii++;
         }
+        REP(i, 2, vvb.size()){
+            cout << "merge [" << vvb[0][ii].blockId << "] [" << vvb[i][0].blockId << "]" <<endl;
+            vvb[0][ii] = vvb[0][ii].merge(vvb[i][0]);
+            vvb[i].erase(vvb[i].begin());
+        }
     }
-    REP(i, 1, vvb[0].size()-1){
+    REP(i, 1, vvb[0].size()){
         cout << "merge [" << vvb[0][0].blockId << "] [" << vvb[0][i].blockId << "]" <<endl;
         vvb[0][0] = vvb[0][0].merge(vvb[0][i]);
     }
