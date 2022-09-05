@@ -1,8 +1,8 @@
 ﻿// inada1.cpp : アプリケーションのエントリ ポイントを定義します。
 //
 
-#define ENABLE_GV 1
 #define LOCAL_DEBUG 1
+#define ENABLE_GV 0
 
 #include "inada1.h"
 #define GV_JS
@@ -168,6 +168,7 @@ void printCanvasTree(Canvas& c) {
     }
 }
 
+/*
 int solve() {
     Canvas c = Canvas(width, height);
     gvNewTime();
@@ -243,6 +244,17 @@ void evalIsl() {
         printCanvasTree(c);
     }
 }
+*/
+
+bool pointMergeCheck(int size0, int size1, int size2, int size3) {
+    int cost1 = std::lround(MergeCost * height * width / std::max(size0, size1))
+        + std::lround(MergeCost * height * width / std::max(size2, size3))
+        + std::lround(MergeCost * height * width / std::max(size0 + size1, size2 + size3));
+    int cost2 = std::lround(MergeCost * height * width / std::max(size1, size2))
+        + std::lround(MergeCost * height * width / std::max(size0, size3))
+        + std::lround(MergeCost * height * width / std::max(size1 + size2, size0 + size3));
+    return cost1 <= cost2;
+}
 
 void islResolve() {
     auto islCanvas = Canvas(width, height);
@@ -254,10 +266,6 @@ void islResolve() {
     gvNewTime();
     gvCanvas(islCanvas);
 
-
-    auto c = Canvas(width, height);
-    c.writeHistory = true;
-
     vector<pair<int, pair<int, int> > > orderedPos;
     for (int i = 0; i < 400; i++) {
         for (int j = 0; j < 400; j++) {
@@ -265,125 +273,181 @@ void islResolve() {
         }
     }
 
-    int orgX = 0;
-    int orgY = 0;
-    for (auto& p : orderedPos) {
-        int i = p.second.first;
-        int j = p.second.second;
-        p.first = abs(i - orgX) + abs(j - orgY);
-    }
+    struct Case {
+        string name;
+        string sortOrder;
+        int startX;
+        int startY;
+        int hCutChild;
+        int vCutChild;
+        int pCutChild;
+    };
 
-    sort(orderedPos.begin(), orderedPos.end());
+    vector<Case> cases = {
+        {"bottomLeft-to-topRight", "xy", 0, 0, 1, 1, 2},
+        // {"bottomLeft-to-topRight2", "xy2", 0, 0, 1, 1, 2},
+        {"topRight-to-bottomLeft", "xy", 400 - 1, 400 - 1, 0, 0, 0},
+        {"bottomRight-to-topLeft", "xy", 400 - 1, 0, 1, 0, 3},
+        {"topLeft-to-bottomRight", "xy", 0, 400 - 1, 0, 1, 1},
+    };
 
-    for (auto& p : orderedPos) {
-        Point at(p.second.first, p.second.second);
+    int bestCost = INT_MAX;
+    vector<string> bestHistory;
 
-        if (c.C(at) != islCanvas.C(at)) {
-            printf("%d,%d\n", at.p[0], at.p[1]);
-            string baseId = c.blocks.begin()->second.get()->id;
+    for (auto& testCase : cases) {
+        auto c = Canvas(width, height);
+        c.writeHistory = true;
 
-            // first fill
-            if (p.first == 0) {
+        printf("%s\n", testCase.name.c_str());
+
+        for (auto& p : orderedPos) {
+            int i = p.second.first;
+            int j = p.second.second;
+
+            if (testCase.sortOrder == "xy") {
+                p.first = abs(i - testCase.startX) + abs(j - testCase.startY);
+            }
+            if (testCase.sortOrder == "xy2") {
+                p.first = abs(i - testCase.startX) * abs(i - testCase.startX) + abs(j - testCase.startY) * abs(j - testCase.startY);
+            }
+            if (testCase.sortOrder == "x") {
+                p.first = abs(i - testCase.startX);
+            }
+            if (testCase.sortOrder == "y") {
+                p.first = abs(j - testCase.startY);
+            }
+        }
+
+        sort(orderedPos.begin(), orderedPos.end());
+
+        for (auto& p : orderedPos) {
+            Point at(p.second.first, p.second.second);
+            auto targetColor = islCanvas.C(at);
+
+            if (c.C(at) != targetColor) {
+                // printf("%d,%d\n", at.p[0], at.p[1]);
+                // printf("c.C[%d,%d,%d,%d]", c.C(at)[0], c.C(at)[1], c.C(at)[2], c.C(at)[3]);
+                // printf("i.C[%d,%d,%d,%d]", islCanvas.C(at)[0], islCanvas.C(at)[1], islCanvas.C(at)[2], islCanvas.C(at)[3]);
                 string baseId = c.blocks.begin()->second.get()->id;
-                c.ColorMove(baseId, islCanvas.C(at));
 
-                gvNewTime();
-                gvOutput("First fill");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
+                if (at.p[0] == 0 || at.p[0] == 400 - 1) {
+                    if (testCase.hCutChild == 1) c.HorizontalCutCanvas(baseId, at.p[1]);
+                    if (testCase.hCutChild == 0) c.HorizontalCutCanvas(baseId, at.p[1] + 1);
+
+                    gvNewTime();
+                    gvOutput("HorizontalCut");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.ColorMove(baseId + "." + to_string(testCase.hCutChild), targetColor);
+                    gvNewTime();
+                    gvOutput("colorMove");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.MergeCanvas(baseId + ".0", baseId + ".1");
+                    gvNewTime();
+                    gvOutput("mergeCanvas");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    assert(c.C(at) == islCanvas.C(at));
+                }
+                else if (at.p[1] == 0 || at.p[1] == 400 - 1) {
+                    if (testCase.vCutChild == 1) c.VerticalCutCanvas(baseId, at.p[0]);
+                    if (testCase.vCutChild == 0) c.VerticalCutCanvas(baseId, at.p[0] + 1);
+
+                    gvNewTime();
+                    gvOutput("VerticalCut");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.ColorMove(baseId + "." + to_string(testCase.vCutChild), targetColor);
+                    gvNewTime();
+                    gvOutput("colorMove");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.MergeCanvas(baseId + ".0", baseId + ".1");
+                    gvNewTime();
+                    gvOutput("mergeCanvas");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    assert(c.C(at) == islCanvas.C(at));
+                }
+                else if (at.isStrictlyInside(Point(0, 0), Point(400, 400))) {
+                    if (testCase.pCutChild == 2) c.PointCut(baseId, at);
+                    if (testCase.pCutChild == 0) c.PointCut(baseId, at.add(Point(1, 1)));
+                    if (testCase.pCutChild == 1) c.PointCut(baseId, at.add(Point(0, 1)));
+                    if (testCase.pCutChild == 3) c.PointCut(baseId, at.add(Point(1, 0)));
+
+                    gvNewTime();
+                    gvOutput("pointCut");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    c.ColorMove(baseId + "." + to_string(testCase.pCutChild), targetColor);
+                    gvNewTime();
+                    gvOutput("colorMove");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    auto id0 = baseId + ".0";
+                    auto id1 = baseId + ".1";
+                    auto id2 = baseId + ".2";
+                    auto id3 = baseId + ".3";
+                    int size0 = c.blocks[id0]->size.getScalarSize();
+                    int size1 = c.blocks[id1]->size.getScalarSize();
+                    int size2 = c.blocks[id2]->size.getScalarSize();
+                    int size3 = c.blocks[id3]->size.getScalarSize();
+                    if (pointMergeCheck(size0, size1, size2, size3)) {
+                        c.MergeCanvas(id0, id1);
+                        c.MergeCanvas(id2, id3);
+                    }
+                    else {
+                        c.MergeCanvas(id1, id2);
+                        c.MergeCanvas(id0, id3);
+                    }
+
+                    c.MergeCanvas(to_string(c.topLevelIdCounter), to_string(c.topLevelIdCounter - 1));
+                    gvNewTime();
+                    gvOutput("mergeCanvas");
+                    gvOutput("moveCost:%d", c.moveCost);
+                    gvCanvas(c);
+
+                    assert(c.C(at) == islCanvas.C(at));
+                }
+                else {
+                    assert(false);
+                }
+
+                if (c.C(at) != islCanvas.C(at)) {
+                    throw 1;
+                }
             }
-            else if (at.p[0] == 0) {
-                c.HorizontalCutCanvas(baseId, at.p[1]);
+        }
 
-                gvNewTime();
-                gvOutput("HorizontalCut");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
+        // cは壊れる事に注意
+        while (c.moveHistory.back().substr(0, 5) == "merge") {
+            c.moveHistory.pop_back();
+            c.costHistory.pop_back();
+        }
+        c.moveCost = c.costHistory.back();
 
-                c.ColorMove(baseId + ".1", islCanvas.C(at));
-                gvNewTime();
-                gvOutput("colorMove");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.MergeCanvas(baseId + ".0", baseId + ".1");
-                gvNewTime();
-                gvOutput("mergeCanvas");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-            }
-            else if (at.p[1] == 0) {
-                c.VerticalCutCanvas(baseId, at.p[0]);
-
-                gvNewTime();
-                gvOutput("VerticalCut");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.ColorMove(baseId + ".1", islCanvas.C(at));
-                gvNewTime();
-                gvOutput("colorMove");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.MergeCanvas(baseId + ".0", baseId + ".1");
-                gvNewTime();
-                gvOutput("mergeCanvas");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-            }
-            else if (at.isStrictlyInside(Point(0, 0), Point(400, 400))) {
-                c.PointCut(baseId, at);
-
-                gvNewTime();
-                gvOutput("pointCut");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.ColorMove(baseId + ".2", islCanvas.C(at));
-                gvNewTime();
-                gvOutput("colorMove");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.MergeCanvas(baseId + ".0", baseId + ".1");
-                gvNewTime();
-                gvOutput("mergeCanvas");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.MergeCanvas(baseId + ".2", baseId + ".3");
-                gvNewTime();
-                gvOutput("mergeCanvas");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-
-                c.MergeCanvas(to_string(c.topLevelIdCounter), to_string(c.topLevelIdCounter - 1));
-                gvNewTime();
-                gvOutput("mergeCanvas");
-                gvOutput("moveCost:%d", c.moveCost);
-                gvCanvas(c);
-            }
-            else {
-                assert(false);
-            }
+        printf("%s: %d->%d\n", testCase.name.c_str(), islCanvas.moveCost, c.moveCost);
+        if (c.moveCost < bestCost) {
+            bestCost = c.moveCost;
+            bestHistory = c.moveHistory;
         }
     }
 
-    for (int i = 0; i < 400; i++) {
-        for (int j = 0; j < 400; j++) {
-            Point at(i, j);
-            assert(c.C(at) == islCanvas.C(at));
-        }
-    }
-
-    printf("ok\n");
-
-    if (c.moveCost < islCanvas.moveCost) {
-        auto fileName = to_string(problemId) + "-inada1-" + to_string(c.moveCost) + ".isl";
-        printf("%d -> %d output:%s", islCanvas.moveCost, c.moveCost, fileName.c_str());
+    if (bestCost < islCanvas.moveCost) {
+        auto simCost = calcSimilarity(islCanvas);
+        auto fileName = to_string(problemId) + "-inada1-" + to_string(bestCost + simCost) + ".isl";
+        printf("%d -> %d output:%s", islCanvas.moveCost + simCost, bestCost + simCost, fileName.c_str());
         ofstream ofs(fileName);
-        for (auto& line : c.history) {
+        for (auto& line : bestHistory) {
             ofs << line << endl;
         }
     }
@@ -391,7 +455,7 @@ void islResolve() {
 
 
 void readInputs() {
-    problemId = 10;
+    problemId = 4;
     problemPamPath = "../../problems.pam/" + to_string(problemId) + ".pam";
     inputIslPath = "../../solutions.best/" + to_string(problemId) + ".isl";
 
@@ -403,7 +467,7 @@ void readInputs() {
         inputIslPath = getenv("INPUT_ISL");
     }
     else {
-        printf("[WARN] PROBLEM_ID is not set");
+        printf("[WARN] PROBLEM_ID is not set\n");
     }
 
     FILE* fp = fopen(problemPamPath.c_str(), "rb");
@@ -422,6 +486,8 @@ int main(int argc, char* argv[]) {
 #endif
 
     readInputs();
+
+    // evalIsl();
 
     islResolve();
 }

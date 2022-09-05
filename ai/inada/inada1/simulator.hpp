@@ -28,9 +28,9 @@ inline double pixeDiff(Color lhs, Color rhs) {
 class Point {
 public:
     Point();
-    Point(uint16_t, uint16_t);
+    Point(int16_t, int16_t);
 
-    std::array<uint16_t, 2> p;
+    std::array<int16_t, 2> p;
 
     Point getDiff(Point) const;
     bool isStrictlyInside(Point, Point) const;
@@ -43,11 +43,11 @@ public:
 
 Point::Point() : p({0, 0}) {}
 
-Point::Point(uint16_t x, uint16_t y) : p({x, y}) {}
+Point::Point(int16_t x, int16_t y) : p({x, y}) {}
 
 Point Point::getDiff(Point other) const {
-    uint16_t newX = this->p[0] - other.p[0];
-    uint16_t newY = this->p[1] - other.p[1];
+    int16_t newX = this->p[0] - other.p[0];
+    int16_t newY = this->p[1] - other.p[1];
 
     if (newX < 0) {
         newX = 0;
@@ -213,7 +213,8 @@ public:
     int height;
 
     bool writeHistory;
-    std::vector<std::string> history;
+    std::vector<std::string> moveHistory;
+    std::vector<int> costHistory;
 };
 
 Color Canvas::C(Point at) const {
@@ -274,7 +275,8 @@ void Canvas::ColorMove(std::string blockId, Color color) {
     if (writeHistory) {
         char buf[256];
         sprintf(buf, "color [%s] [%d,%d,%d,%d]", blockId.c_str(), color[0], color[1], color[2], color[3]);
-        history.emplace_back(buf);
+        moveHistory.emplace_back(buf);
+        costHistory.emplace_back(moveCost);
     }
 
 
@@ -305,7 +307,8 @@ void Canvas::PointCut(std::string blockId, Point point) {
     if (writeHistory) {
         char buf[256];
         sprintf(buf, "cut [%s] [%d,%d]", blockId.c_str(), point.p[0], point.p[1]);
-        history.emplace_back(buf);
+        moveHistory.emplace_back(buf);
+        costHistory.emplace_back(moveCost);
     }
 
     if (block->typ == SimpleBlockType) {
@@ -525,7 +528,8 @@ void Canvas::VerticalCutCanvas(std::string blockId, int lineNumber) {
     if (writeHistory) {
         char buf[256];
         sprintf(buf, "cut [%s] [x] [%d]", blockId.c_str(), lineNumber);
-        history.emplace_back(buf);
+        moveHistory.emplace_back(buf);
+        costHistory.emplace_back(moveCost);
     }
 
     if (!(block->bottomLeft.p[0] <= lineNumber && lineNumber <= block->topRight.p[0])) {
@@ -607,7 +611,8 @@ void Canvas::HorizontalCutCanvas(std::string blockId, int lineNumber) {
     if (writeHistory) {
         char buf[256];
         sprintf(buf, "cut [%s] [y] [%d]", blockId.c_str(), lineNumber);
-        history.emplace_back(buf);
+        moveHistory.emplace_back(buf);
+        costHistory.emplace_back(moveCost);
     }
 
     if (!(block->bottomLeft.p[1] <= lineNumber && lineNumber <= block->topRight.p[1])) {
@@ -690,7 +695,8 @@ void Canvas::SwapCanvas(std::string blockId1, std::string blockId2) {
     if (writeHistory) {
         char buf[256];
         sprintf(buf, "swap [%s] [%s]", blockId1.c_str(), blockId2.c_str());
-        history.emplace_back(buf);
+        moveHistory.emplace_back(buf);
+        costHistory.emplace_back(moveCost);
     }
 
     if (block1->size.p[0] == block2->size.p[0] && block1->size.p[1] == block2->size.p[1]) {
@@ -741,15 +747,15 @@ void Canvas::SwapCanvas(std::string blockId1, std::string blockId2) {
 }
 
 void Canvas::MergeCanvas(std::string blockId1, std::string blockId2) {
-    moveCost += MergeCost;
     auto &block1 = blocks[blockId1];
     auto &block2 = blocks[blockId2];
-    moveCost += std::lround(SwapCost * height * width / std::max(double(block1->size.getScalarSize()), double(block2->size.getScalarSize())));
+    moveCost += std::lround(MergeCost * height * width / std::max(double(block1->size.getScalarSize()), double(block2->size.getScalarSize())));
 
     if (writeHistory) {
         char buf[256];
         sprintf(buf, "merge [%s] [%s]", blockId1.c_str(), blockId2.c_str());
-        history.emplace_back(buf);
+        moveHistory.emplace_back(buf);
+        costHistory.emplace_back(moveCost);
     }
 
     const bool bottomToTop = (block1->bottomLeft.p[1] == block2->topRight.p[1] ||
