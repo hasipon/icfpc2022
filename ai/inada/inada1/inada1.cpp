@@ -1,19 +1,18 @@
-﻿// inada1.cpp : アプリケーションのエントリ ポイントを定義します。
-//
-
-#define LOCAL_DEBUG 1
+﻿#define LOCAL_DEBUG 0
 #define ENABLE_GV 0
 
 #include "inada1.h"
 #define GV_JS
 #include "gv.hpp"
 #include "simulator.hpp"
+#include <limits.h>
 #include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <filesystem>
 #include <fstream>
 #include <cassert>
+#include <algorithm>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -298,7 +297,7 @@ void islResolve() {
         auto c = Canvas(width, height);
         c.writeHistory = true;
 
-        printf("%s\n", testCase.name.c_str());
+        // printf("%s\n", testCase.name.c_str());
 
         for (auto& p : orderedPos) {
             int i = p.second.first;
@@ -445,7 +444,7 @@ void islResolve() {
     if (bestCost < islCanvas.moveCost) {
         auto simCost = calcSimilarity(islCanvas);
         auto fileName = to_string(problemId) + "-inada1-" + to_string(bestCost + simCost) + ".isl";
-        printf("%d -> %d output:%s", islCanvas.moveCost + simCost, bestCost + simCost, fileName.c_str());
+        printf("%d -> %d output:%s\n", islCanvas.moveCost + simCost, bestCost + simCost, fileName.c_str());
         ofstream ofs(fileName);
         for (auto& line : bestHistory) {
             ofs << line << endl;
@@ -460,8 +459,14 @@ void readInputs() {
     inputIslPath = "../../solutions.best/" + to_string(problemId) + ".isl";
 
     if (getenv("PROBLEM_ID")) {
-        assert(getenv("PROBLEM_PAM"), "PROBLEM_PAM is not set");
-        assert(getenv("INPUT_ISL"), "INPUT_ISL is not set");
+        if (!getenv("PROBLEM_PAM")) {
+	    printf("PROBLEM_PAM is not set\n");
+	    exit(1);
+	}
+	if (!getenv("INPUT_ISL")) {
+	    printf("INPUT_ISL is not set\n");
+	    exit(1);
+	}
         problemId = atoi(getenv("PROBLEM_ID"));
         problemPamPath = getenv("PROBLEM_PAM");
         inputIslPath = getenv("INPUT_ISL");

@@ -129,12 +129,14 @@ SimpleBlock::SimpleBlock(std::string id, Point bottomLeft, Point topRight, Color
 
     if(this->bottomLeft.p[0] > this->topRight.p[0] || this->bottomLeft.p[1] > this->topRight.p[1]) {
         printf("Invalid Block");
-        __debugbreak();
+	exit(1);
+        // __debugbreak();
     }
 
     if (this->size.getScalarSize() == 0 ){
         printf("Block size cannot be 0!");
-        __debugbreak();
+	exit(1);
+        // __debugbreak();
     }
 }
 
