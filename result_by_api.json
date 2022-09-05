@@ -75,8 +75,8 @@
     {
       "problem_id": 10,
       "problem_name": "Starry Night",
-      "last_submitted_at": "2022-09-05T04:59:16.811656Z",
-      "submission_count": 52,
+      "last_submitted_at": "2022-09-05T05:03:44.015332Z",
+      "submission_count": 53,
       "min_cost": 22250,
       "overall_best_cost": 12403
     },
@@ -139,8 +139,8 @@
     {
       "problem_id": 18,
       "problem_name": "\"The\" Kiss",
-      "last_submitted_at": "2022-09-05T04:22:33.75373Z",
-      "submission_count": 80,
+      "last_submitted_at": "2022-09-05T05:03:45.253163Z",
+      "submission_count": 81,
       "min_cost": 35362,
       "overall_best_cost": 33364
     },
