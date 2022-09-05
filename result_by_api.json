@@ -91,9 +91,9 @@
     {
       "problem_id": 12,
       "problem_name": "SIGPLAN-M",
-      "last_submitted_at": "2022-09-05T01:12:55.853932Z",
-      "submission_count": 40,
-      "min_cost": 13190,
+      "last_submitted_at": "2022-09-05T02:57:16.589992Z",
+      "submission_count": 41,
+      "min_cost": 12848,
       "overall_best_cost": 5387
     },
     {
@@ -107,9 +107,9 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-04T23:18:09.523915Z",
-      "submission_count": 45,
-      "min_cost": 34925,
+      "last_submitted_at": "2022-09-05T02:57:17.865206Z",
+      "submission_count": 46,
+      "min_cost": 32087,
       "overall_best_cost": 18932
     },
     {
@@ -321,6 +321,6 @@
       "overall_best_cost": 7229
     }
   ],
-  "total_cost": 971539,
+  "total_cost": 968359,
   "solved_problem_count": 40
 }
