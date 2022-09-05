@@ -83,8 +83,8 @@
     {
       "problem_id": 11,
       "problem_name": "Curves",
-      "last_submitted_at": "2022-09-05T05:59:59.537379Z",
-      "submission_count": 52,
+      "last_submitted_at": "2022-09-05T06:10:01.740578Z",
+      "submission_count": 53,
       "min_cost": 29305,
       "overall_best_cost": 19599
     },
@@ -107,16 +107,16 @@
     {
       "problem_id": 14,
       "problem_name": "Objects Lying Around",
-      "last_submitted_at": "2022-09-05T04:05:16.566051Z",
-      "submission_count": 51,
-      "min_cost": 29073,
+      "last_submitted_at": "2022-09-05T06:16:54.282614Z",
+      "submission_count": 52,
+      "min_cost": 26149,
       "overall_best_cost": 18932
     },
     {
       "problem_id": 15,
       "problem_name": "Simply Screaming",
-      "last_submitted_at": "2022-09-05T05:26:08.424428Z",
-      "submission_count": 43,
+      "last_submitted_at": "2022-09-05T06:10:02.958409Z",
+      "submission_count": 44,
       "min_cost": 24145,
       "overall_best_cost": 17143
     },
@@ -321,6 +321,6 @@
       "overall_best_cost": 7227
     }
   ],
-  "total_cost": 923827,
+  "total_cost": 920903,
   "solved_problem_count": 40
 }
