@@ -5,4 +5,4 @@ import random
 subprocess.run(["cargo", "build", "--release", "--target", "x86_64-pc-windows-msvc"])
 
 for n in range(1, 1000):
-    subprocess.run(["./target/x86_64-pc-windows-msvc/release/application_a", str(random.randrange(35, 40)), "40", "7500"])
+    subprocess.run(["./target/x86_64-pc-windows-msvc/release/application_a", str(random.randrange(36, 40)), "40", "7500"])
