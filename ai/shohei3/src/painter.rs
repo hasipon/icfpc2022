@@ -28,7 +28,7 @@ pub struct PainterResult {
     pub image:RgbaImage,
 }
 
-pub fn solve(target:&RgbaImage) -> PainterResult {
+pub fn solve(target:&RgbaImage, beam_w:usize, depth:usize) -> PainterResult {
     let mut best_rects = Vec::new();
     let mut best_result = PainterResult {
         commands: Vec::new(),
@@ -44,18 +44,15 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
     let mut gray_image = GrayImage::new(target.width(), target.height());
 
     let mut current = vec![initial_state];
-    let beam_w = 30;
     let w = target.width() as i32;
     let h = target.height() as i32;
-    for step in 0..2500 {
+    for step in 0..depth {
         println!("step {}", step);
         let mut next = Vec::new();
         let size = usize::min(current.len(), (beam_w as f64 / 2.5) as usize);
         if size == 0 { break; }
-        if step % 5 != 4 {
-            for i in 0..size {
-                next.push(current[i].clone());
-            }
+        for i in 0..size {
+            next.push(current[i].clone());
         }
         for i in 0..beam_w {
             let source = &current[i % size];
@@ -76,7 +73,8 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
 
                     if ax == bx { continue; }
                     if ay == by { continue; }
-                    if by - ay * bx - bx < 20 { continue; }
+
+                    if (by - ay) * (bx - ax) < 20 { continue; }
                     rects.insert(rng.gen_range(0, rects.len() + 1), Rectangle { 
                         x: ax,
                         y: ay,
@@ -143,44 +141,44 @@ pub fn solve(target:&RgbaImage) -> PainterResult {
                 9 => {
                     if rects.len() < 1 { continue; }
                     let mut rect = rects[rng.gen_range(0, rects.len())];
+                    let mut offset = rng.gen_range(1, 20);
                     if rng.gen_bool(0.5) {
                         if rng.gen_bool(0.5) {
                             if rng.gen_bool(0.5) {
-                                if rect.y == rect.bottom() - 1 { continue; }
-                                rect.y += 1;
+                                if rect.y + offset >= rect.bottom() - 1 { continue; }
+                                rect.y += offset;
                             } else {
-                                if rect.x == 0 { continue; }
-                                rect.y -= 1;
+                                if rect.y - offset < 0 { continue; }
+                                rect.y -= offset;
                             }
                         } else {
                             if rng.gen_bool(0.5) {
-                                if rect.x == rect.right() - 1 { continue; }
+                                if rect.x + offset > rect.right() { continue; }
                                 rect.x += 1;
                             } else {
-                                if rect.x == 0 { continue; }
-                                rect.x -= 1;
+                                if rect.x - offset < 0 { continue; }
+                                rect.x -= offset;
                             }
                         }
                     } else {
                         if rng.gen_bool(0.5) {
                             if rng.gen_bool(0.5) {
-                                if rect.bottom() == h { continue; }
-                                rect.h += 1;
+                                if rect.bottom() + offset > h { continue; }
+                                rect.h += offset;
                             } else {
-                                if rect.bottom() - 1  == rect.y { continue; }
-                                rect.h -= 1;
+                                if rect.bottom() - offset <= rect.y { continue; }
+                                rect.h -= offset;
                             }
                         } else {
                             if rng.gen_bool(0.5) {
-                                if rect.right() == w { continue; }
-                                rect.w += 1;
+                                if rect.right() + offset > w { continue; }
+                                rect.w += offset;
                             } else {
-                                if rect.right() - 1  == rect.x { continue; }
-                                rect.w -= 1;
+                                if rect.right() - offset <= rect.x { continue; }
+                                rect.w -= offset;
                             }
                         }
                     }
-                    rects.remove(rng.gen_range(0, rects.len()));
                 },
                 _ => {} 
             }
@@ -234,7 +232,7 @@ fn eval<R:Rng>(
         }
     }
 
-    let mut power = 130.0;
+    let mut power = 180.0;
     let (len, scale) = if fast { (4, 0.33) } else { (20, 0.65) };
     
     for _ in 0..len {
@@ -394,68 +392,43 @@ fn eval<R:Rng>(
                 (w - rect.right()) * (h - rect.bottom()),
                 rect.x * h - rect.bottom()
             ];
-            let mut min = size[0];
+            let mut max = size[0];
             let mut index = 0;
             for i in 1..size.len() {
-                if min > size[i] {
-                    min = size[i];
+                if max < size[i] {
+                    max = size[i];
                     index = i;
                 }
             }
-            match index {
+            let mut vec = Vec::new();
+            for i in 0..size.len() {
+                if index as usize != i { vec.push(i); }
+            }
+            match vec[rng.gen_range(0, 3)] {
                 0 => {
-                    if (w - rect.right()) < (h - rect.bottom()) {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                    id.push(2);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                    id.push(0);
                 },
                 1 => {
-                    if rect.x < (h - rect.bottom()) {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                    id.push(3);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                    id.push(1);
                 },
                 2 => {
-                    if rect.x < rect.y {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
-                        id.push(3);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
-                        id.push(1);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
+                    id.push(0);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
+                    id.push(2);
                 },
                 3 => {
-                    if (w - rect.right()) < rect.y {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                    } else {
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.y}));
-                        id.push(2);
-                        commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.bottom()}));
-                        id.push(0);
-                    }
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.x, y:rect.bottom()}));
+                    id.push(1);
+                    commands.push(Command::PointCut(id.clone(), Point{x:rect.right(), y:rect.y}));
+                    id.push(3);
                 },
-
                 _ => {}
             }
         }
@@ -502,16 +475,16 @@ fn find_x_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, 
     let pixel = target.get_pixel(x as u32, y as u32);
     let mut max_diff = 0.0;
     while min < max {
-        let value = min + (max - min) / 2;
+        let value = (min as f64 + ((max - min) as f64) * rng.gen_range(0.1, 0.6)) as i32;
         let diff = compare(target.get_pixel(value as u32, y as u32), pixel);
         if diff > max_diff {  max_diff = diff; }
-        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
-            max = value;
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(1.0, 200.0) < 1.0 {
+            max = value - 1;
         } else {
-            min = value;
+            min = value + 1;
         }
     }
-    (max_diff, max)
+    (max_diff, min)
 }
 
 fn find_right_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, i32)   {
@@ -520,13 +493,13 @@ fn find_right_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f
     let pixel = target.get_pixel(x as u32, y as u32);
     let mut max_diff = 0.0;
     while min < max {
-        let value = min + (max - min) / 2;
+        let value = (min as f64 + ((max - min) as f64) * rng.gen_range(0.4, 0.9)) as i32;
         let diff = compare(target.get_pixel(value as u32, y as u32), pixel);
         if diff > max_diff {  max_diff = diff; }
-        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
-            min = value;
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(1.0, 200.0) < 1.0 {
+            min = value + 1;
         } else {
-            max = value;
+            max = value - 1;
         }
     }
     (max_diff, min)
@@ -538,16 +511,16 @@ fn find_y_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, 
     let pixel = target.get_pixel(x as u32, y as u32);
     let mut max_diff = 0.0;
     while min < max {
-        let value = min + (max - min) / 2;
+        let value = (min as f64 + ((max - min) as f64) * rng.gen_range(0.1, 0.6)) as i32;
         let diff = compare(target.get_pixel(x as u32, value as u32), pixel);
         if diff > max_diff {  max_diff = diff; }
-        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
-            max = value;
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(1.0, 200.0) < 1.0 {
+            max = value - 1;
         } else {
-            min = value;
+            min = value + 1;
         }
     }
-    (max_diff, max)
+    (max_diff, min)
 }
 
 fn find_bottom_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (f64, i32)   {
@@ -556,13 +529,13 @@ fn find_bottom_boundary<R:Rng>(x:i32, y:i32, target:&RgbaImage, rng:&mut R) -> (
     let pixel = target.get_pixel(x as u32, y as u32);
     let mut max_diff = 0.0;
     while min < max {
-        let value = min + (max - min) / 2;
+        let value = (min as f64 + ((max - min) as f64) * rng.gen_range(0.4, 0.9)) as i32;
         let diff = compare(target.get_pixel(x as u32, value as u32), pixel);
         if diff > max_diff {  max_diff = diff; }
-        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(10.0, 200.0) < 1.0 {
-            min = value;
+        if rng.gen_range(0.0, 1.0) * diff / rng.gen_range(1.0, 200.0) < 1.0 {
+            min = value + 1;
         } else {
-            max = value;
+            max = value - 1;
         }
     }
     (max_diff, min)

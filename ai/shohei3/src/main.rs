@@ -26,10 +26,18 @@ fn main() -> std::io::Result<()>  {
     if arg.len() >= 2 {
         problem = arg[1].parse().unwrap();
     }
+    let mut width = 10;
+    if arg.len() >= 3 {
+        width = arg[2].parse().unwrap();
+    }
+    let mut depth = 8000;
+    if arg.len() >= 4 {
+        depth = arg[3].parse().unwrap();
+    }
     
     let image = ImageReader::open(format!("../../problems/{}.png", problem)).unwrap().decode().unwrap().to_rgba8();
 
-    let state = painter::solve(&image);
+    let state = painter::solve(&image, width, depth);
 
     state.image.save("output.png").unwrap();
     let mut string = String::new();
@@ -37,7 +45,7 @@ fn main() -> std::io::Result<()>  {
 
     println!("{}: similarity:{} cost:{} total:{}", problem, state.similarity, state.cost, state.similarity + state.cost);
     let text = Utc::now().format("%Y%m%d%H%M%S%f3").to_string();
-    let file = File::create(format!("../../solutions/{}-shohei3-{}.isl", problem, text))?;
+    let file = File::create(format!("../../solutions/{}-shohei3_3_{}_{}-{}.isl", problem, text, width, depth))?;
     let mut writer = BufWriter::new(file);
     writer.write_all(string.as_bytes())?;
     writer.flush()?;
