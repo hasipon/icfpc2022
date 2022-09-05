@@ -179,8 +179,8 @@
     {
       "problem_id": 23,
       "problem_name": "Beatles",
-      "last_submitted_at": "2022-09-05T09:39:52.177708Z",
-      "submission_count": 51,
+      "last_submitted_at": "2022-09-05T11:14:48.180378Z",
+      "submission_count": 52,
       "min_cost": 22121,
       "overall_best_cost": 17628
     },
@@ -214,7 +214,7 @@
       "last_submitted_at": "2022-09-05T11:01:44.270408Z",
       "submission_count": 16,
       "min_cost": 32283,
-      "overall_best_cost": 19829
+      "overall_best_cost": 19759
     },
     {
       "problem_id": 28,
@@ -222,7 +222,7 @@
       "last_submitted_at": "2022-09-05T11:08:09.112609Z",
       "submission_count": 16,
       "min_cost": 19051,
-      "overall_best_cost": 14782
+      "overall_best_cost": 14767
     },
     {
       "problem_id": 29,
@@ -238,7 +238,7 @@
       "last_submitted_at": "2022-09-05T11:08:10.378017Z",
       "submission_count": 16,
       "min_cost": 52277,
-      "overall_best_cost": 37093
+      "overall_best_cost": 37022
     },
     {
       "problem_id": 31,
@@ -254,7 +254,7 @@
       "last_submitted_at": "2022-09-05T11:05:03.093505Z",
       "submission_count": 17,
       "min_cost": 26122,
-      "overall_best_cost": 17975
+      "overall_best_cost": 17878
     },
     {
       "problem_id": 33,
@@ -262,7 +262,7 @@
       "last_submitted_at": "2022-09-05T11:08:11.663866Z",
       "submission_count": 18,
       "min_cost": 35798,
-      "overall_best_cost": 26366
+      "overall_best_cost": 26274
     },
     {
       "problem_id": 34,
@@ -278,13 +278,13 @@
       "last_submitted_at": "2022-09-05T11:05:06.876903Z",
       "submission_count": 14,
       "min_cost": 36488,
-      "overall_best_cost": 28428
+      "overall_best_cost": 28333
     },
     {
       "problem_id": 36,
       "problem_name": "Starry Nights",
-      "last_submitted_at": "2022-09-05T11:05:08.09957Z",
-      "submission_count": 30,
+      "last_submitted_at": "2022-09-05T11:14:49.403004Z",
+      "submission_count": 31,
       "min_cost": 35434,
       "overall_best_cost": 32754
     },
@@ -307,8 +307,8 @@
     {
       "problem_id": 39,
       "problem_name": "The Other 2 Seasons",
-      "last_submitted_at": "2022-09-05T11:05:10.59623Z",
-      "submission_count": 17,
+      "last_submitted_at": "2022-09-05T11:14:50.626977Z",
+      "submission_count": 18,
       "min_cost": 22068,
       "overall_best_cost": 19466
     },
