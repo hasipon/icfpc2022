@@ -116,6 +116,7 @@ string convBid(string s){
 
 
 int main() {
+    const int LOOP = atoi(getenv("LOOP"));
     string problemId = string(getenv("PROBLEM_ID"));
     string filename = "../../problems.kyopro/" + problemId + ".kyopro";
     ifstream ifs(filename);
@@ -134,9 +135,8 @@ int main() {
     }
 
     vector<Block> lastC;
-    // 1列目
-    {
-        vector<Block> nowC = vvb[0];
+    rep(ii, LOOP){
+        vector<Block> nowC = vvb[ii];
         Block base = nowC[0];
         REP(i, 1, nowC.size()){
             cout << "merge [" << base.blockId << "] [" << nowC[i].blockId<< "]" <<endl;
@@ -144,43 +144,30 @@ int main() {
         }
         nowC.clear();
         nowC.push_back(base);
-        vvb[0] = nowC;
-    }
-    // 2列目
-    {
-        vector<Block> nowC = vvb[1];
-        Block base = nowC[0];
-        REP(i, 1, nowC.size()){
-            cout << "merge [" << base.blockId << "] [" << nowC[i].blockId<< "]" <<endl;
-            base = base.merge(nowC[i]);
-        }
-        lastC = nowC;
-        nowC.clear();
-        nowC.push_back(base);
-        vvb[1] = nowC;
+        vvb[ii] = nowC;
     }
     // マージ
-    {
-        cout << "merge [" << vvb[0][0].blockId << "] [" << vvb[1][0].blockId << "]" <<endl;
-        vvb[0][0] = vvb[0][0].merge(vvb[1][0]);
-        vvb[1].clear();
+    REP(ii, 1, LOOP){
+        cout << "merge [" << vvb[0][0].blockId << "] [" << vvb[ii][0].blockId << "]" <<endl;
+        vvb[0][0] = vvb[0][0].merge(vvb[ii][0]);
+        vvb[ii].clear();
     }
     {
         int ii = 0;
-        while(!vvb[2].empty()){
-            if(vvb[2][0].topRight.second == 400)break;
+        while(!vvb[LOOP].empty()){
+            if(vvb[LOOP][0].topRight.second == 400)break;
             // cut &折り返し
             {
-                cout << "cut [" << vvb[0][ii].blockId << "] [y] [" << vvb[2][0].topRight.second <<"]"<< endl;
+                cout << "cut [" << vvb[0][ii].blockId << "] [y] [" << vvb[LOOP][0].topRight.second <<"]"<< endl;
                 Block base = vvb[0][ii];
                 vvb[0][ii].blockId = base.blockId + ".0";
-                vvb[0][ii].topRight.second = vvb[2][0].topRight.second;
+                vvb[0][ii].topRight.second = vvb[LOOP][0].topRight.second;
                 vvb[0].push_back((Block){
                         base.blockId + ".1",
-                        make_pair(base.bottomLeft.first, vvb[2][0].topRight.second),
+                        make_pair(base.bottomLeft.first, vvb[LOOP][0].topRight.second),
                         base.topRight});
 
-                REP(i, 2, vvb.size()){
+                REP(i, LOOP, vvb.size()){
                     cout << "merge [" << vvb[0][ii].blockId << "] [" << vvb[i][0].blockId << "]" <<endl;
                     vvb[0][ii] = vvb[0][ii].merge(vvb[i][0]);
                     vvb[i].erase(vvb[i].begin());
@@ -188,7 +175,7 @@ int main() {
             }
             ii++;
         }
-        REP(i, 2, vvb.size()){
+        REP(i, LOOP, vvb.size()){
             cout << "merge [" << vvb[0][ii].blockId << "] [" << vvb[i][0].blockId << "]" <<endl;
             vvb[0][ii] = vvb[0][ii].merge(vvb[i][0]);
             vvb[i].erase(vvb[i].begin());
